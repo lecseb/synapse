@@ -1,0 +1,2 @@
+# synapse
+Communication abstraction library
