@@ -17,7 +17,7 @@
 #ifndef _PROTOC_GENERATOR_H_
 # define _PROTOC_GENERATOR_H_
 
-# include <string.h>
+# include <string>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include "header/synapse-header.hh"
@@ -32,7 +32,7 @@ public:
   /**
    * @brief Code generator implementation to support synapse particular scheme
    */
-  explicit Generator() {}
+  Generator() {}
   /**
    * @brief Destructor
    */

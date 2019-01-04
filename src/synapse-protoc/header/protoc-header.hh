@@ -17,6 +17,7 @@
 #ifndef _PROTOC_HEADER_HEADER_H_
 # define _PROTOC_HEADER_HEADER_H_
 
+# include <string>
 # include <google/protobuf/stubs/common.h>
 # include "protoc-file.hh"
 
@@ -38,7 +39,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~Header() {};
+  virtual ~Header() {}
 
   /**
    * @brief Generates code for the given proto file, generating one or more

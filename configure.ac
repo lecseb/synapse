@@ -16,7 +16,7 @@
 AC_INIT([libsynapse], [0.1])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 AM_CONFIG_HEADER([config.h])
-AM_SILENT_RULES([yes])
+#AM_SILENT_RULES([yes])
 
 # Check programs
 AC_PROG_CC
@@ -34,30 +34,27 @@ PKG_CHECK_MODULES([libcrypto], [libcrypto])
 PKG_CHECK_MODULES([libevent], [libevent])
 PKG_CHECK_MODULES([libevent_openssl], [libevent_openssl])
 PKG_CHECK_MODULES([libssl], [libssl])
-PKG_CHECK_MODULES([libprotobuf], [protobuf >= 3.6.1])
+PKG_CHECK_MODULES([libprotobuf], [protobuf])
 
-my_CFLAGS="\
+my_CPPFLAGS="\
 -W \
 -Werror \
 -Wall \
 -Wchar-subscripts \
 -Wformat-security \
 -Wmissing-declarations \
--Wmissing-prototypes \
--Wnested-externs \
 -Wpointer-arith \
 -Wshadow \
 -Wsign-compare \
--Wstrict-prototypes \
 -Wtype-limits \
 -I`pwd`/src \
 "
 
 # debug mode activation
 AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug]),
-	[extra_CFLAGS="-g -ggdb"], [extra_CFLAGS="-O3"])
+	[extra_CPPFLAGS="-g -ggdb"], [extra_CPPFLAGS="-O3"])
 
-AC_SUBST([AM_CFLAGS], ["$AM_CFLAGS $my_CFLAGS $extra_CFLAGS"])
+AC_SUBST([AM_CPPFLAGS], ["$AM_CPPFLAGS $my_CPPFLAGS $extra_CPPFLAGS"])
 
 # Output generated file
 AC_CONFIG_FILES([
@@ -80,6 +77,6 @@ AC_MSG_RESULT([
     bindir:              ${bindir}
 
     C compiler:          ${CC}
-    CFLAGS:              ${AM_CFLAGS}
+    CFLAGS:              ${AM_CPPFLAGS}
     LDFLAGS:             ${AM_LDFLAGS}
 ])

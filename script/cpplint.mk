@@ -20,14 +20,9 @@ coding-style:
 	for i in $(1); do \
 		echo -e "\033[93m[check]:\033[95m" $$$$i "\033[0m"; \
 		python $(top_srcdir)/script/cpplint.py \
-			--no-tree \
-			--no-summary \
-			--terse \
-			--show-types \
-			-f \
-			--ignore SPLIT_STRING \
-			--ignore LEADING_SPACE \
-			--ignore OPEN_BRACE \
+			--extension hpp,cpp,cc,hh,hxx \
+			--verbose 0 \
+			--filter=-whitespace/tab,-legal/copyright,-build/include_order \
 			$$$$i; \
 		if [ $$$$? -ne 0 ]; then \
 			let "RET=1"; \

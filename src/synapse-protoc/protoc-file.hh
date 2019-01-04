@@ -18,6 +18,7 @@
 # define _PROTOC_FILE_H_
 
 # include <algorithm>
+# include <string>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>
@@ -27,14 +28,13 @@ namespace google {
 namespace protobuf {
 namespace compiler {
 
-static inline std::string strip_suffix(const std::string& var,
-  const std::string& suffix) {
-  if (suffix.size() > var.size())
-    return var;
-  if (var.compare(var.size() - suffix.size(), suffix.size(), suffix) == 0)
-    return var.substr(0, var.size() - suffix.size());
-  return std::string("");
-};
+/**
+ * @brief Remove the suffix part of the variable
+ * @param [in] var: variable to strip off a suffix
+ * @param [in] suffix: suffix to remove
+ * @return the result string
+ */
+std::string strip_suffix(const std::string& var, const std::string& suffix);
 
 class File {
 public:
@@ -43,42 +43,13 @@ public:
    * @param [in] desc: proto description class
    * @param [in] out: proto output description class
    */
-  explicit File(const FileDescriptor *desc, OutputDirectory *out,
-      const std::string& extension)
-    : _desc(desc),
-      _extension(extension),
-      _name(strip_suffix(desc->name(), ".proto")),
-      _full_name(std::string(_name + extension)),
-      _stream(out->Open(_full_name)),
-      _io_printer(new io::Printer(_stream, '$')) {
-
-    std::cout << "File written there : " << _full_name << std::endl;
-
-    _io_printer->Print("/**\n" \
-      " * synapse is free software: you can redistribute it and/or modify\n" \
-      " * it under the terms of the GNU General Public License as published\n" \
-      " * by the Free Software Foundation, either version 3 of the License,\n" \
-      " * or (at your option) any later version.\n" \
-      " *\n" \
-      " * synapse is distributed in the hope that it will be useful,\n"	\
-      " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" \
-      " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" \
-      " * GNU General Public License for more details.\n" \
-      " *\n" \
-      " * You should have received a copy of the GNU General Public License\n" \
-      " * along with synapse.  If not, see <https://www.gnu.org/licenses/>.\n" \
-      " */\n\n"
-    );
-  };
+  File(const FileDescriptor *desc, OutputDirectory *out,
+    const std::string& extension);
 
   /**
    * @brief Destructor
    */
-  virtual ~File() {
-    //_stream->flush();
-    delete _io_printer;
-    delete _stream;
-  };
+  virtual ~File();
 
   /**
    * @brief Generates code for the given proto file, generating one or more

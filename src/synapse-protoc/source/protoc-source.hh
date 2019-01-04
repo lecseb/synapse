@@ -17,6 +17,7 @@
 #ifndef _PROTOC_SOURCE_SOURCE_H_
 # define _PROTOC_SOURCE_SOURCE_H_
 
+# include <string>
 # include <google/protobuf/stubs/common.h>
 # include "protoc-file.hh"
 
@@ -32,14 +33,14 @@ public:
    * @param [in] desc: proto description class
    * @param [in] out: proto output description class
    */
-  explicit Source(const FileDescriptor *desc, OutputDirectory *out,
+  Source(const FileDescriptor *desc, OutputDirectory *out,
       const std::string& extension)
     : File(desc, out, extension) {}
 
   /**
    * @brief Destructor
    */
-  virtual ~Source() {};
+  virtual ~Source() {}
 
   /**
    * @brief Generates code for the given proto file, generating one or more

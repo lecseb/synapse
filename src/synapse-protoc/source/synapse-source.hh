@@ -17,6 +17,7 @@
 #ifndef _PROTOC_SOURCE_SYNAPSE_SOURCE_H_
 # define _PROTOC_SOURCE_SYNAPSE_SOURCE_H_
 
+# include <string>
 # include <google/protobuf/stubs/common.h>
 # include "protoc-source.hh"
 
@@ -32,13 +33,12 @@ public:
    * @param [in] desc: proto description class
    * @param [in] out: proto output description class
    */
-  explicit Synapse(const FileDescriptor *desc, OutputDirectory *out)
-    : Source(desc, out, ".synapse.c") {}
+  Synapse(const FileDescriptor *desc, OutputDirectory *out);
 
   /**
    * @brief Destructor
    */
-  virtual ~Synapse() {};
+  virtual ~Synapse();
 
   /**
    * @brief Generates code for the given proto file, generating one or more
@@ -50,14 +50,7 @@ public:
    * @return true if successful. Otherwise, sets *error to a description of the
    * problem (e.g. "invalid parameter") and returns false.
    */
-  virtual bool generate(const std::string& param, std::string *error) {
-    const std::string header = strip_suffix(_full_name, ".c") + ".h";
-    /* write preproc protection */
-    _io_printer->Print(std::string("#include \"" + header + "\"\n").c_str());
-    /* TODO: do the core parsing */
-    _io_printer->Print("\n");
-    return true;
-  }
+  virtual bool generate(const std::string& param, std::string *error);
 };
 
 };  // namespace source

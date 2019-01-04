@@ -17,25 +17,28 @@ include $(top_builddir)/script/cpplint.mk
 
 bin_PROGRAMS= synapse-protoc
 
-synapse_protoc_CFLAGS= \
-	$(libevent_LIBS) \
-	$(libevent_openssl_LIBS) \
-	$(libssl_CFLAGS) \
-	$(protobuf_CFLAGS) \
+synapse_protoc_CXXFLAGS= \
+	$(AM_CPPFLAGS) \
+	$(libprotobuf_CFLAGS) \
 	-I.
 
-noinst_HEADERS=
+noinst_HEADERS= \
+	protoc-file.hh \
+	protoc-generator.hh \
+	header/synapse-header.hh \
+	header/protoc-header.hh \
+	source/synapse-source.hh \
+	source/protoc-source.hh
 
 synapse_protoc_SOURCES= \
-	protoc.cc
+	protoc.cc \
+	protoc-file.cc \
+	header/synapse-header.cc \
+	source/synapse-source.cc
 
 synapse_protoc_LDFLAGS= \
-	$(protobuf_LIBS) \
-	$(libevent_LIBS) \
-	$(libevent_openssl_LIBS) \
-	$(libssl_LIBS) \
-	-L/usr/local/lib \
-	-lprotoc
+	-lprotoc \
+	$(libprotobuf_LIBS)
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(synapse_protoc_SOURCES))))
