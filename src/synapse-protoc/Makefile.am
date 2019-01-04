@@ -13,4 +13,29 @@
 # You should have received a copy of the GNU General Public License
 # along with synapse.  If not, see <https://www.gnu.org/licenses/>.
 
-SUBDIRS= src
+include $(top_builddir)/script/cpplint.mk
+
+bin_PROGRAMS= synapse-protoc
+
+synapse_protoc_CFLAGS= \
+	$(libevent_LIBS) \
+	$(libevent_openssl_LIBS) \
+	$(libssl_CFLAGS) \
+	$(protobuf_CFLAGS) \
+	-I.
+
+noinst_HEADERS=
+
+synapse_protoc_SOURCES= \
+	protoc.cc
+
+synapse_protoc_LDFLAGS= \
+	$(protobuf_LIBS) \
+	$(libevent_LIBS) \
+	$(libevent_openssl_LIBS) \
+	$(libssl_LIBS) \
+	-L/usr/local/lib \
+	-lprotoc
+
+# eval to create the coding style rule
+$(eval $(call check, $(sort $(noinst_HEADERS) $(synapse_protoc_SOURCES))))

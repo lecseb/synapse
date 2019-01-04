@@ -16,9 +16,11 @@
 AC_INIT([libsynapse], [0.1])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 AM_CONFIG_HEADER([config.h])
+AM_SILENT_RULES([yes])
 
 # Check programs
 AC_PROG_CC
+AC_PROG_CXX
 AM_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL(libtool)
@@ -32,6 +34,7 @@ PKG_CHECK_MODULES([libcrypto], [libcrypto])
 PKG_CHECK_MODULES([libevent], [libevent])
 PKG_CHECK_MODULES([libevent_openssl], [libevent_openssl])
 PKG_CHECK_MODULES([libssl], [libssl])
+PKG_CHECK_MODULES([libprotobuf], [protobuf >= 3.6.1])
 
 my_CFLAGS="\
 -W \
@@ -59,6 +62,8 @@ AC_SUBST([AM_CFLAGS], ["$AM_CFLAGS $my_CFLAGS $extra_CFLAGS"])
 # Output generated file
 AC_CONFIG_FILES([
 	Makefile
+	src/Makefile
+	src/synapse-protoc/Makefile
 ])
 
 AC_OUTPUT
