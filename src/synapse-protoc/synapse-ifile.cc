@@ -14,11 +14,13 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "protoc-file.hh"
+#include "synapse-ifile.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+
+const std::string IFile::endl = "\n";
 
 std::string strip_suffix(const std::string& var, const std::string& suffix) {
   if (suffix.size() > var.size())
@@ -28,7 +30,7 @@ std::string strip_suffix(const std::string& var, const std::string& suffix) {
   return std::string("");
 }
 
-File::File(const FileDescriptor *desc, OutputDirectory *out,
+IFile::IFile(const FileDescriptor *desc, OutputDirectory *out,
     const std::string& extension)
   : _desc(desc),
     _extension(extension),
@@ -52,9 +54,14 @@ File::File(const FileDescriptor *desc, OutputDirectory *out,
     " */\n\n");
 }
 
-File::~File() {
+IFile::~IFile() {
   delete _io_printer;
   delete _stream;
+}
+
+IFile& IFile::operator<<(const std::string& data) {
+  _io_printer->Print(data.c_str());
+  return *this;
 }
 
 };  // namespace compiler

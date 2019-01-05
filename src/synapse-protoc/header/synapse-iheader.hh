@@ -14,33 +14,32 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_SOURCE_SOURCE_H_
-# define _PROTOC_SOURCE_SOURCE_H_
+#ifndef _HEADER_SYNAPSE_IHEADER_HH_
+# define _HEADER_SYNAPSE_IHEADER_HH_
 
 # include <string>
 # include <google/protobuf/stubs/common.h>
-# include "protoc-file.hh"
+# include "synapse-ifile.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace source {
 
-class Source : public File {
+class IHeader : public IFile {
 public:
   /**
    * @brief Generate a generic file
    * @param [in] desc: proto description class
    * @param [in] out: proto output description class
    */
-  Source(const FileDescriptor *desc, OutputDirectory *out,
+  explicit IHeader(const FileDescriptor *desc, OutputDirectory *out,
       const std::string& extension)
-    : File(desc, out, extension) {}
+    : IFile(desc, out, extension) {}
 
   /**
    * @brief Destructor
    */
-  virtual ~Source() {}
+  virtual ~IHeader() {}
 
   /**
    * @brief Generates code for the given proto file, generating one or more
@@ -55,9 +54,8 @@ public:
   virtual bool generate(const std::string& param, std::string *error) = 0;
 };
 
-};  // namespace source
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_SOURCE_SOURCE_H_ */
+#endif /* !_HEADER_SYNAPSE_IHEADER_HH_ */

@@ -16,7 +16,7 @@
 AC_INIT([libsynapse], [0.1])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 AM_CONFIG_HEADER([config.h])
-#AM_SILENT_RULES([yes])
+AM_SILENT_RULES([yes])
 
 # Check programs
 AC_PROG_CC

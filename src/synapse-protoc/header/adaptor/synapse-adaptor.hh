@@ -14,19 +14,9 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <google/protobuf/compiler/command_line_interface.h>
-#include "protoc-generator.hh"
+#ifndef _HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_
+# define _HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_
 
-int main(int argc, char *argv[]) {
-  static const std::string _cmd_out = "--synapse_out";
-  static const std::string _cmd_brief = "Generate synapse headers/sources";
+# include "synapse-desc.hh"
 
-  google::protobuf::compiler::CommandLineInterface client;
-  google::protobuf::compiler::Generator generator;
-
-  client.SetVersionInfo("libprotoc 3.5.1");
-
-  client.RegisterGenerator(_cmd_out, &generator, _cmd_brief);
-
-  return client.Run(argc, argv);
-}
+#endif /* !_HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_ */

@@ -14,28 +14,36 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#include "synapse-preproc.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
+namespace adaptor {
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
+std::string PreprocAdaptor::begin(IFile& file, const std::string& name) {
+  std::string temp = std::string("_GENERATE_" + name);
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+
+  file << "#ifndef " << temp << IFile::endl;
+  file << "# define " << temp << IFile::endl;
+  file << IFile::endl;
+
+  return std::string();
 }
 
-Synapse::~Synapse() {
+std::string PreprocAdaptor::end(IFile& file, const std::string& name) {
+  std::string temp = std::string("_GENERATE_" + name);
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+
+  file << "#endif /* !" << temp << " */" << IFile::endl;
+  return std::string();
 }
 
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
+};  // namespace adaptor
 };  // namespace header
 };  // namespace compiler
 };  // namespace protobuf

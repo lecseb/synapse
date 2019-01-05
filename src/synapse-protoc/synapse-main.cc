@@ -14,29 +14,19 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#include <google/protobuf/compiler/command_line_interface.h>
+#include "synapse-generator.hh"
 
-namespace google {
-namespace protobuf {
-namespace compiler {
-namespace header {
+int main(int argc, char *argv[]) {
+  static const std::string _cmd_out = "--synapse_out";
+  static const std::string _cmd_brief = "Generate synapse headers/sources";
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
+  google::protobuf::compiler::CommandLineInterface client;
+  google::protobuf::compiler::Generator generator;
+
+  client.SetVersionInfo("libprotoc 3.5.1");
+
+  client.RegisterGenerator(_cmd_out, &generator, _cmd_brief);
+
+  return client.Run(argc, argv);
 }
-
-Synapse::~Synapse() {
-}
-
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
-};  // namespace header
-};  // namespace compiler
-};  // namespace protobuf
-};  // namespace google

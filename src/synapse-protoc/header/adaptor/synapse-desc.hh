@@ -14,29 +14,38 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#ifndef _HEADER_ADAPTOR_SYNAPSE_DESC_HH_
+# define _HEADER_ADAPTOR_SYNAPSE_DESC_HH_
+
+# include <string>
+# include <google/protobuf/descriptor.h>
+# include "synapse-enum.hh"
+# include "synapse-ifile.hh"
+# include "synapse-preproc.hh"
+# include "synapse-service.hh"
+# include "synapse-struct.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
+namespace adaptor {
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
-}
+class DescAdaptor {
+public:
+  /**
+   * @brief Adapt an enum descriptor and print it into the file
+   * @param [in] file: file to write the converted data
+   * @param [in] desc: descriptor to convert
+   * @return an empty string on success, an explanation on error
+   */
+  static std::string adapt(IFile& file, const FileDescriptor *desc);
+};
 
-Synapse::~Synapse() {
-}
-
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
+};  // namespace adaptor
 };  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* !_HEADER_ADAPTOR_SYNAPSE_DESC_HH_ */

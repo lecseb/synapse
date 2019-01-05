@@ -14,28 +14,20 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#include "synapse-struct.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
+namespace adaptor {
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
+std::string StructAdaptor::adapt(IFile& file, const Descriptor *desc) {
+  file << "struct " << desc->name() << ";" << IFile::endl;
+  return std::string("");
 }
 
-Synapse::~Synapse() {
-}
-
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
+};  // namespace adaptor
 };  // namespace header
 };  // namespace compiler
 };  // namespace protobuf

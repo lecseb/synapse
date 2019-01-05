@@ -14,29 +14,41 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#ifndef _HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_
+# define _HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_
+
+# include <string>
+# include "synapse-ifile.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
+namespace adaptor {
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
-}
+class PreprocAdaptor {
+public:
+  /**
+   * @brief Adapt a name into a preproc begin section
+   * @param [in] file: file to write the converted data
+   * @param [in] name: name to convert
+   * @return an empty string on success, an explanation on error
+   */
+  static std::string begin(IFile& file, const std::string& name);
 
-Synapse::~Synapse() {
-}
+  /**
+   * @brief Adapt a name into a preproc end section
+   * @param [in] file: file to write the converted data
+   * @param [in] name: name to convert
+   * @return an empty string on success, an explanation on error
+   */
+  static std::string end(IFile& file, const std::string& name);
+};
 
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
+};  // namespace adaptor
 };  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* !_HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_ */

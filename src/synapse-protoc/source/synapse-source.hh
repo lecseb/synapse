@@ -14,12 +14,12 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_SOURCE_SYNAPSE_SOURCE_H_
-# define _PROTOC_SOURCE_SYNAPSE_SOURCE_H_
+#ifndef _SOURCE_SYNAPSE_SOURCE_HH_
+# define _SOURCE_SYNAPSE_SOURCE_HH_
 
 # include <string>
 # include <google/protobuf/stubs/common.h>
-# include "protoc-source.hh"
+# include "synapse-isource.hh"
 
 namespace google {
 namespace protobuf {
@@ -58,4 +58,4 @@ public:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_SOURCE_SYNAPSE_SOURCE_H_ */
+#endif /* !_SOURCE_SYNAPSE_SOURCE_HH_ */

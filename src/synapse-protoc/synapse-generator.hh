@@ -1,9 +1,9 @@
 /** This file is part of synapse.
  *
  * synapse is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
- * by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * synapse is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,42 +14,29 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_FILE_H_
-# define _PROTOC_FILE_H_
+#ifndef _SYNAPSE_GENERATOR_HH_
+# define _SYNAPSE_GENERATOR_HH_
 
-# include <algorithm>
 # include <string>
-# include <google/protobuf/descriptor.h>
+# include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
-# include <google/protobuf/io/printer.h>
-# include <google/protobuf/io/zero_copy_stream_impl.h>
+# include "header/synapse-header.hh"
+# include "source/synapse-source.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 
-/**
- * @brief Remove the suffix part of the variable
- * @param [in] var: variable to strip off a suffix
- * @param [in] suffix: suffix to remove
- * @return the result string
- */
-std::string strip_suffix(const std::string& var, const std::string& suffix);
-
-class File {
+class Generator : public google::protobuf::compiler::CodeGenerator {
 public:
   /**
-   * @brief Generate a generic file
-   * @param [in] desc: proto description class
-   * @param [in] out: proto output description class
+   * @brief Code generator implementation to support synapse particular scheme
    */
-  File(const FileDescriptor *desc, OutputDirectory *out,
-    const std::string& extension);
-
+  Generator() {}
   /**
    * @brief Destructor
    */
-  virtual ~File();
+  virtual ~Generator() {}
 
   /**
    * @brief Generates code for the given proto file, generating one or more
@@ -61,19 +48,17 @@ public:
    * @return true if successful. Otherwise, sets *error to a description of the
    * problem (e.g. "invalid parameter") and returns false.
    */
-  virtual bool generate(const std::string& param, std::string *error) = 0;
-
-protected:
-  const FileDescriptor *_desc;
-  std::string _extension;
-  std::string _name;
-  std::string _full_name;
-  io::ZeroCopyOutputStream *_stream;
-  io::Printer *_io_printer;
+  virtual bool Generate(const FileDescriptor *desc, const std::string& param,
+      OutputDirectory *out, std::string *error) const {
+    header::Synapse synapse_header(desc, out);
+    source::Synapse synapse_source(desc, out);
+    return synapse_header.generate(param, error) &&
+      synapse_source.generate(param, error);
+  }
 };
 
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_FILE_H_ */
+#endif /* !_SYNAPSE_GENERATOR_HH_ */

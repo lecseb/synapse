@@ -1,9 +1,9 @@
 /** This file is part of synapse.
  *
  * synapse is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
  *
  * synapse is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,29 +14,33 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_GENERATOR_H_
-# define _PROTOC_GENERATOR_H_
+#ifndef _SOURCE_SYNAPSE_ISOURCE_HH_
+# define _SOURCE_SYNAPSE_ISOURCE_HH_
 
 # include <string>
-# include <google/protobuf/compiler/command_line_interface.h>
-# include <google/protobuf/compiler/code_generator.h>
-# include "header/synapse-header.hh"
-# include "source/synapse-source.hh"
+# include <google/protobuf/stubs/common.h>
+# include "synapse-ifile.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace source {
 
-class Generator : public google::protobuf::compiler::CodeGenerator {
+class Source : public IFile {
 public:
   /**
-   * @brief Code generator implementation to support synapse particular scheme
+   * @brief Generate a generic file
+   * @param [in] desc: proto description class
+   * @param [in] out: proto output description class
    */
-  Generator() {}
+  Source(const FileDescriptor *desc, OutputDirectory *out,
+      const std::string& extension)
+    : IFile(desc, out, extension) {}
+
   /**
    * @brief Destructor
    */
-  virtual ~Generator() {}
+  virtual ~Source() {}
 
   /**
    * @brief Generates code for the given proto file, generating one or more
@@ -48,17 +52,12 @@ public:
    * @return true if successful. Otherwise, sets *error to a description of the
    * problem (e.g. "invalid parameter") and returns false.
    */
-  virtual bool Generate(const FileDescriptor *desc, const std::string& param,
-      OutputDirectory *out, std::string *error) const {
-    header::Synapse synapse_header(desc, out);
-    source::Synapse synapse_source(desc, out);
-    return synapse_header.generate(param, error) &&
-      synapse_source.generate(param, error);
-  }
+  virtual bool generate(const std::string& param, std::string *error) = 0;
 };
 
+};  // namespace source
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_GENERATOR_H_ */
+#endif /* !_SOURCE_SYNAPSE_ISOURCE_HH_ */

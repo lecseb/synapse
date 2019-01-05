@@ -14,32 +14,45 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_HEADER_HEADER_H_
-# define _PROTOC_HEADER_HEADER_H_
+#ifndef _SYNAPSE_IFILE_HH_
+# define _SYNAPSE_IFILE_HH_
 
+# include <algorithm>
+# include <iostream>
 # include <string>
-# include <google/protobuf/stubs/common.h>
-# include "protoc-file.hh"
+# include <google/protobuf/descriptor.h>
+# include <google/protobuf/compiler/code_generator.h>
+# include <google/protobuf/io/printer.h>
+# include <google/protobuf/io/zero_copy_stream_impl.h>
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 
-class Header : public File {
+/**
+ * @brief Remove the suffix part of the variable
+ * @param [in] var: variable to strip off a suffix
+ * @param [in] suffix: suffix to remove
+ * @return the result string
+ */
+std::string strip_suffix(const std::string& var, const std::string& suffix);
+
+class IFile {
 public:
+  static const std::string endl;
+
   /**
    * @brief Generate a generic file
    * @param [in] desc: proto description class
    * @param [in] out: proto output description class
    */
-  explicit Header(const FileDescriptor *desc, OutputDirectory *out,
-      const std::string& extension)
-    : File(desc, out, extension) {}
+  IFile(const FileDescriptor *desc, OutputDirectory *out,
+    const std::string& extension);
 
   /**
    * @brief Destructor
    */
-  virtual ~Header() {}
+  virtual ~IFile();
 
   /**
    * @brief Generates code for the given proto file, generating one or more
@@ -52,10 +65,28 @@ public:
    * problem (e.g. "invalid parameter") and returns false.
    */
   virtual bool generate(const std::string& param, std::string *error) = 0;
+
+  /**
+   * @brief Write the data into the file
+   * @param [in] data: data to write
+   * @return the ostream instance to chain the call
+   */
+  virtual IFile& operator<<(const std::string& data);
+
+  virtual inline void indent() { _io_printer->Indent(); }
+  virtual inline void outdent() { _io_printer->Outdent(); }
+
+protected:
+  const FileDescriptor *_desc;
+  std::string _extension;
+  std::string _name;
+  std::string _full_name;
+  io::ZeroCopyOutputStream *_stream;
+  io::Printer *_io_printer;
 };
 
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_HEADER_HEADER_H_ */
+#endif /* !_SYNAPSE_IFILE_HH_ */

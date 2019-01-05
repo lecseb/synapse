@@ -14,20 +14,20 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PROTOC_HEADER_SYNAPSE_HEADER_H_
-# define _PROTOC_HEADER_SYNAPSE_HEADER_H_
+#ifndef _HEADER_SYNAPSE_HEADER_HH_
+# define _HEADER_SYNAPSE_HEADER_HH_
 
 # include <algorithm>
 # include <string>
 # include <google/protobuf/stubs/common.h>
-# include "protoc-header.hh"
+# include "synapse-iheader.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
 
-class Synapse : public Header {
+class Synapse : public IHeader {
 public:
   /**
    * @brief Generate a generic file
@@ -52,11 +52,6 @@ public:
    * problem (e.g. "invalid parameter") and returns false.
    */
   virtual bool generate(const std::string& param, std::string *error);
-
-  virtual void generate_enum(const EnumDescriptor *desc, std::string *error);
-
-  virtual void generate_service(const ServiceDescriptor *desc,
-    std::string *error);
 };
 
 };  // namespace header
@@ -64,4 +59,4 @@ public:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_PROTOC_HEADER_SYNAPSE_HEADER_H_ */
+#endif /* !_HEADER_SYNAPSE_HEADER_HH_ */

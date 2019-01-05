@@ -14,28 +14,31 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
-#include "adaptor/synapse-adaptor.hh"
+#include "synapse-enum.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
+namespace adaptor {
 
-Synapse::Synapse(const FileDescriptor *desc, OutputDirectory *out)
-  : IHeader(desc, out, ".synapse.h") {
+std::string EnumAdaptor::adapt(IFile& file, const EnumDescriptor *desc) {
+  file << "enum " << desc->name() << IFile::endl;
+  file.indent();
+  for (int32_t i = 0; i < desc->value_count(); i++)
+    EnumAdaptor::adapt(file, desc->value(i));
+  file.outdent();
+  file << "};" << IFile::endl;
+  return std::string();
 }
 
-Synapse::~Synapse() {
+std::string EnumAdaptor::adapt(IFile& file, const EnumValueDescriptor *desc) {
+  file << desc->name() << " = " << std::to_string(desc->number())
+    << ";" << IFile::endl;
+  return std::string();
 }
 
-bool Synapse::generate(const std::string&, std::string *error) {
-  *error = adaptor::PreprocAdaptor::begin(*this, _full_name);
-  *error += adaptor::DescAdaptor::adapt(*this, _desc);
-  *error += adaptor::PreprocAdaptor::end(*this, _full_name);
-  return true;
-}
-
+};  // namespace adaptor
 };  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
