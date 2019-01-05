@@ -20,8 +20,7 @@
 # include <string>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
-# include "header/synapse-header.hh"
-# include "source/synapse-source.hh"
+# include "visitor/synapse.hh"
 
 namespace google {
 namespace protobuf {
@@ -48,12 +47,12 @@ public:
    * @return true if successful. Otherwise, sets *error to a description of the
    * problem (e.g. "invalid parameter") and returns false.
    */
-  virtual bool Generate(const FileDescriptor *desc, const std::string& param,
-      OutputDirectory *out, std::string *error) const {
-    header::Synapse synapse_header(desc, out);
-    source::Synapse synapse_source(desc, out);
-    return synapse_header.generate(param, error) &&
-      synapse_source.generate(param, error);
+  virtual bool Generate(const FileDescriptor *descriptor,
+      const std::string&, OutputDirectory *out,
+      std::string *error) const {
+    visitor::header::Synapse synapse(descriptor->name(), out, ".synapse.h");
+    *error = synapse.parse(descriptor);
+    return (error->size()) ? false : true;
   }
 };
 

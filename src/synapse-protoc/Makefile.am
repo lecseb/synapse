@@ -24,27 +24,21 @@ synapse_protoc_CXXFLAGS= \
 
 noinst_HEADERS= \
 	synapse-generator.hh \
-	synapse-ifile.hh \
-	header/synapse-iheader.hh \
-	header/adaptor/synapse-adaptor.hh \
-	header/adaptor/synapse-desc.hh \
-	header/adaptor/synapse-enum.hh \
-	header/adaptor/synapse-preproc.hh \
-	header/adaptor/synapse-service.hh \
-	header/adaptor/synapse-struct.hh \
-	source/synapse-isource.hh \
-	source/synapse-source.hh
+	adaptor/synapse-ast.hh \
+	adaptor/synapse-element.hh \
+	adaptor/synapse-enum.hh \
+	adaptor/synapse-field.hh \
+	adaptor/synapse-label.hh \
+	adaptor/synapse-struct.hh \
+	adaptor/synapse-visitor.hh \
+	visitor/synapse-default.hh \
+	visitor/synapse-header.hh \
+	visitor/synapse-stream.hh
 
 synapse_protoc_SOURCES= \
-	synapse-ifile.cc \
 	synapse-main.cc \
-	header/synapse-header.cc \
-	header/adaptor/synapse-desc.cc \
-	header/adaptor/synapse-enum.cc \
-	header/adaptor/synapse-preproc.cc \
-	header/adaptor/synapse-service.cc \
-	header/adaptor/synapse-struct.cc \
-	source/synapse-source.cc
+	visitor/synapse.cc \
+	visitor/synapse-stream.cc
 
 synapse_protoc_LDFLAGS= \
 	-lprotoc \

@@ -14,41 +14,51 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_
-# define _HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_
+#ifndef _ADAPTOR_SYNAPSE_FIELD_HH_
+# define _ADAPTOR_SYNAPSE_FIELD_HH_
 
 # include <string>
-# include "synapse-ifile.hh"
+# include <google/protobuf/descriptor.h>
+# include "synapse-element.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace header {
 namespace adaptor {
 
-class PreprocAdaptor {
+class Field : public Element {
 public:
   /**
-   * @brief Adapt a name into a preproc begin section
-   * @param [in] file: file to write the converted data
-   * @param [in] name: name to convert
-   * @return an empty string on success, an explanation on error
+   * @brief Constructor
+   * @param [in] desc: protobuf structure field representation
    */
-  static std::string begin(IFile& file, const std::string& name);
+  explicit Field(const FieldDescriptor *desc)
+    : _label(desc->label()),
+      _name(desc->name()),
+      _type_name(desc->type_name()) {
+  }
 
   /**
-   * @brief Adapt a name into a preproc end section
-   * @param [in] file: file to write the converted data
-   * @param [in] name: name to convert
-   * @return an empty string on success, an explanation on error
+   * @brief Destructor
    */
-  static std::string end(IFile& file, const std::string& name);
+  virtual ~Field() {}
+
+  /**
+   * @brief part of the visitor design pattern
+   */
+  virtual std::string accept(Visitor *visitor) const {
+    return visitor->visite(this);
+  }
+
+private:
+  FieldDescriptor::Label _label;
+  std::string _name;
+  std::string _type_name;
 };
 
 };  // namespace adaptor
-};  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_HEADER_ADAPTOR_SYNAPSE_PREPROC_HH_ */
+#endif /* !_ADAPTOR_SYNAPSE_FIELD_HH_ */

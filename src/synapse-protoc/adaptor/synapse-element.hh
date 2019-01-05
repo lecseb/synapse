@@ -14,9 +14,32 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_
-# define _HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_
+#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
+# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
 
-# include "synapse-desc.hh"
+# include <string>
+# include "synapse-visitor.hh"
 
-#endif /* !_HEADER_ADAPTOR_SYNAPSE_ADAPTOR_HH_ */
+namespace google {
+namespace protobuf {
+namespace compiler {
+namespace adaptor {
+
+/**
+ * @brief Root element of the AST
+ */
+class Element {
+public:
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(Visitor *visitor) const = 0;
+};
+
+};  // namespace adaptor
+};  // namespace compiler
+};  // namespace protobuf
+};  // namespace google
+
+#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */

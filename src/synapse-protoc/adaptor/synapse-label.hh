@@ -14,42 +14,67 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEADER_ADAPTOR_SYNAPSE_SERVICE_HH_
-# define _HEADER_ADAPTOR_SYNAPSE_SERVICE_HH_
+#ifndef _ADAPTOR_SYNAPSE_LABEL_HH_
+# define _ADAPTOR_SYNAPSE_LABEL_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
-# include "synapse-ifile.hh"
+# include "synapse-element.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace header {
 namespace adaptor {
 
-class ServiceAdaptor {
+/**
+ * @brief Enumeration label representation
+ */
+class Label : public Element {
 public:
   /**
-   * @brief Adapt an enum descriptor and print it into the file
-   * @param [in] file: file to write the converted data
-   * @param [in] desc: descriptor to convert
-   * @return an empty string on success, an explanation on error
+   * @brief Constructor
+   * @param [in] desc: protobuf label representation
    */
-  static std::string adapt(IFile& file, const ServiceDescriptor *desc);
+  explicit Label(const EnumValueDescriptor *desc)
+    : _name(desc->name()),
+      _value(std::to_string(desc->number())) {}
 
   /**
-   * @brief Adapt an enum value descriptor and print it into the file
-   * @param [in] file: file to write the convereted data
-   * @param [in] desc: descriptor to convert
-   * @return an empty string on success, an explanation on error
+   * @brief Destructor
    */
-  static std::string adapt(IFile& file, const MethodDescriptor *desc);
+  virtual ~Label() {}
+
+  /**
+   * @brief Get the label name
+   * @return the label name
+   */
+  const std::string& get_name() const {
+    return _name;
+  }
+
+  /**
+   * @brief Get the label value
+   * @return the label value
+   */
+  const std::string& get_value() const {
+    return _value;
+  }
+
+  /**
+   * @brief part of the visitor design pattern
+   */
+  virtual std::string accept(Visitor *visitor) const {
+    return visitor->visite(this);
+  }
+
+private:
+  std::string _name;
+  std::string _value;
 };
 
 };  // namespace adaptor
-};  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_HEADER_ADAPTOR_SYNAPSE_SERVICE_HH_ */
+#endif /* !_ADAPTOR_SYNAPSE_LABEL_HH_ */
