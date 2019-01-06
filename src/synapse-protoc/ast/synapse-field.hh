@@ -14,10 +14,9 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_FUNCTION_HH_
-# define _ADAPTOR_SYNAPSE_FUNCTION_HH_
+#ifndef _AST_SYNAPSE_FIELD_HH_
+# define _AST_SYNAPSE_FIELD_HH_
 
-# include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
@@ -25,35 +24,70 @@
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
-/**
- * @brief C enumeration representation
- */
-class Function : public Element {
+class Field : public Element {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf enumeration representation
+   * @param [in] desc: protobuf structure field representation
    */
-  explicit Function(const ServiceDescriptor *desc);
+  explicit Field(const FieldDescriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Function() {}
+  virtual ~Field() {}
+
+  /**
+   * @brief Get the default value
+   * @return a string
+   */
+  const std::string& get_def_value() const {
+    return _def_value;
+  }
+
+  /**
+   * @brief Field is repeated or not
+   * @return 0 if not, 1 if it's repeated
+   */
+  uint8_t is_repeated() const {
+    return _is_repeated;
+  }
+
+  /**
+   * @brief Get the name of the field
+   * @return a string
+   */
+  const std::string& get_name() const {
+    return _name;
+  }
+
+  /**
+   * @brief Get the type
+   * @return a type
+   */
+  enum FieldDescriptor::Type get_type() const {
+    return _type;
+  }
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
+  virtual std::string accept(Visitor *visitor);
+
+private:
+  std::string _def_value;
+  uint8_t _is_repeated;
+  std::string _name;
+  enum FieldDescriptor::Type _type;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_FUNCTION_HH_ */
+#endif /* !_AST_SYNAPSE_FIELD_HH_ */

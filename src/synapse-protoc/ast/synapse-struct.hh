@@ -14,76 +14,70 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_AST_HH_
-# define _ADAPTOR_SYNAPSE_AST_HH_
+#ifndef _AST_SYNAPSE_STRUCT_HH_
+# define _AST_SYNAPSE_STRUCT_HH_
 
-# include <list>
+# include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
-# include "synapse-enum.hh"
-# include "synapse-struct.hh"
+# include "synapse-field.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
-/**
- * @brief Root element of the AST
- */
-class Ast : public Element {
+class Struct : public Element {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf root ast representation
+   * @param [in] desc: protobuf structure representation
    */
-  explicit Ast(const FileDescriptor *desc);
+  explicit Struct(const Descriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Ast();
+  virtual ~Struct();
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
+  virtual std::string accept(Visitor *visitor);
 
   /**
-   * @brief Get an iterator over the first element contained in the enum
-   * @return a valid iterator
+   * @brief Get the structure name
+   * @return return a string
    */
-  std::list<Enum *>::const_iterator get_enum_begin() const;
+  const std::string& get_name() const;
 
   /**
-   * @brief Get an iterator over the last element contained in the enum
+   * @brief Get an iterator over the first field contained in the enum
    * @return a valid iterator
    */
-  std::list<Enum *>::const_iterator get_enum_end() const;
+  std::map<std::string, Field *>::const_iterator get_fields_begin() const {
+    return _fields.begin();
+  }
 
   /**
-   * @brief Get an iterator over the first element contained in the enum
+   * @brief Get an iterator over the last field contained in the enum
    * @return a valid iterator
    */
-  std::list<Struct *>::const_iterator get_struct_begin() const;
-
-  /**
-   * @brief Get an iterator over the last element contained in the enum
-   * @return a valid iterator
-   */
-  std::list<Struct *>::const_iterator get_struct_end() const;
+  std::map<std::string, Field *>::const_iterator get_fields_end() const {
+    return _fields.end();
+  }
 
 private:
-  std::list<Enum *> _enums;
-  std::list<Struct *> _structs;
+  std::map<std::string, Field *> _fields;
+  std::string _name;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_AST_HH_ */
+#endif /* !_AST_SYNAPSE_STRUCT_HH_ */

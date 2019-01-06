@@ -14,8 +14,8 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_LABEL_HH_
-# define _ADAPTOR_SYNAPSE_LABEL_HH_
+#ifndef _AST_SYNAPSE_LABEL_HH_
+# define _AST_SYNAPSE_LABEL_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
@@ -24,7 +24,7 @@
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
@@ -59,16 +59,16 @@ public:
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
+  virtual std::string accept(Visitor *visitor);
 
 private:
   std::string _name;
   std::string _value;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_LABEL_HH_ */
+#endif /* !_AST_SYNAPSE_LABEL_HH_ */

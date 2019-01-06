@@ -15,12 +15,12 @@
  */
 
 #include "synapse-struct.hh"
-#include "adaptor/synapse-visitor.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 Struct::Struct(const Descriptor *desc)
     : _fields(std::map<std::string, Field *>()),
@@ -37,7 +37,7 @@ Struct::~Struct() {
     delete it->second;
 }
 
-std::string Struct::accept(Visitor *visitor) const {
+std::string Struct::accept(Visitor *visitor) {
   return visitor->visite(this);
 }
 
@@ -45,15 +45,7 @@ const std::string& Struct::get_name() const {
   return _name;
 }
 
-std::map<std::string, Field *>::const_iterator Struct::get_field_begin() const {
-  return _fields.begin();
-}
-
-std::map<std::string, Field *>::const_iterator Struct::get_field_end() const {
-  return _fields.end();
-}
-
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

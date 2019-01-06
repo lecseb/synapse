@@ -22,9 +22,9 @@
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>
 # include <google/protobuf/io/zero_copy_stream_impl.h>
-# include "synapse-default.hh"
+# include "synapse-file.hh"
 # include "synapse-stream.hh"
-# include "adaptor/synapse-visitor.hh"
+# include "ast/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
@@ -32,7 +32,7 @@ namespace compiler {
 namespace visitor {
 namespace header {
 
-class Header : public Default {
+class Header : public File {
 public:
   /**
    * @brief Constructor
@@ -52,42 +52,49 @@ public:
    * @param [in] ast: ast node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Ast *ast) = 0;
+  virtual std::string visite(ast::Ast *ast) = 0;
 
   /**
    * @brief Visite an Enumeration node
    * @param [in] enumeration: enumeration node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Enum *enumeration) = 0;
+  virtual std::string visite(ast::Enum *enumeration) = 0;
 
   /**
    * @brief Visite a field node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Field *field) = 0;
+  virtual std::string visite(ast::Field *field) = 0;
 
   /**
    * @brief Visite a function node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Function *function) = 0;
+  virtual std::string visite(ast::Function *function) = 0;
+
+  /**
+   * @brief Visite a include node
+   * @param [in] include: include node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(ast::Include *include) = 0;
 
   /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Label *label) = 0;
+  virtual std::string visite(ast::Label *label) = 0;
 
   /**
    * @brief Visite a structure node
    * @param [in] structure: structure node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Struct *structure) = 0;
+  virtual std::string visite(ast::Struct *structure) = 0;
 };
 
 };  // namespace header

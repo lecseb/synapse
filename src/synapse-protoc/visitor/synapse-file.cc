@@ -14,14 +14,14 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-default.hh"
+#include "synapse-file.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace visitor {
 
-Default::Default(const std::string& filename, OutputDirectory *out,
+File::File(const std::string& filename, OutputDirectory *out,
     const std::string& extension)
   : _stream(Stream(filename, out, extension)) {
   _stream << "/**\n"
@@ -44,8 +44,8 @@ Default::Default(const std::string& filename, OutputDirectory *out,
     << " */\n\n";
 }
 
-std::string Default::parse(const FileDescriptor *descriptor) {
-  adaptor::Ast ast(descriptor);
+std::string File::parse(const FileDescriptor *descriptor) {
+  ast::Ast ast(descriptor);
   return ast.accept(this);
 }
 

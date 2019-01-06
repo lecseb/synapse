@@ -24,7 +24,7 @@ namespace header {
 
 Header::Header(const std::string& filename, OutputDirectory *out,
     const std::string& extension)
-  : Default(filename, out, extension) {
+  : File(filename, out, extension) {
   std::string temp = std::string("_GENERATE_" + _stream.get_name() + "_");
   std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
   std::replace_if(temp.begin(), temp.end(), ispunct, '_');

@@ -14,25 +14,42 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-field.hh"
-#include "adaptor/synapse-visitor.hh"
+#ifndef _AST_SYNAPSE_DATA_FACTORY_HH_
+# define _AST_SYNAPSEH_DATA_FACTORY_H_
+
+# include <string>
+# include <google/protobuf/descriptor.h>
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
-Field::Field(const FieldDescriptor *desc)
-    : _label(desc->label()),
-      _name(desc->name()),
-      _type_name(desc->type_name()) {
-}
+class DataFactory {
+public:
+  /**
+   * @brief Create some contextual data for the AST
+   * @param [in] ast: ast to modify
+   */
+  static void add_context_data(ast::Ast *ast);
 
-std::string Field::accept(Visitor *visitor) const {
-  return visitor->visite(this);
-}
+private:
+  /**
+   * @brief Browse the Ast in order to add necessary include
+   * @param [in] ast: ast to browse and modify
+   */
+  static void _add_context_includes(ast::Ast *ast);
 
-};  // namespace adaptor
+  /**
+   * @brief Browse the Ast in order to add necessary allocation function
+   * @param [in] ast: ast to browse and modify
+   */
+  static void _add_context_functions(ast::Ast *ast);
+};
+
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* !_AST_SYNAPSE_DATA_FACTORY_HH_ */

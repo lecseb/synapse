@@ -24,27 +24,31 @@ synapse_protoc_CXXFLAGS= \
 
 noinst_HEADERS= \
 	synapse-generator.hh \
-	adaptor/synapse-ast.hh \
-	adaptor/synapse-element.hh \
-	adaptor/synapse-enum.hh \
-	adaptor/synapse-field.hh \
-	adaptor/synapse-label.hh \
-	adaptor/synapse-struct.hh \
-	adaptor/synapse-visitor.hh \
-	visitor/synapse-default.hh \
+	ast/synapse-ast.hh \
+	ast/synapse-data_factory.hh \
+	ast/synapse-element.hh \
+	ast/synapse-enum.hh \
+	ast/synapse-field.hh \
+	ast/synapse-include.hh \
+	ast/synapse-label.hh \
+	ast/synapse-struct.hh \
+	ast/synapse-visitor.hh \
+	visitor/synapse-file.hh \
 	visitor/synapse-header.hh \
 	visitor/synapse-stream.hh
 
 synapse_protoc_SOURCES= \
 	synapse-main.cc \
-	adaptor/synapse-ast.cc \
-	adaptor/synapse-enum.cc \
-	adaptor/synapse-field.cc \
-	adaptor/synapse-function.cc \
-	adaptor/synapse-label.cc \
-	adaptor/synapse-struct.cc \
+	ast/synapse-ast.cc \
+	ast/synapse-data_factory.cc \
+	ast/synapse-enum.cc \
+	ast/synapse-field.cc \
+	ast/synapse-function.cc \
+	ast/synapse-include.cc \
+	ast/synapse-label.cc \
+	ast/synapse-struct.cc \
 	visitor/synapse.cc \
-	visitor/synapse-default.cc \
+	visitor/synapse-file.cc \
 	visitor/synapse-header.cc \
 	visitor/synapse-stream.cc
 

@@ -14,47 +14,73 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_FIELD_HH_
-# define _ADAPTOR_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_ENUM_HH_
+# define _AST_SYNAPSE_ENUM_HH_
 
+# include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
+# include "synapse-label.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
-class Field : public Element {
+/**
+ * @brief C enumeration representation
+ */
+class Enum : public Element {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf structure field representation
+   * @param [in] desc: protobuf enumeration representation
    */
-  explicit Field(const FieldDescriptor *desc);
+  explicit Enum(const EnumDescriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Field() {}
+  virtual ~Enum();
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
+  virtual std::string accept(Visitor *visitor);
+
+  /**
+   * @brief Get the enumeration name
+   * @return the enum string name
+   */
+  virtual const std::string& get_name() const;
+
+  /**
+   * @brief Get an iterator over the first element contained in the enum
+   * @return a valid iterator
+   */
+  std::map<uint32_t, Label *>::const_iterator get_labels_begin() const {
+    return _labels.begin();
+  }
+
+  /**
+   * @brief Get an iterator over the last element contained in the enum
+   * @return a valid iterator
+   */
+  std::map<uint32_t, Label *>::const_iterator get_labels_end() const {
+    return _labels.end();
+  }
 
 private:
-  FieldDescriptor::Label _label;
+  std::map<uint32_t, Label *> _labels;
   std::string _name;
-  std::string _type_name;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_FIELD_HH_ */
+#endif /* !_AST_SYNAPSE_ENUM_HH_ */

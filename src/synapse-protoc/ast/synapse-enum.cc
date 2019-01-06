@@ -15,12 +15,12 @@
  */
 
 #include "synapse-enum.hh"
-#include "adaptor/synapse-visitor.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 Enum::Enum(const EnumDescriptor *desc)
     : _labels(std::map<uint32_t, Label *>()),
@@ -37,7 +37,7 @@ Enum::~Enum() {
     delete it->second;
 }
 
-std::string Enum::accept(Visitor *visitor) const {
+std::string Enum::accept(Visitor *visitor) {
   return visitor->visite(this);
 }
 
@@ -45,15 +45,7 @@ const std::string& Enum::get_name() const {
   return _name;
 }
 
-std::map<uint32_t, Label *>::const_iterator Enum::get_label_begin() const {
-  return _labels.begin();
-}
-
-std::map<uint32_t, Label *>::const_iterator Enum::get_label_end() const {
-  return _labels.end();
-}
-
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

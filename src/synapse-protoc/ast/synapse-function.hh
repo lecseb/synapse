@@ -14,69 +14,70 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ENUM_HH_
-# define _ADAPTOR_SYNAPSE_ENUM_HH_
+#ifndef _AST_SYNAPSE_FUNCTION_HH_
+# define _AST_SYNAPSE_FUNCTION_HH_
 
+# include <list>
 # include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
-# include "synapse-label.hh"
+# include "synapse-field.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
 /**
  * @brief C enumeration representation
  */
-class Enum : public Element {
+class Function : public Element {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf enumeration representation
    */
-  explicit Enum(const EnumDescriptor *desc);
+  explicit Function(const ServiceDescriptor *desc);
+
+  /**
+   * @brief Constructor
+   * @param [in] name: name of the function
+   * @param [in] inputs: list of argument
+   * @param [in] out: output type
+   */
+  Function(const std::string& name, const std::list<Field *>& inputs,
+    Field *out);
 
   /**
    * @brief Destructor
    */
-  virtual ~Enum();
+  virtual ~Function() {}
+
+  /**
+   * @brief Get the function name
+   * @return a string
+   */
+  const std::string& get_name() const {
+    return _name;
+  }
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
-
-  /**
-   * @brief Get the enumeration name
-   * @return the enum string name
-   */
-  virtual const std::string& get_name() const;
-
-  /**
-   * @brief Get an iterator over the first element contained in the enum
-   * @return a valid iterator
-   */
-  std::map<uint32_t, Label *>::const_iterator get_label_begin() const;
-
-  /**
-   * @brief Get an iterator over the last element contained in the enum
-   * @return a valid iterator
-   */
-  std::map<uint32_t, Label *>::const_iterator get_label_end() const;
+  virtual std::string accept(Visitor *visitor);
 
 private:
-  std::map<uint32_t, Label *> _labels;
+  std::list<Field *> _inputs;
+  Field *_out;
   std::string _name;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_ENUM_HH_ */
+#endif /* !_AST_SYNAPSE_FUNCTION_HH_ */

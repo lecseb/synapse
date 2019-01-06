@@ -14,93 +14,80 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _VISITOR_SYNAPSE_DEFAULT_HH_
-# define _VISITOR_SYNAPSE_DEFAULT_HH_
+#ifndef _AST_SYNAPSE_VISITOR_HH_
+# define _AST_SYNAPSE_VISITOR_HH_
 
+# include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
-# include <google/protobuf/compiler/code_generator.h>
-# include <google/protobuf/io/printer.h>
-# include <google/protobuf/io/zero_copy_stream_impl.h>
-# include "synapse-stream.hh"
-# include "adaptor/synapse-visitor.hh"
+# include "synapse-ast.hh"
+# include "synapse-enum.hh"
+# include "synapse-field.hh"
+# include "synapse-function.hh"
+# include "synapse-include.hh"
+# include "synapse-label.hh"
+# include "synapse-struct.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace visitor {
+namespace ast {
 
-class Default : public adaptor::Visitor {
+class Visitor {
 public:
-  /**
-   * @brief Constructor
-   * @param [in] out: protobuf out structure
-   * @param [in] extension: extension of the file to write
-   */
-  Default(const std::string& filename, OutputDirectory *out,
-    const std::string& extension);
-
-  /**
-   * @brief Destructor
-   */
-  virtual ~Default() {}
-
   /**
    * @brief Visite an Ast node
    * @param [in] ast: ast node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Ast *ast) = 0;
+  virtual std::string visite(Ast *ast) = 0;
 
   /**
    * @brief Visite an Enumeration node
    * @param [in] enumeration: enumeration node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Enum *enumeration) = 0;
+  virtual std::string visite(Enum *enumeration) = 0;
 
   /**
    * @brief Visite a field node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Field *field) = 0;
+  virtual std::string visite(Field *field) = 0;
 
   /**
    * @brief Visite a function node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Function *function) = 0;
+  virtual std::string visite(Function *function) = 0;
+
+  /**
+   * @brief Visite a include node
+   * @param [in] include: label node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(Include *include) = 0;
 
   /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Label *label) = 0;
+  virtual std::string visite(Label *label) = 0;
 
   /**
    * @brief Visite a structure node
    * @param [in] structure: structure node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Struct *structure) = 0;
-
-  /**
-   * @brief Parse the file descriptor, build the ast and call the visitor
-   * @param [in] descriptor: descriptor to parse
-   * @return an error string representation
-   */
-  virtual std::string parse(const FileDescriptor *descriptor);
-
-protected:
-  Stream _stream;
+  virtual std::string visite(Struct *structure) = 0;
 };
 
-};  // namespace visitor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_VISITOR_SYNAPSE_DEFAULT_HH_ */
+#endif /* !_AST_SYNAPSE_VISITOR_HH_ */

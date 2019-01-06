@@ -14,29 +14,33 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#ifndef _AST_SYNAPSE_ELEMENT_HH_
+# define _AST_SYNAPSE_ELEMENT_HH_
+
+# include <string>
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace visitor {
+namespace ast {
 
-const std::string Stream::endl = "\n";
+class Visitor;
 
-Stream::Stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
-}
+/**
+ * @brief Root element of the AST
+ */
+class Element {
+public:
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(Visitor *visitor) = 0;
+};
 
-Stream::~Stream() {
-  delete _printer;
-  delete _stream;
-}
-
-};  // namespace visitor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* !_AST_SYNAPSE_ELEMENT_HH_ */

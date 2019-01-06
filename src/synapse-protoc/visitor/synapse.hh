@@ -48,42 +48,49 @@ public:
    * @param [in] ast: ast node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Ast *ast);
+  virtual std::string visite(ast::Ast *ast);
 
   /**
    * @brief Visite an Enumeration node
    * @param [in] enumeration: enumeration node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Enum *enumeration);
+  virtual std::string visite(ast::Enum *enumeration);
 
   /**
    * @brief Visite a field node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Field *field);
+  virtual std::string visite(ast::Field *field);
 
   /**
    * @brief Visite a function node
    * @param [in] field: field node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Function *function);
+  virtual std::string visite(ast::Function *function);
 
   /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Label *label);
+  virtual std::string visite(ast::Include *include);
+
+  /**
+   * @brief Visite a label node
+   * @param [in] label: label node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(ast::Label *label);
 
   /**
    * @brief Visite a structure node
    * @param [in] structure: structure node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(const adaptor::Struct *structure);
+  virtual std::string visite(ast::Struct *structure);
 };
 
 };  // namespace header

@@ -14,66 +14,68 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_STRUCT_HH_
-# define _ADAPTOR_SYNAPSE_STRUCT_HH_
+#ifndef _AST_SYNAPSE_AST_INCLUDE_HH_
+# define _AST_SYNAPSE_AST_INCLUDE_HH_
 
-# include <map>
+# include <list>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
-# include "synapse-field.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 class Visitor;
 
-class Struct : public Element {
+/**
+ * @brief Root element of the AST
+ */
+class Include : public Element {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf structure representation
+   * @param [in] desc: protobuf root ast representation
    */
-  explicit Struct(const Descriptor *desc);
+  explicit Include(const FileDescriptor *desc);
+
+  /**
+   * @brief Constructor
+   * @param [in] name: name of the include
+   */
+  explicit Include(const std::string& name);
 
   /**
    * @brief Destructor
    */
-  virtual ~Struct();
+  virtual ~Include() {}
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const;
+  virtual std::string accept(Visitor *visitor);
 
   /**
-   * @brief Get the structure name
-   * @return return a string
+   * @brief Get the include name
+   * @return a string
    */
-  const std::string& get_name() const;
+  const std::string& get_name() const {
+    return _name;
+  }
 
-  /**
-   * @brief Get an iterator over the first field contained in the enum
-   * @return a valid iterator
-   */
-  std::map<std::string, Field *>::const_iterator get_field_begin() const;
-
-  /**
-   * @brief Get an iterator over the last field contained in the enum
-   * @return a valid iterator
-   */
-  std::map<std::string, Field *>::const_iterator get_field_end() const;
+  bool is_synapse_header() const {
+    return _synapse_header;
+  }
 
 private:
-  std::map<std::string, Field *> _fields;
   std::string _name;
+  bool _synapse_header;
 };
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_STRUCT_HH_ */
+#endif /* !_AST_SYNAPSE_INCLUDE_HH_ */

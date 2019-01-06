@@ -14,33 +14,32 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
-# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
-
-# include <string>
+#include "synapse-label.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
-class Visitor;
+Label::Label(const EnumValueDescriptor *desc)
+    : _name(desc->name()),
+      _value(std::to_string(desc->number())) {
+}
 
-/**
- * @brief Root element of the AST
- */
-class Element {
-public:
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   */
-  virtual std::string accept(Visitor *visitor) const = 0;
-};
+const std::string& Label::get_name() const {
+  return _name;
+}
 
-};  // namespace adaptor
+const std::string& Label::get_value() const {
+  return _value;
+}
+
+std::string Label::accept(Visitor *visitor) {
+  return visitor->visite(this);
+}
+
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
-
-#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */

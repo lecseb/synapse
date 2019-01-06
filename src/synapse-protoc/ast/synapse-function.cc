@@ -14,32 +14,27 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-label.hh"
+#include "synapse-function.hh"
 #include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
-Label::Label(const EnumValueDescriptor *desc)
-    : _name(desc->name()),
-      _value(std::to_string(desc->number())) {
+Function::Function(const ServiceDescriptor *) {
 }
 
-const std::string& Label::get_name() const {
-  return _name;
+Function::Function(const std::string&, const std::list<Field *>&,
+  Field *) {
 }
 
-const std::string& Label::get_value() const {
-  return _value;
-}
 
-std::string Label::accept(Visitor *visitor) const {
+std::string Function::accept(Visitor *visitor) {
   return visitor->visite(this);
 }
 
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

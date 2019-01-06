@@ -15,52 +15,69 @@
  */
 
 #include "synapse-ast.hh"
-#include "adaptor/synapse-visitor.hh"
+#include "synapse-data_factory.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
-namespace adaptor {
+namespace ast {
 
 Ast::Ast(const FileDescriptor *desc)
     : _enums(std::list<Enum *>()),
       _structs(std::list<Struct *>()) {
-  for (int32_t i = 0; i < desc->enum_type_count(); i++)
-    _enums.push_back(new Enum(desc->enum_type(i)));
+  /* add all structure definition */
   for (int32_t i = 0; i < desc->message_type_count(); i++)
     _structs.push_back(new Struct(desc->message_type(i)));
+
+  for (int32_t i = 0; i < desc->enum_type_count(); i++)
+    _enums.push_back(new Enum(desc->enum_type(i)));
+
+  /* add some context data to the ast */
+  DataFactory::add_context_data(this);
+
+  for (int32_t i = 0; i < desc->dependency_count(); i++)
+    _includes.push_back(new Include(desc->dependency(i)));
 }
 
 Ast::~Ast() {
+  std::list<Include *>::iterator it_include = _includes.begin();
+  for (; it_include != _includes.end(); it_include++)
+    delete *it_include;
   std::list<Enum *>::iterator it_enum = _enums.begin();
   for (; it_enum != _enums.end(); it_enum++)
     delete *it_enum;
   std::list<Struct *>::iterator it_struct = _structs.begin();
   for (; it_struct != _structs.end(); it_struct++)
     delete *it_struct;
+  std::list<Function *>::iterator it_func = _functions.begin();
+  for (; it_func != _functions.end(); it_func++)
+    delete *it_func;
 }
 
-std::string Ast::accept(Visitor *visitor) const {
+std::string Ast::accept(Visitor *visitor) {
   return visitor->visite(this);
 }
 
-std::list<Enum *>::const_iterator Ast::get_enum_begin() const {
-  return _enums.begin();
+bool Ast::add_include(Include *include) {
+  std::list<Include *>::iterator it = _includes.begin();
+  for (; it != _includes.end(); it++)
+    if ((*it)->get_name() == include->get_name())
+      return false;
+  _includes.push_back(include);
+  return true;
 }
 
-std::list<Enum *>::const_iterator Ast::get_enum_end() const {
-  return _enums.end();
+bool Ast::add_function(Function *function) {
+  std::list<Function *>::iterator it = _functions.begin();
+  for (; it != _functions.end(); it++)
+    if ((*it)->get_name() == function->get_name())
+      return false;
+  _functions.push_back(function);
+  return true;
 }
 
-std::list<Struct *>::const_iterator Ast::get_struct_begin() const {
-  return _structs.begin();
-}
-
-std::list<Struct *>::const_iterator Ast::get_struct_end() const {
-  return _structs.end();
-}
-
-};  // namespace adaptor
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
