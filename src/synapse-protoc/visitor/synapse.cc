@@ -18,6 +18,7 @@
 #include "adaptor/synapse-ast.hh"
 #include "adaptor/synapse-enum.hh"
 #include "adaptor/synapse-field.hh"
+#include "adaptor/synapse-function.hh"
 #include "adaptor/synapse-label.hh"
 #include "adaptor/synapse-struct.hh"
 
@@ -71,12 +72,13 @@ std::string Synapse::visite(const adaptor::Enum *enumeration) {
   return error;
 }
 
-std::string Synapse::visite(const adaptor::Field *field) {
-  std::string error = std::string();
+std::string Synapse::visite(const adaptor::Field *) {
+  /* nothing to do here. all structure are opaque in synapse implementation */
+  return std::string();
+}
 
-  (void)field;
-
-  return error;
+std::string Synapse::visite(const adaptor::Function *) {
+  return std::string();
 }
 
 std::string Synapse::visite(const adaptor::Label *label) {

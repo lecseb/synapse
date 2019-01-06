@@ -14,9 +14,10 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_LABEL_HH_
-# define _ADAPTOR_SYNAPSE_LABEL_HH_
+#ifndef _ADAPTOR_SYNAPSE_FUNCTION_HH_
+# define _ADAPTOR_SYNAPSE_FUNCTION_HH_
 
+# include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
@@ -29,41 +30,25 @@ namespace adaptor {
 class Visitor;
 
 /**
- * @brief Enumeration label representation
+ * @brief C enumeration representation
  */
-class Label : public Element {
+class Function : public Element {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf label representation
+   * @param [in] desc: protobuf enumeration representation
    */
-  explicit Label(const EnumValueDescriptor *desc);
+  explicit Function(const ServiceDescriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Label() {}
-
-  /**
-   * @brief Get the label name
-   * @return the label name
-   */
-  const std::string& get_name() const;
-
-  /**
-   * @brief Get the label value
-   * @return the label value
-   */
-  const std::string& get_value() const;
+  virtual ~Function() {}
 
   /**
    * @brief part of the visitor design pattern
    */
   virtual std::string accept(Visitor *visitor) const;
-
-private:
-  std::string _name;
-  std::string _value;
 };
 
 };  // namespace adaptor
@@ -71,4 +56,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_ADAPTOR_SYNAPSE_LABEL_HH_ */
+#endif /* !_ADAPTOR_SYNAPSE_FUNCTION_HH_ */

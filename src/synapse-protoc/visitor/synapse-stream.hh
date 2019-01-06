@@ -17,6 +17,7 @@
 #ifndef _VISITOR_SYNAPSE_STREAM_HH_
 # define _VISITOR_SYNAPSE_STREAM_HH_
 
+# include <string>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>

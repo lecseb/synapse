@@ -65,6 +65,13 @@ public:
   virtual std::string visite(const adaptor::Field *field);
 
   /**
+   * @brief Visite a function node
+   * @param [in] field: field node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const adaptor::Function *function);
+
+  /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error

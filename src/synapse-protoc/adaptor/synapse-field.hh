@@ -26,17 +26,15 @@ namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
+class Visitor;
+
 class Field : public Element {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf structure field representation
    */
-  explicit Field(const FieldDescriptor *desc)
-    : _label(desc->label()),
-      _name(desc->name()),
-      _type_name(desc->type_name()) {
-  }
+  explicit Field(const FieldDescriptor *desc);
 
   /**
    * @brief Destructor
@@ -46,9 +44,7 @@ public:
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const {
-    return visitor->visite(this);
-  }
+  virtual std::string accept(Visitor *visitor) const;
 
 private:
   FieldDescriptor::Label _label;

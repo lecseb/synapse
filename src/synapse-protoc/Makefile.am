@@ -37,7 +37,15 @@ noinst_HEADERS= \
 
 synapse_protoc_SOURCES= \
 	synapse-main.cc \
+	adaptor/synapse-ast.cc \
+	adaptor/synapse-enum.cc \
+	adaptor/synapse-field.cc \
+	adaptor/synapse-function.cc \
+	adaptor/synapse-label.cc \
+	adaptor/synapse-struct.cc \
 	visitor/synapse.cc \
+	visitor/synapse-default.cc \
+	visitor/synapse-header.cc \
 	visitor/synapse-stream.cc
 
 synapse_protoc_LDFLAGS= \

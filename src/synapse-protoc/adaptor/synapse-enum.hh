@@ -28,6 +28,8 @@ namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
+class Visitor;
+
 /**
  * @brief C enumeration representation
  */
@@ -37,54 +39,35 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf enumeration representation
    */
-  explicit Enum(const EnumDescriptor *desc)
-    : _labels(std::map<uint32_t, Label *>()),
-      _name(desc->name()) {
-    for (int32_t i = 0; i < desc->value_count(); i++) {
-      const EnumValueDescriptor *label = desc->value(i);
-      _labels[label->number()] = new Label(label);
-    }
-  }
+  explicit Enum(const EnumDescriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Enum() {
-    std::map<uint32_t, Label *>::iterator it = _labels.begin();
-    for (; it != _labels.end(); it++)
-      delete it->second;
-  }
+  virtual ~Enum();
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const {
-    return visitor->visite(this);
-  }
+  virtual std::string accept(Visitor *visitor) const;
 
   /**
    * @brief Get the enumeration name
    * @return the enum string name
    */
-  virtual std::string get_name() const {
-    return _name;
-  }
+  virtual const std::string& get_name() const;
 
   /**
    * @brief Get an iterator over the first element contained in the enum
    * @return a valid iterator
    */
-  std::map<uint32_t, Label *>::const_iterator get_label_begin() const {
-    return _labels.begin();
-  }
+  std::map<uint32_t, Label *>::const_iterator get_label_begin() const;
 
   /**
    * @brief Get an iterator over the last element contained in the enum
    * @return a valid iterator
    */
-  std::map<uint32_t, Label *>::const_iterator get_label_end() const {
-    return _labels.end();
-  }
+  std::map<uint32_t, Label *>::const_iterator get_label_end() const;
 
 private:
   std::map<uint32_t, Label *> _labels;

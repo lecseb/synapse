@@ -28,60 +28,43 @@ namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
+class Visitor;
+
 class Struct : public Element {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf structure representation
    */
-  explicit Struct(const Descriptor *desc)
-    : _fields(std::map<std::string, Field *>()),
-      _name(desc->name()) {
-    for (int32_t i = 0; i < desc->field_count(); i++) {
-      const FieldDescriptor *field = desc->field(i);
-      _fields[field->name()] = new Field(field);
-    }
-  }
+  explicit Struct(const Descriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Struct() {
-    std::map<std::string, Field *>::iterator it = _fields.begin();
-    for (; it != _fields.end(); it++)
-      delete it->second;
-  }
+  virtual ~Struct();
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const {
-    return visitor->visite(this);
-  }
+  virtual std::string accept(Visitor *visitor) const;
 
   /**
    * @brief Get the structure name
    * @return return a string
    */
-  std::string get_name() const {
-    return _name;
-  }
+  const std::string& get_name() const;
 
   /**
    * @brief Get an iterator over the first field contained in the enum
    * @return a valid iterator
    */
-  std::map<std::string, Field *>::const_iterator get_field_begin() const {
-    return _fields.begin();
-  }
+  std::map<std::string, Field *>::const_iterator get_field_begin() const;
 
   /**
    * @brief Get an iterator over the last field contained in the enum
    * @return a valid iterator
    */
-  std::map<std::string, Field *>::const_iterator get_field_end() const {
-    return _fields.end();
-  }
+  std::map<std::string, Field *>::const_iterator get_field_end() const;
 
 private:
   std::map<std::string, Field *> _fields;

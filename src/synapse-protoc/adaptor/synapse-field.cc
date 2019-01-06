@@ -14,33 +14,25 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
-# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
-
-# include <string>
+#include "synapse-field.hh"
+#include "adaptor/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
-class Visitor;
+Field::Field(const FieldDescriptor *desc)
+    : _label(desc->label()),
+      _name(desc->name()),
+      _type_name(desc->type_name()) {
+}
 
-/**
- * @brief Root element of the AST
- */
-class Element {
-public:
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   */
-  virtual std::string accept(Visitor *visitor) const = 0;
-};
+std::string Field::accept(Visitor *visitor) const {
+  return visitor->visite(this);
+}
 
 };  // namespace adaptor
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
-
-#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */

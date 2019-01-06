@@ -14,33 +14,46 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
-# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
-
-# include <string>
+#include "synapse-enum.hh"
+#include "adaptor/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
-class Visitor;
+Enum::Enum(const EnumDescriptor *desc)
+    : _labels(std::map<uint32_t, Label *>()),
+      _name(desc->name()) {
+  for (int32_t i = 0; i < desc->value_count(); i++) {
+    const EnumValueDescriptor *label = desc->value(i);
+    _labels[label->number()] = new Label(label);
+  }
+}
 
-/**
- * @brief Root element of the AST
- */
-class Element {
-public:
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   */
-  virtual std::string accept(Visitor *visitor) const = 0;
-};
+Enum::~Enum() {
+  std::map<uint32_t, Label *>::iterator it = _labels.begin();
+  for (; it != _labels.end(); it++)
+    delete it->second;
+}
+
+std::string Enum::accept(Visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+const std::string& Enum::get_name() const {
+  return _name;
+}
+
+std::map<uint32_t, Label *>::const_iterator Enum::get_label_begin() const {
+  return _labels.begin();
+}
+
+std::map<uint32_t, Label *>::const_iterator Enum::get_label_end() const {
+  return _labels.end();
+}
 
 };  // namespace adaptor
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
-
-#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */

@@ -24,7 +24,6 @@
 # include <google/protobuf/io/zero_copy_stream_impl.h>
 # include "synapse-default.hh"
 # include "synapse-stream.hh"
-# include "adaptor/synapse-ast.hh"
 # include "adaptor/synapse-visitor.hh"
 
 namespace google {
@@ -41,25 +40,12 @@ public:
    * @param [in] extension: extension of the file to write
    */
   Header(const std::string& filename, OutputDirectory *out,
-      const std::string& extension)
-    : Default(filename, out, extension) {
-    std::string temp = std::string("_GENERATE_" + _stream.get_name() + "_");
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-    _stream << "#ifndef " << temp << Stream::endl;
-    _stream << "# define " << temp << Stream::endl;
-    _stream << Stream::endl;
-  }
+    const std::string& extension);
 
   /**
    * @brief Destructor
    */
-  virtual ~Header() {
-    std::string temp = std::string("_GENERATE_" + _stream.get_name() + "_");
-    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-    std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-    _stream << "#endif /* !" << temp << " */" << Stream::endl;
-  }
+  virtual ~Header();
 
   /**
    * @brief Visite an Ast node
@@ -83,6 +69,13 @@ public:
   virtual std::string visite(const adaptor::Field *field) = 0;
 
   /**
+   * @brief Visite a function node
+   * @param [in] field: field node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const adaptor::Function *function) = 0;
+
+  /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error
@@ -95,16 +88,6 @@ public:
    * @return a string representation of an error
    */
   virtual std::string visite(const adaptor::Struct *structure) = 0;
-
-  /**
-   * @brief Parse the file descriptor, build the ast and call the visitor
-   * @param [in] descriptor: descriptor to parse
-   * @return an error string representation
-   */
-  virtual std::string parse(const FileDescriptor *descriptor) {
-    adaptor::Ast ast(descriptor);
-    return ast.accept(this);
-  }
 };
 
 };  // namespace header

@@ -23,7 +23,6 @@
 # include <google/protobuf/io/printer.h>
 # include <google/protobuf/io/zero_copy_stream_impl.h>
 # include "synapse-stream.hh"
-# include "adaptor/synapse-ast.hh"
 # include "adaptor/synapse-visitor.hh"
 
 namespace google {
@@ -39,27 +38,7 @@ public:
    * @param [in] extension: extension of the file to write
    */
   Default(const std::string& filename, OutputDirectory *out,
-    const std::string& extension)
-    : _stream(Stream(filename, out, extension)) {
-    _stream << "/**\n"
-      << " * synapse is free software: you can redistribute it and/or modify\n"
-      << " * it under the terms of the GNU General Public License as "
-      << "published\n"
-      << " * by the Free Software Foundation, either version 3 of the License,"
-      << "\n"
-      << " * or (at your option) any later version.\n"
-      << " *\n"
-      << " * synapse is distributed in the hope that it will be useful,\n"
-      << " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-      << " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-      << " * GNU General Public License for more details.\n"
-      << " *\n"
-      << " * You should have received a copy of the GNU General Public License"
-      << "\n"
-      << " * along with synapse.  If not, see <https://www.gnu.org/licenses/>."
-      << "\n"
-      << " */\n\n";
-  }
+    const std::string& extension);
 
   /**
    * @brief Destructor
@@ -88,6 +67,13 @@ public:
   virtual std::string visite(const adaptor::Field *field) = 0;
 
   /**
+   * @brief Visite a function node
+   * @param [in] field: field node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const adaptor::Function *function) = 0;
+
+  /**
    * @brief Visite a label node
    * @param [in] label: label node to visite
    * @return a string representation of an error
@@ -106,10 +92,7 @@ public:
    * @param [in] descriptor: descriptor to parse
    * @return an error string representation
    */
-  virtual std::string parse(const FileDescriptor *descriptor) {
-    adaptor::Ast ast(descriptor);
-    return ast.accept(this);
-  }
+  virtual std::string parse(const FileDescriptor *descriptor);
 
 protected:
   Stream _stream;

@@ -20,17 +20,17 @@
 # include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
+# include "synapse-ast.hh"
+# include "synapse-enum.hh"
+# include "synapse-field.hh"
+# include "synapse-function.hh"
+# include "synapse-label.hh"
+# include "synapse-struct.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
-
-class Ast;
-class Enum;
-class Field;
-class Label;
-class Struct;
 
 class Visitor {
 public:
@@ -54,6 +54,13 @@ public:
    * @return a string representation of an error
    */
   virtual std::string visite(const Field *field) = 0;
+
+  /**
+   * @brief Visite a function node
+   * @param [in] field: field node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const Function *function) = 0;
 
   /**
    * @brief Visite a label node

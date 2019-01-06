@@ -22,15 +22,14 @@
 # include <google/protobuf/descriptor.h>
 # include "synapse-element.hh"
 # include "synapse-enum.hh"
-# include "synapse-field.hh"
-# include "synapse-label.hh"
 # include "synapse-struct.hh"
-# include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
+
+class Visitor;
 
 /**
  * @brief Root element of the AST
@@ -41,65 +40,41 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf root ast representation
    */
-  explicit Ast(const FileDescriptor *desc)
-    : _enums(std::list<Enum *>()),
-      _structs(std::list<Struct *>()) {
-    for (int32_t i = 0; i < desc->enum_type_count(); i++)
-      _enums.push_back(new Enum(desc->enum_type(i)));
-    for (int32_t i = 0; i < desc->message_type_count(); i++)
-      _structs.push_back(new Struct(desc->message_type(i)));
-  }
+  explicit Ast(const FileDescriptor *desc);
 
   /**
    * @brief Destructor
    */
-  virtual ~Ast() {
-    std::list<Enum *>::iterator it_enum = _enums.begin();
-    for (; it_enum != _enums.end(); it_enum++)
-      delete *it_enum;
-    std::list<Struct *>::iterator it_struct = _structs.begin();
-    for (; it_struct != _structs.end(); it_struct++)
-      delete *it_struct;
-  }
+  virtual ~Ast();
 
   /**
    * @brief part of the visitor design pattern
    */
-  virtual std::string accept(Visitor *visitor) const {
-    return visitor->visite(this);
-  }
+  virtual std::string accept(Visitor *visitor) const;
 
   /**
    * @brief Get an iterator over the first element contained in the enum
    * @return a valid iterator
    */
-  std::list<Enum *>::const_iterator get_enum_begin() const {
-    return _enums.begin();
-  }
+  std::list<Enum *>::const_iterator get_enum_begin() const;
 
   /**
    * @brief Get an iterator over the last element contained in the enum
    * @return a valid iterator
    */
-  std::list<Enum *>::const_iterator get_enum_end() const {
-    return _enums.end();
-  }
+  std::list<Enum *>::const_iterator get_enum_end() const;
 
   /**
    * @brief Get an iterator over the first element contained in the enum
    * @return a valid iterator
    */
-  std::list<Struct *>::const_iterator get_struct_begin() const {
-    return _structs.begin();
-  }
+  std::list<Struct *>::const_iterator get_struct_begin() const;
 
   /**
    * @brief Get an iterator over the last element contained in the enum
    * @return a valid iterator
    */
-  std::list<Struct *>::const_iterator get_struct_end() const {
-    return _structs.end();
-  }
+  std::list<Struct *>::const_iterator get_struct_end() const;
 
 private:
   std::list<Enum *> _enums;

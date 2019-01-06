@@ -14,33 +14,22 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
-# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
-
-# include <string>
+#include "synapse-function.hh"
+#include "adaptor/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
-class Visitor;
+Function::Function(const ServiceDescriptor *) {
+}
 
-/**
- * @brief Root element of the AST
- */
-class Element {
-public:
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   */
-  virtual std::string accept(Visitor *visitor) const = 0;
-};
+std::string Function::accept(Visitor *visitor) const {
+  return visitor->visite(this);
+}
 
 };  // namespace adaptor
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
-
-#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */

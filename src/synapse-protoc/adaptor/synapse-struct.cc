@@ -14,33 +14,46 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ADAPTOR_SYNAPSE_ELEMENT_HH_
-# define _ADAPTOR_SYNAPSE_ELEMENT_HH_
-
-# include <string>
+#include "synapse-struct.hh"
+#include "adaptor/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace adaptor {
 
-class Visitor;
+Struct::Struct(const Descriptor *desc)
+    : _fields(std::map<std::string, Field *>()),
+      _name(desc->name()) {
+  for (int32_t i = 0; i < desc->field_count(); i++) {
+    const FieldDescriptor *field = desc->field(i);
+    _fields[field->name()] = new Field(field);
+  }
+}
 
-/**
- * @brief Root element of the AST
- */
-class Element {
-public:
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   */
-  virtual std::string accept(Visitor *visitor) const = 0;
-};
+Struct::~Struct() {
+  std::map<std::string, Field *>::iterator it = _fields.begin();
+  for (; it != _fields.end(); it++)
+    delete it->second;
+}
+
+std::string Struct::accept(Visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+const std::string& Struct::get_name() const {
+  return _name;
+}
+
+std::map<std::string, Field *>::const_iterator Struct::get_field_begin() const {
+  return _fields.begin();
+}
+
+std::map<std::string, Field *>::const_iterator Struct::get_field_end() const {
+  return _fields.end();
+}
 
 };  // namespace adaptor
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
-
-#endif /* !_ADAPTOR_SYNAPSE_ELEMENT_HH_ */
