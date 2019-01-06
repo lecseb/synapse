@@ -37,6 +37,22 @@ public:
   explicit Field(const FieldDescriptor *desc);
 
   /**
+   * @brief Copy constructor
+   * @param [in] field: field to copy
+   */
+  explicit Field(const Field *field);
+
+  /**
+   * @brief Create an internal field
+   * @param [in] name: name of the field
+   * @param [in] type: type of the field
+   * @param [in] value: type default value
+   * @param [in] isrepeat: array or not
+   */
+  Field(const std::string& name, enum FieldDescriptor::Type type,
+    const std::string& value = std::string(), bool isrepeat = false);
+
+  /**
    * @brief Destructor
    */
   virtual ~Field() {}
@@ -53,7 +69,7 @@ public:
    * @brief Field is repeated or not
    * @return 0 if not, 1 if it's repeated
    */
-  uint8_t is_repeated() const {
+  bool is_repeated() const {
     return _is_repeated;
   }
 
@@ -80,10 +96,17 @@ public:
 
 private:
   std::string _def_value;
-  uint8_t _is_repeated;
+  bool _is_repeated;
   std::string _name;
   enum FieldDescriptor::Type _type;
 };
+
+/**
+ * @brief Convert a type into a string
+ * @param [in] type: type to convert
+ * @return a string
+ */
+std::string type_tostring(enum FieldDescriptor::Type type);
 
 };  // namespace ast
 };  // namespace compiler

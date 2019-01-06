@@ -25,8 +25,11 @@ namespace ast {
 Function::Function(const ServiceDescriptor *) {
 }
 
-Function::Function(const std::string&, const std::list<Field *>&,
-  Field *) {
+Function::Function(const std::string& name, const std::list<Field *>& inputs,
+  Field *output)
+  : _inputs(std::list<Field *>(inputs.begin(), inputs.end())),
+    _name(name),
+    _output(output) {
 }
 
 

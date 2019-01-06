@@ -47,12 +47,25 @@ void DataFactory::_add_context_functions(ast::Ast *ast) {
   std::list<ast::Struct *>::const_iterator structs =
     ast->get_structs_begin();
   for (; structs != ast->get_structs_end(); structs++) {
-    ast->add_function(new Function(
-      std::string((*structs)->get_name() + "_new"),
-      std::list<Field *>(), NULL));
-    ast->add_function(new Function(
-      std::string((*structs)->get_name() + "_free"),
-      std::list<Field *>(), NULL));
+    /* new struct handler */
+    struct std::list<Field *> list = std::list<Field *>();
+    std::map<std::string, Field *>::const_iterator field =
+      (*structs)->get_fields_begin();
+    for (; field != (*structs)->get_fields_end(); field++)
+      list.push_back(new ast::Field(field->second));
+    std::string new_func_name = (*structs)->get_name() + "_new";
+    std::string new_type_name = (*structs)->get_name() + " *";
+    FieldDescriptor::Type new_type = FieldDescriptor::TYPE_MESSAGE;
+    Field *output = new Field(new_type_name, new_type);
+    ast->add_function(new Function(new_func_name,  list, output));
+
+    /* free struct handler */
+    list.clear();
+    std::string free_type_name = (*structs)->get_name() + " *msg";
+    FieldDescriptor::Type free_type = FieldDescriptor::TYPE_MESSAGE;
+    list.push_back(new Field(free_type_name, free_type));
+    std::string free_func_name = (*structs)->get_name() + "_free";
+    ast->add_function(new Function(free_func_name, list, NULL));
   }
 }
 

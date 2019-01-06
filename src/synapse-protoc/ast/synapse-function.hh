@@ -65,14 +65,40 @@ public:
   }
 
   /**
+   * @brief Get the output field of the function
+   * @return a string
+   */
+  Field *get_output() const {
+    return _output;
+  }
+
+  /**
    * @brief part of the visitor design pattern
    */
   virtual std::string accept(Visitor *visitor);
 
+  /**
+   * @brief Get an iterator over the first element contained in the argument
+   * list
+   * @return a valid iterator
+   */
+  std::list<Field *>::const_iterator get_fields_begin() const {
+    return _inputs.begin();
+  }
+
+  /**
+   * @brief Get an iterator over the last element contained in the argument
+   * list
+   * @return a valid iterator
+   */
+  std::list<Field *>::const_iterator get_fields_end() const {
+    return _inputs.end();
+  }
+
 private:
   std::list<Field *> _inputs;
-  Field *_out;
   std::string _name;
+  Field *_output;
 };
 
 };  // namespace ast

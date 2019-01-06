@@ -52,6 +52,11 @@ std::string Synapse::visite(ast::Ast *ast) {
   for (; structs != ast->get_structs_end(); structs++)
     error += (*structs)->accept(this);
 
+  std::list<ast::Function *>::const_iterator funcs =
+    ast->get_functions_begin();
+  for (; funcs != ast->get_functions_end(); funcs++)
+    error += (*funcs)->accept(this);
+
   return error;
 }
 
@@ -74,13 +79,39 @@ std::string Synapse::visite(ast::Enum *enumeration) {
   return error;
 }
 
-std::string Synapse::visite(ast::Field *) {
-  /* nothing to do here. all structure are opaque in synapse implementation */
+std::string Synapse::visite(ast::Field *field) {
+  /* Those field concern the input parameter list of a function */
+  const std::string& type = ast::type_tostring(field->get_type());
+  if (type[type.size() - 1] == '*')
+    _stream << type << field->get_name();
+  else
+    _stream << type << " " << field->get_name();
   return std::string();
 }
 
-std::string Synapse::visite(ast::Function *) {
-  return std::string();
+std::string Synapse::visite(ast::Function *function) {
+  std::string error = std::string();
+
+  if (function->get_output()) {
+    error += function->get_output()->accept(this);
+    _stream << " " << function->get_name() << "(";
+  } else {
+    _stream << "void " << function->get_name() << "(";
+  }
+  _stream.indent();
+  std::list<ast::Field *>::const_iterator field = function->get_fields_begin();
+  if (field != function->get_fields_end()) {
+    _stream << Stream::endl;
+    error += (*field)->accept(this);
+    for (field++; field != function->get_fields_end(); field++) {
+      _stream << "," << Stream::endl;
+      error += (*field)->accept(this);
+    }
+  }
+  _stream.outdent();
+  _stream << ");" << Stream::endl;
+  _stream << Stream::endl;
+  return error;
 }
 
 std::string Synapse::visite(ast::Include *include) {

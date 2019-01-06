@@ -23,6 +23,36 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
+std::string type_tostring(enum FieldDescriptor::Type type) {
+  switch (type) {
+  case FieldDescriptor::TYPE_DOUBLE:
+    return "double";
+  case FieldDescriptor::TYPE_FLOAT:
+    return "float";
+  case FieldDescriptor::TYPE_INT64:
+    return "int64_t";
+  case FieldDescriptor::TYPE_UINT64:
+    return "uint64_t";
+  case FieldDescriptor::TYPE_INT32:
+    return "int32_t";
+  case FieldDescriptor::TYPE_BOOL:
+    return "uint8_t";
+  case FieldDescriptor::TYPE_STRING:
+    return "char *";
+  case FieldDescriptor::TYPE_MESSAGE:
+    return "struct";
+  case FieldDescriptor::TYPE_BYTES:
+    return "struct s_sypase_bytes *";
+  case FieldDescriptor::TYPE_UINT32:
+    return "uint32_t";
+  case FieldDescriptor::TYPE_ENUM:
+    return "enum";
+  default:
+    break;
+  }
+  return "unknown";
+}
+
 static std::string _get_default_value(const FieldDescriptor *desc) {
   switch (desc->type()) {
   case FieldDescriptor::TYPE_DOUBLE:
@@ -44,14 +74,7 @@ static std::string _get_default_value(const FieldDescriptor *desc) {
   case FieldDescriptor::TYPE_BYTES:
   case FieldDescriptor::TYPE_MESSAGE:
     return std::string("NULL");
-  case FieldDescriptor::TYPE_GROUP:
-  case FieldDescriptor::TYPE_ENUM:
-  case FieldDescriptor::TYPE_SFIXED32:
-  case FieldDescriptor::TYPE_SFIXED64:
-  case FieldDescriptor::TYPE_SINT32:
-  case FieldDescriptor::TYPE_SINT64:
-  case FieldDescriptor::TYPE_FIXED64:
-  case FieldDescriptor::TYPE_FIXED32:
+  default:
     break;
   }
   return std::string();
@@ -62,6 +85,21 @@ Field::Field(const FieldDescriptor *desc)
     _is_repeated(desc->is_repeated()),
     _name(desc->name()),
     _type(desc->type()) {
+}
+
+Field::Field(const Field *field)
+  : _def_value(field->_def_value),
+    _is_repeated(field->_is_repeated),
+    _name(field->_name),
+    _type(field->_type) {
+}
+
+Field::Field(const std::string& name, enum FieldDescriptor::Type type,
+    const std::string& value, bool isrepeat)
+  : _def_value(value),
+    _is_repeated(isrepeat),
+    _name(name),
+    _type(type) {
 }
 
 std::string Field::accept(Visitor *visitor) {
