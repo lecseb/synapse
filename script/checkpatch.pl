@@ -45,7 +45,6 @@ sub help {
 	print << "EOM";
 Usage: $P [OPTION]... [FILE]...
 Version: $V
-
 Options:
   -q, --quiet                quiet
   --no-tree                  run without a kernel tree
@@ -73,7 +72,6 @@ Options:
                              with potential errors corrected to the preferred
                              checkpatch style
   -h, --help, --version      display this help and exit
-
 When FILE is - read standard input.
 EOM
 
@@ -4179,13 +4177,10 @@ sub process {
 		if (!$quiet) {
 			print << "EOM";
 Wrote EXPERIMENTAL --fix correction(s) to '$newfile'
-
 Do _NOT_ trust the results written to this file.
 Do _NOT_ submit these changes without inspecting them for correctness.
-
 This EXPERIMENTAL file is simply a convenience to help rewrite patches.
 No warranties, expressed or implied...
-
 EOM
 		}
 	}
@@ -4196,7 +4191,6 @@ EOM
 	if ($clean == 0 && $quiet == 0) {
 		print << "EOM";
 $vname has style problems, please review.
-
 If any of these errors are false positives, please report
 them to the maintainer, see CHECKPATCH in MAINTAINERS.
 EOM

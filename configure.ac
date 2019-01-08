@@ -36,7 +36,7 @@ PKG_CHECK_MODULES([libevent_openssl], [libevent_openssl])
 PKG_CHECK_MODULES([libssl], [libssl])
 PKG_CHECK_MODULES([libprotobuf], [protobuf])
 
-my_CPPFLAGS="\
+synapse_CFLAGS="\
 -W \
 -Werror \
 -Wall \
@@ -49,18 +49,31 @@ my_CPPFLAGS="\
 -Wtype-limits \
 -I`pwd`/src \
 "
+synapse_CPPFLAGS="\
+-std=gnu++11 \
+$synapse_CFLAGS \
+"
 
 # debug mode activation
 AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug]),
-	[extra_CPPFLAGS="-g -ggdb"], [extra_CPPFLAGS="-O3"])
+	[ extra_CPPFLAGS="-g -ggdb" ; extra_CFLAGS="-g -ggdb" ],
+        [ extra_CPPFLAGS="-O3" ; extra_CFLAGS="-g -ggdb" ])
 
-AC_SUBST([AM_CPPFLAGS], ["$AM_CPPFLAGS $my_CPPFLAGS $extra_CPPFLAGS"])
+AC_SUBST([synapse_CPPFLAGS], ["$AM_CPPFLAGS $synapse_CPPFLAGS $extra_CPPFLAGS"])
+AC_SUBST([synapse_CFLAGS], ["$AM_CFLAGS $synapse_CFLAGS $extra_CFLAGS"])
+AC_SUBST([synapse_libdir], ["`pwd`/src/library"])
+AC_SUBST([synapse_compdir], ["`pwd`/src/compiler"])
+AM_CONDITIONAL([synapse_SILENT], [test "$AM_DEFAULT_VERBOSITY"="0"])
 
 # Output generated file
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
-	src/synapse-protoc/Makefile
+	src/compiler/ast/Makefile
+	src/compiler/Makefile
+	src/library/libsynapse.pc
+	src/library/Makefile
+	src/library/proto/Makefile
 ])
 
 AC_OUTPUT
@@ -76,7 +89,9 @@ AC_MSG_RESULT([
     includedir:          ${includedir}
     bindir:              ${bindir}
 
+    CXX compiler:        ${CXX}
     C compiler:          ${CC}
-    CFLAGS:              ${AM_CPPFLAGS}
+    CPPFLAGS:            ${synapse_CPPFLAGS}
+    CFLAGS:              ${synapse_CFLAGS}
     LDFLAGS:             ${AM_LDFLAGS}
 ])

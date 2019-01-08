@@ -23,10 +23,12 @@ coding-style:
 			--extension hpp,cpp,cc,hh,hxx \
 			--verbose 0 \
 			--filter=-whitespace/tab,-legal/copyright,-build/include_order \
-			$$$$i; \
+			$$$$i 2> $$$$i.tmp; \
 		if [ $$$$? -ne 0 ]; then \
+			cat $$$$i.tmp; \
 			let "RET=1"; \
 		fi; \
+		rm $$$$i.tmp; \
 	done; \
 	if [ $$$$RET -ne 0 ]; then \
 		echo -e "\033[93m[check]: \033[91mcheck failed\033[0m"; \

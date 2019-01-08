@@ -13,4 +13,33 @@
 # You should have received a copy of the GNU General Public License
 # along with synapse.  If not, see <https://www.gnu.org/licenses/>.
 
-SUBDIRS= src
+SUBDIRS= proto
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libsynapse.pc
+
+include $(top_builddir)/script/checkpatch.mk
+
+lib_LTLIBRARIES= libsynapse.la
+
+libsynapse_la_CFLAGS= \
+	$(synapse_CFLAGS) \
+	-I. \
+	-Isynapse
+
+noinst_HEADERS= \
+	synapse/alloc.h \
+	synapse/bytes.h \
+	synapse/condition.h \
+	synapse/log.h
+
+include_HEADERS= \
+	synapse/connection.synapse.h \
+	synapse/export.h
+
+libsynapse_la_SOURCES= \
+	synapse.c
+
+# eval to create the coding style rule
+$(eval $(call check, $(sort $(noinst_HEADERS) $(include_HEADERS) \
+  $(libsynapse_la_SOURCES))))

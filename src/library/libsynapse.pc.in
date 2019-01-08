@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+bindir=@bindir@
+
+Name: libsynapse
+Description: Synapse communication library
+Version: @VERSION@
+Libs: -L${libdir} -lsynapse
+Libs.private:
+Cflags: -I${includedir} -I${includedir}/proto
+Libdir: ${libdir}
+Requires: @DEP_DBUS@
