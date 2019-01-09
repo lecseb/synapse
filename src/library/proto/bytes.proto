@@ -16,26 +16,7 @@
 
 syntax = "proto3";
 
-package synapse.connect;
-
-enum type {
-     dbus = 0;
-     client_ssl = 1;
-     server_ssl = 2;
-};
-
-message SearchRequest {
-  uint32 test = 1;
-  uint32 tetst_2 = 2;
-  bytes test3 = 3;
-};
-
-message SearchResponse {
-  uint32 test = 1;
-  uint32 tetst_2 = 2;
-  bytes test3 = 3;
-};
-
-service toto {
-  rpc Search (SearchRequest) returns (SearchResponse);
+message s_synapse_bytes {
+  uint32 size = 1;
+  repeated bool data = 2;
 };

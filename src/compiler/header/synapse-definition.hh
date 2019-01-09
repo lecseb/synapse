@@ -38,13 +38,23 @@ public:
    * @param [in] out: protobuf out structure
    * @param [in] extension: extension of the file to write
    */
-  definition(const std::string& filename, OutputDirectory *out,
-    const std::string& extension);
+  definition(const std::string& filename, const std::string& extension,
+    const std::string& params, OutputDirectory *out);
 
   /**
    * @brief Destructor
    */
   virtual ~definition();
+
+  /**
+   * @brief Order the parsing and start the ast construction
+   * @param [in] desc: protobuf file structure
+   * @return a string
+   */
+  virtual std::string parse(const FileDescriptor *desc);
+
+protected:
+  std::string _include_path;
 };
 
 };  // namespace header

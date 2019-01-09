@@ -14,6 +14,10 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "synapse-decls.hh"
+#include "synapse-enumeration.hh"
+#include "synapse-include.hh"
+#include "synapse-structure.hh"
 #include "synapse-visitor.hh"
 
 namespace google {
@@ -23,6 +27,13 @@ namespace ast {
 
 decls::decls(const FileDescriptor *desc)
   : _decls(std::list<decl *>()) {
+  _decls.push_back(new include("synapse/export.hh"));
+
+  for (int32_t i = 0; i < desc->dependency_count(); i++) {
+    const FileDescriptor *dependency = desc->dependency(i);
+    _decls.push_back(new include(dependency));
+  }
+
   for (int32_t i = 0; i < desc->enum_type_count(); i++)
     _decls.push_back(new enumeration(desc->enum_type(i)));
 

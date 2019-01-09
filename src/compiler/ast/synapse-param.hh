@@ -69,15 +69,6 @@ public:
     return _type;
   }
 
-  /**
-   * @brief Generate a new name
-   * @return a string
-   */
-  std::string generate_name() const {
-    static uint32_t index = 0;
-    return std::string(_name + std::to_string(index));
-  }
-
 protected:
   const Descriptor *_desc;
   std::string _name;

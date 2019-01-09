@@ -15,15 +15,18 @@
  */
 
 #include "synapse-definition.hh"
+#include "synapse-factory.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace header {
 
-definition::definition(const std::string& filename, OutputDirectory *out,
-    const std::string& extension)
-  : file(filename, out, extension) {
+definition::definition(const std::string& filename,
+    const std::string& extension, const std::string&,
+    OutputDirectory *out)
+  : file(filename, out, extension),
+    _include_path(std::string()) {
   std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
   std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
   std::replace_if(temp.begin(), temp.end(), ispunct, '_');
@@ -37,6 +40,13 @@ definition::~definition() {
   std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
   std::replace_if(temp.begin(), temp.end(), ispunct, '_');
   _stream << "#endif /* !" << temp << " */" << stream::endl;
+}
+
+std::string definition::parse(const FileDescriptor *desc) {
+  ast::decls *_decls = new ast::decls(desc);
+  std::string error = _decls->accept(this);
+  delete _decls;
+  return error;
 }
 
 };  // namespace header

@@ -29,6 +29,7 @@ noinst_HEADERS= \
 	synapse-stream.hh \
 	synapse-string.hh \
 	header/synapse-definition.hh \
+	header/synapse-factory.hh \
 	header/synapse-generator.hh \
 	header/synapse-header.hh
 
@@ -36,6 +37,7 @@ synapse_header_SOURCES= \
 	synapse-file.cc \
 	synapse-stream.cc \
 	header/synapse-definition.cc \
+	header/synapse-factory.cc \
 	header/synapse-header.cc \
 	header/synapse-main.cc
 

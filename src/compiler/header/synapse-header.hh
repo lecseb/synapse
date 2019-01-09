@@ -32,11 +32,12 @@ public:
   /**
    * @brief Constructor
    * @param [in] name: file name
-   * @param [in] out: protobuf out structure
    * @param [in] extension: extension of the file to write
+   * @param [in] params: parameter given to the compiler
+   * @param [in] out: protobuf out structure
    */
-  synapse(const std::string& name, OutputDirectory *out,
-    const std::string& extension);
+  synapse(const std::string& name, const std::string& extension,
+    const std::string& params, OutputDirectory *out);
 
   /**
    * @brief Destructor
@@ -107,6 +108,13 @@ public:
   virtual std::string visite(const ast::function::out *node);
 
   /**
+   * @brief Visite an include node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const ast::include *node);
+
+  /**
    * @brief Visite an param node
    * @param [in] node: node to visite
    * @return a string representation of an error
@@ -133,13 +141,6 @@ public:
    * @return a string representation of an error
    */
   virtual std::string visite(const ast::structure *node);
-
-  /**
-   * @brief Order the parsing and start the ast construction
-   * @param [in] desc: protobuf file structure
-   * @return a string
-   */
-  virtual std::string parse(const FileDescriptor *desc);
 };
 
 };  // namespace header

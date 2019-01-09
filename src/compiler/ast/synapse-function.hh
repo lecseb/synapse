@@ -43,13 +43,13 @@ public:
      * @brief Constructor
      * @param [in] desc: protobuf output function type
      */
-    out(const Descriptor *desc)
+    explicit out(const Descriptor *desc)
       : param(desc) {}
 
     /**
      * @brief Destructor
      */
-    virtual ~out() {};
+    virtual ~out() {}
 
     /**
      * @brief Accept function of the visitor design pattern
@@ -67,10 +67,10 @@ public:
   /**
    * @brief Constructor
    * @param [in] name: name of the function
-   * @param [in] output: return type
+   * @param [in] out: return type
    * @param [in] input: input type
    */
-  function(const std::string& name, param *return_type,
+  function(const std::string& name, out *return_type,
     params *args);
 
   /**
@@ -96,13 +96,13 @@ public:
    * @brief Get the argument list
    * @return the param list
    */
-  const param *get_return_type() const {
+  const out *get_return_type() const {
     return _return;
   }
 
 private:
   params *_params;
-  param *_return;
+  out *_return;
 };
 
 };  // namespace ast

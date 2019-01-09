@@ -32,6 +32,7 @@ noinst_HEADERS= \
 	synapse-field.hh \
 	synapse-fields.hh \
 	synapse-function.hh \
+	synapse-include.hh \
 	synapse-node.hh \
 	synapse-param.hh \
 	synapse-params.hh \
@@ -49,6 +50,7 @@ libsynapse_ast_a_SOURCES= \
 	synapse-field.cc \
 	synapse-fields.cc \
 	synapse-function.cc \
+	synapse-include.cc \
 	synapse-param.cc \
 	synapse-params.cc \
 	synapse-service.cc \

@@ -27,6 +27,7 @@
 # include "synapse-field.hh"
 # include "synapse-fields.hh"
 # include "synapse-function.hh"
+# include "synapse-include.hh"
 # include "synapse-param.hh"
 # include "synapse-params.hh"
 # include "synapse-service.hh"
@@ -101,6 +102,13 @@ public:
    * @return a string representation of an error
    */
   virtual std::string visite(const function::out *node) = 0;
+
+  /**
+   * @brief Visite an include node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const include *node) = 0;
 
   /**
    * @brief Visite an param node

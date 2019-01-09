@@ -14,16 +14,24 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <google/protobuf/compiler/command_line_interface.h>
-#include "synapse-generator.hh"
+#ifndef _HEADER_SYNAPSE_FACTORY_HH_
+# define _HEADER_SYNAPSE_FACTORY_HH_
 
-int main(int argc, char *argv[]) {
-  static const std::string _cmd_out = "--synapse_out";
-  static const std::string _cmd_brief = "Generate synapse headers/sources";
-  google::protobuf::compiler::CommandLineInterface client;
-  google::protobuf::compiler::header::Generator generator;
+# include <string>
+# include <google/protobuf/descriptor.h>
 
-  client.SetVersionInfo("libprotoc 3.5.1");
-  client.RegisterGenerator(_cmd_out, &generator, _cmd_brief);
-  return client.Run(argc, argv);
-}
+namespace google {
+namespace protobuf {
+namespace compiler {
+namespace header {
+
+class factory {
+public:
+};
+
+};  // namespace header
+};  // namespace compiler
+};  // namespace protobuf
+};  // namespace google
+
+#endif /* !_HEADER_SYNAPSE_FACTORY_HH_ */

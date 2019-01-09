@@ -14,13 +14,11 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_ENUMERATION_HH_
-# define _AST_SYNAPSE_ENUMERATION_HH_
+#ifndef _AST_SYNAPSE_INCLUDE_HH_
+# define _AST_SYNAPSE_INCLUDE_HH_
 
-# include <map>
 # include <string>
 # include "synapse-decl.hh"
-# include "synapse-enumerators.hh"
 
 namespace google {
 namespace protobuf {
@@ -28,54 +26,40 @@ namespace compiler {
 namespace ast {
 
 /**
- * @brief Root element of the AST
+ * @brief declaration
  */
-class enumeration : public decl {
+class include : public decl {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf enumeration descriptor
+   * @param [in] desc: protobuf file descriptor
    */
-  explicit enumeration(const EnumDescriptor *desc)
-    : enumeration(std::string(desc->name()), new enumerators(desc)) {
-    _desc = desc;
-  }
+  explicit include(const FileDescriptor *desc);
 
   /**
    * @brief Constructor
-   * @param [in] name: name of the enumeration
-   * @param [in] enumerators: list of enumerator
+   * @param [in] name: name of the include
    */
-  enumeration(const std::string& name, enumerators *enumerators)
-    : decl(name),
-      _desc(NULL),
-      _enumerators(enumerators) {
-  }
+  explicit include(const std::string& name);
 
   /**
    * @brief destructor
    */
-  virtual ~enumeration() {
-    delete _enumerators;
-  }
+  virtual ~include() {}
 
   /**
-   * @brief Accept function of the visitor design* pattern
+   * @brief Accept function of the visitor design pattern
    * @param [in] visitor: visitor to browse
    */
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the enumerator list
-   * @return a valid pointer
+   * @brief Get the declaration name
+   * @return a string
    */
-  const enumerators *get_enumerators() const {
-    return _enumerators;
+  const std::string& get_name() const {
+    return _name;
   }
-
-private:
-  const EnumDescriptor *_desc;
-  enumerators *_enumerators;
 };
 
 };  // namespace ast
@@ -83,4 +67,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_ENUMERATION_HH_ */
+#endif /* _AST_SYNAPSE_INCLUDE_HH_ */

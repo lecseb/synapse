@@ -21,14 +21,9 @@ namespace protobuf {
 namespace compiler {
 namespace header {
 
-synapse::synapse(const std::string& filename,
-    OutputDirectory *out, const std::string& extension)
-  : definition(filename, out, extension) {
-}
-
-std::string synapse::parse(const FileDescriptor *desc) {
-  ast::decls *_decls = new ast::decls(desc);
-  return _decls->accept(this);
+synapse::synapse(const std::string& name, const std::string& extension,
+    const std::string& params, OutputDirectory *out)
+  : definition(name, extension, params, out) {
 }
 
 std::string synapse::visite(const ast::composite *node) {
@@ -48,20 +43,21 @@ std::string synapse::visite(const ast::decls *node) {
   std::list<ast::decl *>::const_iterator decl = decls.begin();
   for (; decl != decls.end(); decl++) {
     error = (*decl)->accept(this);
-    _stream << ";" << stream::endl;
     _stream << stream::endl;
   }
+  _stream << stream::endl;
   return error;
 }
 
 std::string synapse::visite(const ast::enumeration *node) {
   std::string error = std::string();
 
-  _stream << "enum " << node->get_name() << " {" << stream::endl;
+  _stream << stream::endl << "synapse_export enum ";
+  _stream << node->get_name() << " {" << stream::endl;
   _stream.indent();
   error = node->get_enumerators()->accept(this);
   _stream.outdent();
-  _stream << "}";
+  _stream << "};";
   return error;
 }
 
@@ -110,12 +106,13 @@ std::string synapse::visite(const ast::fields *node) {
 std::string synapse::visite(const ast::function *node) {
   std::string error = std::string();
 
+  _stream << stream::endl << "synapse_export ";
   error += node->get_return_type()->accept(this);
   _stream << node->get_name() << "(" << stream::endl;
   _stream.indent();
   error += node->get_params()->accept(this);
   _stream.outdent();
-  _stream << ")";
+  _stream << ");";
   return std::string();
 }
 
@@ -127,12 +124,19 @@ std::string synapse::visite(const ast::function::out *node) {
   return error;
 }
 
+std::string synapse::visite(const ast::include *node) {
+  std::string error = std::string();
+
+  _stream << "# include <" << node->get_name() << ">";
+  return error;
+}
+
 std::string synapse::visite(const ast::param *node) {
   std::string error = std::string();
 
   const ast::composite *cmp = node->get_composite();
   error = cmp->accept(this);
-  _stream << node->generate_name();
+  _stream << "msg";
   return error;
 }
 
@@ -164,11 +168,12 @@ std::string synapse::visite(const ast::service *service) {
 std::string synapse::visite(const ast::structure *node) {
   std::string error = std::string();
 
-  _stream << "struct " << node->get_name() << " {" << stream::endl;
+  _stream << stream::endl << "synapse_export struct ";
+  _stream << node->get_name() << " {" << stream::endl;
   _stream.indent();
   error = node->get_fields()->accept(this);
   _stream.outdent();
-  _stream << "}";
+  _stream << "};";
   return error;
 }
 

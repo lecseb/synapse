@@ -49,9 +49,11 @@ public:
    * problem (e.g. "invalid parameter") and returns false.
    */
   virtual bool Generate(const FileDescriptor *descriptor,
-      const std::string&, OutputDirectory *out,
+      const std::string& params, OutputDirectory *out,
       std::string *error) const {
-    synapse synapse(descriptor->name(), out, ".synapse.h");
+    std::vector<std::pair<std::string, std::string> > options;
+
+    synapse synapse(descriptor->name(), ".synapse.h", params, out);
     *error = synapse.parse(descriptor);
     return (error->size()) ? false : true;
   }

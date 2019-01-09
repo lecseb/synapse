@@ -25,10 +25,10 @@ namespace ast {
 function::function(const MethodDescriptor *desc)
   : decl(desc->name()),
     _params(new params(desc->output_type())),
-    _return(new param(desc->input_type())) {
+    _return(new out(desc->input_type())) {
 }
 
-function::function(const std::string& name, param *return_type,
+function::function(const std::string& name, out *return_type,
     params *args)
   : decl(name),
     _params(args),
