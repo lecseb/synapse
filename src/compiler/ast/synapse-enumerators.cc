@@ -14,7 +14,7 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-field.hh"
+#include "synapse-enumerators.hh"
 #include "synapse-visitor.hh"
 
 namespace google {
@@ -22,7 +22,28 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
-std::string field::accept(visitor *visitor) const {
+enumerators::enumerators(const EnumDescriptor *desc)
+  : _enumerators(std::map<uint32_t, enumerator *>()) {
+  for (int32_t i = 0; i < desc->value_count(); i++) {
+    const EnumValueDescriptor *enum_desc = desc->value(i);
+    _enumerators[enum_desc->number()] = new enumerator(enum_desc);
+  }
+}
+
+enumerators::enumerators(const std::initializer_list<enumerator *>& list)
+  : _enumerators(std::map<uint32_t, enumerator *>()) {
+  std::initializer_list<enumerator *>::iterator it = list.begin();
+  for (; it != list.end(); it++)
+    _enumerators[(*it)->get_value()] = *it;
+}
+
+enumerators::~enumerators() {
+  std::map<uint32_t, enumerator *>::iterator it = _enumerators.begin();
+  for (; it != _enumerators.end(); it++)
+    delete it->second;
+}
+
+std::string enumerators::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

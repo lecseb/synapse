@@ -14,38 +14,39 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-enum.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SYNAPSE_NODE_HH_
+# define _AST_SYNAPSE_NODE_HH_
+
+# include <string>
+# include <google/protobuf/descriptor.h>
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-Enum::Enum(const std::string& package, const EnumDescriptor *desc)
-    : _labels(std::map<uint32_t, Label *>()),
-      _name(std::string("e_" + package + "_" + desc->name())) {
-  for (int32_t i = 0; i < desc->value_count(); i++) {
-    const EnumValueDescriptor *label = desc->value(i);
-    _labels[label->number()] = new Label(package, desc->name(), label);
-  }
-}
+class visitor;
 
-Enum::~Enum() {
-  std::map<uint32_t, Label *>::iterator it = _labels.begin();
-  for (; it != _labels.end(); it++)
-    delete it->second;
-}
+/**
+ * @brief Root element of the AST
+ */
+class node {
+public:
+  /**
+   * @brief destructor
+   */
+  virtual ~node() {}
 
-std::string Enum::accept(Visitor *visitor) {
-  return visitor->visite(this);
-}
-
-const std::string& Enum::get_name() const {
-  return _name;
-}
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(visitor *visitor) const = 0;
+};
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* _AST_SYNAPSE_NODE_HH_ */

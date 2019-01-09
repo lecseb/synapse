@@ -14,11 +14,12 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_ENUMERATORS_HH_
+# define _AST_SYNAPSE_ENUMERATORS_HH_
 
+# include <map>
 # include <string>
-# include "synapse-composite.hh"
+# include "synapse-enumerator.hh"
 # include "synapse-node.hh"
 
 namespace google {
@@ -29,28 +30,23 @@ namespace ast {
 /**
  * @brief Root element of the AST
  */
-class field : public node {
+class enumerators : public node {
 public:
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf enumeration descriptor structure
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
-    _desc = desc;
-  }
+  explicit enumerators(const EnumDescriptor *desc);
 
   /**
    * @brief Constructor
    */
-  field(const std::string& name, composite *type)
-    : _desc(NULL),
-      _name(name),
-      _type(type) {}
+  explicit enumerators(const std::initializer_list<enumerator *>& list);
 
   /**
    * @brief destructor
    */
-  virtual ~field() {}
+  virtual ~enumerators();
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -59,25 +55,15 @@ public:
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the declared name
-   * @return a string
+   * @brief Get the enumerator list
+   * @return a list
    */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the declared type
-   * @return a type
-   */
-  composite *get_type() const {
-    return _type;
+  const std::map<uint32_t, enumerator *>& get_enumerators() const {
+    return _enumerators;
   }
 
 private:
-  const FieldDescriptor *_desc;
-  std::string _name;
-  composite *_type;
+  std::map<uint32_t, enumerator *> _enumerators;
 };
 
 };  // namespace ast
@@ -85,4 +71,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* _AST_SYNAPSE_ENUMERATORS_HH_ */

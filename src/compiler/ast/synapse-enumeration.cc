@@ -14,7 +14,7 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-struct.hh"
+#include "synapse-enumeration.hh"
 #include "synapse-visitor.hh"
 
 namespace google {
@@ -22,22 +22,7 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
-Struct::Struct(const std::string& package, const Descriptor *desc)
-    : _fields(std::map<uint32_t, Field *>()),
-      _name(std::string("s_" + package + "_" + desc->name())) {
-  for (int32_t i = 0; i < desc->field_count(); i++) {
-    const FieldDescriptor *field = desc->field(i);
-    _fields[field->index()] = new Field(field);
-  }
-}
-
-Struct::~Struct() {
-  std::map<uint32_t, Field *>::iterator it = _fields.begin();
-  for (; it != _fields.end(); it++)
-    delete it->second;
-}
-
-std::string Struct::accept(Visitor *visitor) {
+std::string enumeration::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

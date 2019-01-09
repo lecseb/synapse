@@ -14,27 +14,18 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#include "synapse-decl.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace ast {
 
-const std::string stream::endl = "\n";
+decl::decl(const std::string& name)
+  : _name(name) {}
 
-stream::stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
-}
-
-stream::~stream() {
-  delete _printer;
-  delete _stream;
-}
-
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

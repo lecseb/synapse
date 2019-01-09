@@ -27,7 +27,7 @@ namespace google {
 namespace protobuf {
 namespace compiler {
 
-class Stream {
+class stream {
 public:
   /**
    * @brief \n static variable
@@ -40,20 +40,20 @@ public:
    * @param [in] out: protobuf out structure
    * @param [in] extension: extension of the file to write
    */
-  Stream(const std::string& name, OutputDirectory *out,
+  stream(const std::string& name, OutputDirectory *out,
     const std::string& extension);
 
   /**
    * @brief Destructor
    */
-  ~Stream();
+  ~stream();
 
   /**
    * @brief Push a data into the stream
    * @param [in] data: data to push
    * @return a reference to the stream itself
    */
-  Stream& operator<<(const std::string& data) {
+  stream& operator<<(const std::string& data) {
     _printer->Print(data.c_str());
     return *this;
   }

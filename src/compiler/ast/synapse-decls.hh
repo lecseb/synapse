@@ -14,59 +14,57 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_LABEL_HH_
-# define _AST_SYNAPSE_LABEL_HH_
+#ifndef _AST_SYNAPSE_DECLS_HH_
+# define _AST_SYNAPSE_DECLS_HH_
 
+# include <list>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "synapse-element.hh"
+# include "synapse-decl.hh"
+# include "synapse-node.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-class Visitor;
-
 /**
- * @brief Enumeration label representation
+ * @brief declaration list
  */
-class Label : public Element {
+class decls : public node {
 public:
   /**
    * @brief Constructor
-   * @param [in] package: package name of the label
-   * @param [in] enum_name: enumeration name
-   * @param [in] desc: protobuf label representation
+   * @param [in] desc: protobuf file descriptor structure
    */
-  Label(const std::string& package, const std::string& enum_name,
-    const EnumValueDescriptor *desc);
+  explicit decls(const FileDescriptor *desc);
+
+  /**
+   * @brief Constructor
+   */
+  decls(const std::initializer_list<decl *>& list)
+    : _decls(list) {}
 
   /**
    * @brief Destructor
    */
-  virtual ~Label() {}
+  virtual ~decls() {}
 
   /**
-   * @brief Get the label name
-   * @return the label name
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
    */
-  const std::string& get_name() const;
+  virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the label value
-   * @return the label value
+   * @brief Return the contained declarations list
+   * @return a list
    */
-  const std::string& get_value() const;
-
-  /**
-   * @brief part of the visitor design pattern
-   */
-  virtual std::string accept(Visitor *visitor);
+  const std::list<decl *>& get_declarations() const {
+    return _decls;
+  }
 
 private:
-  std::string _name;
-  std::string _value;
+  std::list<decl *> _decls;
 };
 
 };  // namespace ast
@@ -74,4 +72,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_AST_SYNAPSE_LABEL_HH_ */
+#endif /* _AST_SYNAPSE_DECLS_HH_ */

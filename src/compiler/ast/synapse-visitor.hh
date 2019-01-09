@@ -17,72 +17,118 @@
 #ifndef _AST_SYNAPSE_VISITOR_HH_
 # define _AST_SYNAPSE_VISITOR_HH_
 
-# include <map>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "synapse-ast.hh"
-# include "synapse-enum.hh"
+# include "synapse-composite.hh"
+# include "synapse-decl.hh"
+# include "synapse-decls.hh"
+# include "synapse-enumeration.hh"
+# include "synapse-enumerator.hh"
+# include "synapse-enumerators.hh"
 # include "synapse-field.hh"
+# include "synapse-fields.hh"
 # include "synapse-function.hh"
-# include "synapse-include.hh"
-# include "synapse-label.hh"
-# include "synapse-struct.hh"
+# include "synapse-param.hh"
+# include "synapse-params.hh"
+# include "synapse-service.hh"
+# include "synapse-structure.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-class Visitor {
+class visitor {
 public:
   /**
-   * @brief Visite an Ast node
-   * @param [in] ast: ast node to visite
+   * @brief Visite an composite node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Ast *ast) = 0;
+  virtual std::string visite(const composite *node) = 0;
 
   /**
-   * @brief Visite an Enumeration node
-   * @param [in] enumeration: enumeration node to visite
+   * @brief Visite an decls node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Enum *enumeration) = 0;
+  virtual std::string visite(const decls *node) = 0;
 
   /**
-   * @brief Visite a field node
-   * @param [in] field: field node to visite
+   * @brief Visite an enumeration node
+   * @param [in] node: node node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Field *field) = 0;
+  virtual std::string visite(const enumeration *node) = 0;
 
   /**
-   * @brief Visite a function node
-   * @param [in] field: field node to visite
+   * @brief Visite an enumerator node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Function *function) = 0;
+  virtual std::string visite(const enumerator *node) = 0;
 
   /**
-   * @brief Visite a include node
-   * @param [in] include: label node to visite
+   * @brief Visite an enumerators node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Include *include) = 0;
+  virtual std::string visite(const enumerators *node) = 0;
 
   /**
-   * @brief Visite a label node
-   * @param [in] label: label node to visite
+   * @brief Visite an field node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Label *label) = 0;
+  virtual std::string visite(const field *node) = 0;
 
   /**
-   * @brief Visite a structure node
-   * @param [in] structure: structure node to visite
+   * @brief Visite an fields node
+   * @param [in] node: node to visite
    * @return a string representation of an error
    */
-  virtual std::string visite(Struct *structure) = 0;
+  virtual std::string visite(const fields *node) = 0;
+
+  /**
+   * @brief Visite an function node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const function *node) = 0;
+
+  /**
+   * @brief Visite an function output node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const function::out *node) = 0;
+
+  /**
+   * @brief Visite an param node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const param *node) = 0;
+
+  /**
+   * @brief Visite an params node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const params *node) = 0;
+
+  /**
+   * @brief Visite an service node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const service *node) = 0;
+
+  /**
+   * @brief Visite an structure node
+   * @param [in] node: node to visite
+   * @return a string representation of an error
+   */
+  virtual std::string visite(const structure *node) = 0;
 };
 
 };  // namespace ast
@@ -90,4 +136,4 @@ public:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_AST_SYNAPSE_VISITOR_HH_ */
+#endif /* _AST_SYNAPSE_VISITOR_HH_ */

@@ -23,24 +23,36 @@ libsynapse_ast_a_CXXFLAGS= \
 	-I$(synapse_compdir)/
 
 noinst_HEADERS= \
-	synapse-ast.hh \
-	synapse-element.hh \
-	synapse-enum.hh \
+	synapse-composite.hh \
+	synapse-decl.hh \
+	synapse-decls.hh \
+	synapse-enumeration.hh \
+	synapse-enumerator.hh \
+	synapse-enumerators.hh \
 	synapse-field.hh \
+	synapse-fields.hh \
 	synapse-function.hh \
-	synapse-include.hh \
-	synapse-label.hh \
-	synapse-struct.hh \
+	synapse-node.hh \
+	synapse-param.hh \
+	synapse-params.hh \
+	synapse-service.hh \
+	synapse-structure.hh \
 	synapse-visitor.hh
 
 libsynapse_ast_a_SOURCES= \
-	synapse-ast.cc \
-	synapse-enum.cc \
+	synapse-composite.cc \
+	synapse-decl.cc \
+	synapse-decls.cc \
+	synapse-enumeration.cc \
+	synapse-enumerator.cc \
+	synapse-enumerators.cc \
 	synapse-field.cc \
+	synapse-fields.cc \
 	synapse-function.cc \
-	synapse-include.cc \
-	synapse-label.cc \
-	synapse-struct.cc
+	synapse-param.cc \
+	synapse-params.cc \
+	synapse-service.cc \
+	synapse-structure.cc
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(libsynapse_ast_a_SOURCES))))

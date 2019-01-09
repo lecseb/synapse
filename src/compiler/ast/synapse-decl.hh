@@ -14,19 +14,55 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-field.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SYNAPSE_DECL_HH_
+# define _AST_SYNAPSE_DECL_HH_
+
+# include <string>
+# include "synapse-node.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-std::string field::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+/**
+ * @brief declaration
+ */
+class decl : public node {
+public:
+  /**
+   * @brief Constructor
+   * @param [in] name: name of the declaration
+   * @param [in] type: type of the declaration
+   */
+  explicit decl(const std::string& name);
+
+  /**
+   * @brief destructor
+   */
+  virtual ~decl() {}
+
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(visitor *visitor) const = 0;
+
+  /**
+   * @brief Get the declaration name
+   * @return a string
+   */
+  const std::string& get_name() const {
+    return _name;
+  }
+
+protected:
+  std::string _name;
+};
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* _AST_SYNAPSE_DECL_HH_ */

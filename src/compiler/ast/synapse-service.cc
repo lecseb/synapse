@@ -14,27 +14,40 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#include "synapse-service.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace ast {
 
-const std::string stream::endl = "\n";
-
-stream::stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
+service::service(const ServiceDescriptor *desc)
+  : decl(desc->name()),
+    _functions(std::list<function *>()) {
+  for (int32_t i = 0; i < desc->method_count(); i++) {
+    const MethodDescriptor *method = desc->method(i);
+    _functions.push_back(new function(method));
+  }
 }
 
-stream::~stream() {
-  delete _printer;
-  delete _stream;
+service::service(const std::string& name,
+    const std::initializer_list<function *>& list)
+  : decl(name),
+    _functions(list) {
 }
 
+service::~service() {
+  std::list<function *>::iterator it = _functions.begin();
+  for (; it != _functions.end(); it++)
+    delete (*it);
+}
+
+std::string service::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

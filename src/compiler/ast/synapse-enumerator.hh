@@ -14,11 +14,10 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_ENUMERATOR_HH_
+# define _AST_SYNAPSE_ENUMERATOR_HH_
 
 # include <string>
-# include "synapse-composite.hh"
 # include "synapse-node.hh"
 
 namespace google {
@@ -29,28 +28,30 @@ namespace ast {
 /**
  * @brief Root element of the AST
  */
-class field : public node {
+class enumerator : public node {
 public:
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf enumerator descriptor
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
-    _desc = desc;
-  }
+  explicit enumerator(const EnumValueDescriptor *desc)
+    : _name(desc->name()),
+      _value(desc->number()) {}
 
   /**
    * @brief Constructor
+   * @param [in] name: name of the enumerator
+   * @param [in] value: value of the enumerator
    */
-  field(const std::string& name, composite *type)
+  enumerator(const std::string& name, uint32_t value)
     : _desc(NULL),
       _name(name),
-      _type(type) {}
+      _value(value) {}
 
   /**
    * @brief destructor
    */
-  virtual ~field() {}
+  virtual ~enumerator() {}
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -59,7 +60,7 @@ public:
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the declared name
+   * @brief Get the declaration name
    * @return a string
    */
   const std::string& get_name() const {
@@ -67,17 +68,17 @@ public:
   }
 
   /**
-   * @brief Get the declared type
-   * @return a type
+   * @brief Get the declaration value
+   * @return a string
    */
-  composite *get_type() const {
-    return _type;
+  uint32_t get_value() const {
+    return _value;
   }
 
 private:
-  const FieldDescriptor *_desc;
+  const EnumValueDescriptor *_desc;
   std::string _name;
-  composite *_type;
+  uint32_t _value;
 };
 
 };  // namespace ast
@@ -85,4 +86,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* _AST_SYNAPSE_ENUMERATOR_HH_ */

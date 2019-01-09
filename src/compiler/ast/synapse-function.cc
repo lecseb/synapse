@@ -22,19 +22,29 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
-Function::Function(const ServiceDescriptor *) {
+function::function(const MethodDescriptor *desc)
+  : decl(desc->name()),
+    _params(new params(desc->output_type())),
+    _return(new param(desc->input_type())) {
 }
 
-Function::Function(const std::string& name, const std::list<Field *>& inputs,
-    Field *output, const std::string& comment)
-  : _comment(comment),
-    _inputs(std::list<Field *>(inputs.begin(), inputs.end())),
-    _name(name),
-    _output(output) {
+function::function(const std::string& name, param *return_type,
+    params *args)
+  : decl(name),
+    _params(args),
+    _return(return_type) {
 }
 
+function::~function() {
+  delete _params;
+  delete _return;
+}
 
-std::string Function::accept(Visitor *visitor) {
+std::string function::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+std::string function::out::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

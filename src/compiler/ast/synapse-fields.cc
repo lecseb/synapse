@@ -14,27 +14,40 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#include "synapse-fields.hh"
+#include "synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace ast {
 
-const std::string stream::endl = "\n";
-
-stream::stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
+fields::fields(const Descriptor *desc)
+  : _fields(std::map<uint32_t, field *>()) {
+  for (int32_t i = 0; i < desc->field_count(); i++) {
+    const FieldDescriptor *field_desc = desc->field(i);
+    _fields[field_desc->index()] = new field(field_desc);
+  }
 }
 
-stream::~stream() {
-  delete _printer;
-  delete _stream;
+fields::fields(const std::initializer_list<field *>& list) {
+  uint32_t index = 0;
+  std::initializer_list<field *>::iterator it = list.begin();
+  for (index = 0; it != list.end(); it++, index++)
+    _fields[index] = (*it);
 }
 
+fields::~fields() {
+  std::map<uint32_t, field *>::iterator it = _fields.begin();
+  for (; it != _fields.end(); it++)
+    delete it->second;
+}
+
+std::string fields::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

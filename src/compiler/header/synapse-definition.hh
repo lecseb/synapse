@@ -14,27 +14,42 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#ifndef _HEADER_SYNAPSE_DEFINITION_HH_
+# define _HEADER_SYNAPSE_DEFINITION_HH_
+
+# include <string>
+# include <google/protobuf/descriptor.h>
+# include <google/protobuf/compiler/code_generator.h>
+# include <google/protobuf/io/printer.h>
+# include <google/protobuf/io/zero_copy_stream_impl.h>
+# include "synapse-file.hh"
+# include "synapse-stream.hh"
+# include "ast/synapse-visitor.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace header {
 
-const std::string stream::endl = "\n";
+class definition : public file {
+public:
+  /**
+   * @brief Constructor
+   * @param [in] out: protobuf out structure
+   * @param [in] extension: extension of the file to write
+   */
+  definition(const std::string& filename, OutputDirectory *out,
+    const std::string& extension);
 
-stream::stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
-}
+  /**
+   * @brief Destructor
+   */
+  virtual ~definition();
+};
 
-stream::~stream() {
-  delete _printer;
-  delete _stream;
-}
-
+};  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
+
+#endif /* !_HEADER_SYNAPSE_DEFITION_HH_ */

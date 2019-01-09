@@ -14,12 +14,13 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_STRUCTURE_HH_
+# define _AST_SYNAPSE_STRUCTURE_HH_
 
+# include <map>
 # include <string>
-# include "synapse-composite.hh"
-# include "synapse-node.hh"
+# include "synapse-decl.hh"
+# include "synapse-fields.hh"
 
 namespace google {
 namespace protobuf {
@@ -29,28 +30,31 @@ namespace ast {
 /**
  * @brief Root element of the AST
  */
-class field : public node {
+class structure : public decl {
 public:
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf structure descriptor
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
+  explicit structure(const Descriptor *desc)
+    : structure(desc->name(), new fields(desc)) {
     _desc = desc;
   }
 
   /**
    * @brief Constructor
    */
-  field(const std::string& name, composite *type)
-    : _desc(NULL),
-      _name(name),
-      _type(type) {}
+  structure(const std::string& name, fields *fields)
+    : decl(name),
+      _desc(NULL),
+      _fields(fields) {}
 
   /**
    * @brief destructor
    */
-  virtual ~field() {}
+  virtual ~structure() {
+    delete _fields;
+  }
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -59,25 +63,16 @@ public:
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the declared name
-   * @return a string
+   * @brief Get all fields contained into the structure
+   * @return a valid pointer
    */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the declared type
-   * @return a type
-   */
-  composite *get_type() const {
-    return _type;
+  const fields *get_fields() const {
+    return _fields;
   }
 
 private:
-  const FieldDescriptor *_desc;
-  std::string _name;
-  composite *_type;
+  const Descriptor *_desc;
+  fields *_fields;
 };
 
 };  // namespace ast
@@ -85,4 +80,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* _AST_SYNAPSE_STRUCTURE_HH_ */

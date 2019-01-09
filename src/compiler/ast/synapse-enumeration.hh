@@ -14,12 +14,13 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_ENUMERATION_HH_
+# define _AST_SYNAPSE_ENUMERATION_HH_
 
+# include <map>
 # include <string>
-# include "synapse-composite.hh"
-# include "synapse-node.hh"
+# include "synapse-decl.hh"
+# include "synapse-enumerators.hh"
 
 namespace google {
 namespace protobuf {
@@ -29,55 +30,52 @@ namespace ast {
 /**
  * @brief Root element of the AST
  */
-class field : public node {
+class enumeration : public decl {
 public:
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf enumeration descriptor
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
+  explicit enumeration(const EnumDescriptor *desc)
+    : enumeration(desc->name(), new enumerators(desc)) {
     _desc = desc;
   }
 
   /**
    * @brief Constructor
+   * @param [in] name: name of the enumeration
+   * @param [in] enumerators: list of enumerator
    */
-  field(const std::string& name, composite *type)
-    : _desc(NULL),
-      _name(name),
-      _type(type) {}
+  enumeration(const std::string& name, enumerators *enumerators)
+    : decl(name),
+      _desc(NULL),
+      _enumerators(enumerators) {
+  }
 
   /**
    * @brief destructor
    */
-  virtual ~field() {}
+  virtual ~enumeration() {
+    delete _enumerators;
+  }
 
   /**
-   * @brief Accept function of the visitor design pattern
+   * @brief Accept function of the visitor design* pattern
    * @param [in] visitor: visitor to browse
    */
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the declared name
-   * @return a string
+   * @brief Get the enumerator list
+   * @return a valid pointer
    */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the declared type
-   * @return a type
-   */
-  composite *get_type() const {
-    return _type;
+  const enumerators *get_enumerators() const {
+    return _enumerators;
   }
 
 private:
-  const FieldDescriptor *_desc;
-  std::string _name;
-  composite *_type;
+  const EnumDescriptor *_desc;
+  enumerators *_enumerators;
 };
 
 };  // namespace ast
@@ -85,4 +83,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* _AST_SYNAPSE_ENUMERATION_HH_ */

@@ -14,43 +14,39 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_SERVICE_HH_
+# define _AST_SYNAPSE_SERVICE_HH_
 
+# include <list>
 # include <string>
-# include "synapse-composite.hh"
-# include "synapse-node.hh"
+# include "synapse-decl.hh"
+# include "synapse-function.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-/**
- * @brief Root element of the AST
- */
-class field : public node {
+class service : public decl {
 public:
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf service descriptor
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
-    _desc = desc;
-  }
+  explicit service(const ServiceDescriptor *desc);
 
   /**
    * @brief Constructor
+   * @param [in] name: name of the service
+   * @param [in] list: function list
    */
-  field(const std::string& name, composite *type)
-    : _desc(NULL),
-      _name(name),
-      _type(type) {}
+  explicit service(const std::string& name,
+    const std::initializer_list<function *>& list);
 
   /**
-   * @brief destructor
+   * @brief Destructor
    */
-  virtual ~field() {}
+  virtual ~service();
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -59,25 +55,15 @@ public:
   virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the declared name
-   * @return a string
+   * @brief Get the enumerator list
+   * @return a list
    */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the declared type
-   * @return a type
-   */
-  composite *get_type() const {
-    return _type;
+  const std::list<function *>& get_functions() const {
+    return _functions;
   }
 
 private:
-  const FieldDescriptor *_desc;
-  std::string _name;
-  composite *_type;
+  std::list<function *> _functions;
 };
 
 };  // namespace ast
@@ -85,4 +71,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* !_AST_SYNAPSE_SERVICE_HH_ */

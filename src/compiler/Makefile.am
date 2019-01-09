@@ -28,16 +28,14 @@ noinst_HEADERS= \
 	synapse-file.hh \
 	synapse-stream.hh \
 	synapse-string.hh \
-	header/synapse.hh \
-	header/synapse-ctx_factory.hh \
+	header/synapse-definition.hh \
 	header/synapse-generator.hh \
 	header/synapse-header.hh
 
 synapse_header_SOURCES= \
 	synapse-file.cc \
 	synapse-stream.cc \
-	header/synapse.cc \
-	header/synapse-ctx_factory.cc \
+	header/synapse-definition.cc \
 	header/synapse-header.cc \
 	header/synapse-main.cc
 

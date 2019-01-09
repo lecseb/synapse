@@ -14,7 +14,6 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-label.hh"
 #include "synapse-visitor.hh"
 
 namespace google {
@@ -22,21 +21,19 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
-Label::Label(const std::string& package, const std::string& enum_name,
-    const EnumValueDescriptor *desc)
-  : _name(std::string("e_" + package + "_" + enum_name + "_" + desc->name())),
-    _value(std::to_string(desc->number())) {
+decls::decls(const FileDescriptor *desc)
+  : _decls(std::list<decl *>()) {
+  for (int32_t i = 0; i < desc->enum_type_count(); i++)
+    _decls.push_back(new enumeration(desc->enum_type(i)));
+
+  for (int32_t i = 0; i < desc->message_type_count(); i++)
+    _decls.push_back(new structure(desc->message_type(i)));
+
+  for (int32_t i = 0; i < desc->service_count(); i++)
+    _decls.push_back(new service(desc->service(i)));
 }
 
-const std::string& Label::get_name() const {
-  return _name;
-}
-
-const std::string& Label::get_value() const {
-  return _value;
-}
-
-std::string Label::accept(Visitor *visitor) {
+std::string decls::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

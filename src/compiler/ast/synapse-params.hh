@@ -14,42 +14,61 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _SYNAPSE_FILE_HH_
-# define _SYNAPSE_FILE_HH_
+#ifndef _AST_SYNAPSE_PARAMS_HH_
+# define _AST_SYNAPSE_PARAMS_HH_
 
+# include <list>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include <google/protobuf/compiler/code_generator.h>
-# include <google/protobuf/io/printer.h>
-# include <google/protobuf/io/zero_copy_stream_impl.h>
-# include "synapse-stream.hh"
-# include "ast/synapse-visitor.hh"
+# include "synapse-node.hh"
+# include "synapse-param.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace ast {
 
-class file : public ast::visitor {
+/**
+ * @brief Root element of the AST
+ */
+class params : public node {
 public:
   /**
    * @brief Constructor
-   * @param [in] out: protobuf out structure
-   * @param [in] extension: extension of the file to write
+   * @param [in] desc: protobuf structure
    */
-  file(const std::string& filename, OutputDirectory *out,
-    const std::string& extension);
+  explicit params(const Descriptor *desc);
 
   /**
-   * @brief Destructor
+   * @brief Constructor
    */
-  virtual ~file() {}
+  explicit params(const std::initializer_list<param *>& list);
 
-protected:
-  stream _stream;
+  /**
+   * @brief destructor
+   */
+  virtual ~params();
+
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(visitor *visitor) const;
+
+  /**
+   * @brief Get the parameter list
+   * @return the param list
+   */
+  const std::list<param *>& get_params() const {
+    return _params;
+  }
+
+private:
+  std::list<param *> _params;
 };
 
+};  // namespace ast
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_SYNAPSE_FILE_HH_ */
+#endif /* _AST_SYNAPSE_PARAMS_HH_ */

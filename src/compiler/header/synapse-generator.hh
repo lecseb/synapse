@@ -20,7 +20,7 @@
 # include <string>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
-# include "synapse.hh"
+# include "synapse-header.hh"
 
 namespace google {
 namespace protobuf {
@@ -51,7 +51,7 @@ public:
   virtual bool Generate(const FileDescriptor *descriptor,
       const std::string&, OutputDirectory *out,
       std::string *error) const {
-    Synapse synapse(descriptor->name(), out, ".synapse.h");
+    synapse synapse(descriptor->name(), out, ".synapse.h");
     *error = synapse.parse(descriptor);
     return (error->size()) ? false : true;
   }

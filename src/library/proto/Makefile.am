@@ -29,14 +29,14 @@ libsynapse_proto_la_SOURCES= \
 if synapse_SILENT
 %.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-header
 	@echo "  proto    $< -> $(synapse_libdir)/synapse/$(basename $<).synapse.h"
-	@$(top_srcdir)/src/compiler/synapse-header \
+	@LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
 		--proto_path=$(synapse_libdir)/proto \
 		--synapse_out=$(top_srcdir)/src/library/synapse $<
 	@echo "  proto    $< -> $(basename $<).synapse.c"
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
 else
 %.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-protoc
-	$(top_srcdir)/src/compiler/synapse-header \
+	LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
 		--proto_path=$(synapse_libdir)/proto \
 		--synapse_out=$(top_srcdir)/src/library/synapse $<
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c

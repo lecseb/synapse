@@ -14,11 +14,10 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_FIELD_HH_
-# define _AST_SYNAPSE_FIELD_HH_
+#ifndef _AST_SYNAPSE_COMPOSITE_HH_
+# define _AST_SYNAPSE_COMPOSITE_HH_
 
 # include <string>
-# include "synapse-composite.hh"
 # include "synapse-node.hh"
 
 namespace google {
@@ -26,31 +25,27 @@ namespace protobuf {
 namespace compiler {
 namespace ast {
 
-/**
- * @brief Root element of the AST
- */
-class field : public node {
+class composite : public node {
 public:
   /**
    * @brief Constructor
    */
-  explicit field(const FieldDescriptor *desc)
-    : field(desc->name(), new composite(desc)) {
-    _desc = desc;
-  }
+  explicit composite(const FieldDescriptor *desc);
 
   /**
    * @brief Constructor
    */
-  field(const std::string& name, composite *type)
+  composite(const FieldDescriptor::Type& type, const std::string& name,
+      bool pointer = false)
     : _desc(NULL),
+      _is_pointer(pointer),
       _name(name),
-      _type(type) {}
+      _type(composite::to_string(type)) {}
 
   /**
-   * @brief destructor
+   * @brief Destructor
    */
-  virtual ~field() {}
+  virtual ~composite() {}
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -68,16 +63,27 @@ public:
 
   /**
    * @brief Get the declared type
-   * @return a type
    */
-  composite *get_type() const {
+  const std::string& get_type() const {
     return _type;
   }
 
+  bool is_pointer() const {
+    return _is_pointer;
+  }
+
+  /**
+   * @brief Convert a type from protobuf to a string
+   * @param [in] type: type to convert
+   * @return a string
+   */
+  static std::string to_string(const FieldDescriptor::Type& type);
+
 private:
   const FieldDescriptor *_desc;
+  bool _is_pointer;
   std::string _name;
-  composite *_type;
+  std::string _type;
 };
 
 };  // namespace ast
@@ -85,4 +91,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* _AST_SYNAPSE_FIELD_HH_ */
+#endif /* !_AST_SYNAPSE_COMPOSITE_HH_ */

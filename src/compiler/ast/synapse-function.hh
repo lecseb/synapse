@@ -18,96 +18,91 @@
 # define _AST_SYNAPSE_FUNCTION_HH_
 
 # include <list>
-# include <map>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "synapse-element.hh"
-# include "synapse-field.hh"
+# include "synapse-composite.hh"
+# include "synapse-decl.hh"
+# include "synapse-params.hh"
+# include "synapse-structure.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-class Visitor;
-
 /**
- * @brief C enumeration representation
+ * @brief Function element of the AST
  */
-class Function : public Element {
+class function : public decl {
 public:
   /**
-   * @brief Constructor
-   * @param [in] desc: protobuf enumeration representation
+   * @brief Ouptu element of a function
    */
-  explicit Function(const ServiceDescriptor *desc);
+  class out : public param {
+  public:
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf output function type
+     */
+    out(const Descriptor *desc)
+      : param(desc) {}
+
+    /**
+     * @brief Destructor
+     */
+    virtual ~out() {};
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     */
+    virtual std::string accept(visitor *visitor) const;
+  };
+
+  /**
+   * @brief Constructor
+   * @param [in] desc: protobuf service descriptor structure
+   */
+  explicit function(const MethodDescriptor *desc);
 
   /**
    * @brief Constructor
    * @param [in] name: name of the function
-   * @param [in] inputs: list of argument
-   * @param [in] out: output type
-   * @param [in] comment: commentary of the function
+   * @param [in] output: return type
+   * @param [in] input: input type
    */
-  Function(const std::string& name, const std::list<Field *>& inputs,
-    Field *out, const std::string& comment = std::string());
+  function(const std::string& name, param *return_type,
+    params *args);
 
   /**
-   * @brief Destructor
+   * @brief destructor
    */
-  virtual ~Function() {}
+  virtual ~function();
 
   /**
-   * @brief part of the visitor design pattern
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
    */
-  virtual std::string accept(Visitor *visitor);
+  virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get an iterator over the first element contained in the argument
-   * list
-   * @return a valid iterator
+   * @brief Get the argument list
+   * @return the param list
    */
-  std::list<Field *>::const_iterator get_fields_begin() const {
-    return _inputs.begin();
+  const params *get_params() const {
+    return _params;
   }
 
   /**
-   * @brief Get an iterator over the last element contained in the argument
-   * list
-   * @return a valid iterator
+   * @brief Get the argument list
+   * @return the param list
    */
-  std::list<Field *>::const_iterator get_fields_end() const {
-    return _inputs.end();
-  }
-
-  /**
-   * @brief Get the comment of the function
-   */
-  const std::string& get_comment() const {
-    return _comment;
-  }
-
-  /**
-   * @brief Get the function name
-   * @return a string
-   */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the output field of the function
-   * @return a string
-   */
-  Field *get_output() const {
-    return _output;
+  const param *get_return_type() const {
+    return _return;
   }
 
 private:
-  std::string _comment;
-  std::list<Field *> _inputs;
-  std::string _name;
-  Field *_output;
+  params *_params;
+  param *_return;
 };
 
 };  // namespace ast
@@ -115,4 +110,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_AST_SYNAPSE_FUNCTION_HH_ */
+#endif /* _AST_SYNAPSE_FUNCTION_HH_ */

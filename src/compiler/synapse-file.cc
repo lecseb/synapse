@@ -20,9 +20,9 @@ namespace google {
 namespace protobuf {
 namespace compiler {
 
-File::File(const std::string& filename, OutputDirectory *out,
+file::file(const std::string& filename, OutputDirectory *out,
     const std::string& extension)
-  : _stream(Stream(filename, out, extension)) {
+  : _stream(stream(filename, out, extension)) {
   _stream << "/**\n"
     << " * synapse is free software: you can redistribute it and/or modify\n"
     << " * it under the terms of the GNU General Public License as "
@@ -41,11 +41,6 @@ File::File(const std::string& filename, OutputDirectory *out,
     << " * along with synapse.  If not, see <https://www.gnu.org/licenses/>."
     << "\n"
     << " */\n\n";
-}
-
-std::string File::parse(const FileDescriptor *descriptor) {
-  ast::Ast ast(descriptor);
-  return ast.accept(this);
 }
 
 };  // namespace compiler

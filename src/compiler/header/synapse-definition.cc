@@ -14,27 +14,32 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-stream.hh"
-#include "synapse-string.hh"
+#include "synapse-definition.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
+namespace header {
 
-const std::string stream::endl = "\n";
-
-stream::stream(const std::string& name, OutputDirectory *out,
+definition::definition(const std::string& filename, OutputDirectory *out,
     const std::string& extension)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
+  : file(filename, out, extension) {
+  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+  _stream << "#ifndef " << temp << stream::endl;
+  _stream << "# define " << temp << stream::endl;
+  _stream << stream::endl;
 }
 
-stream::~stream() {
-  delete _printer;
-  delete _stream;
+definition::~definition() {
+  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+  _stream << "#endif /* !" << temp << " */" << stream::endl;
 }
 
+};  // namespace header
 };  // namespace compiler
 };  // namespace protobuf
 };  // namespace google

@@ -14,63 +14,74 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_AST_INCLUDE_HH_
-# define _AST_SYNAPSE_AST_INCLUDE_HH_
+#ifndef _AST_SYNAPSE_PARAM_HH_
+# define _AST_SYNAPSE_PARAM_HH_
 
-# include <list>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "synapse-element.hh"
-# include "synapse-string.hh"
+# include "synapse-composite.hh"
+# include "synapse-node.hh"
 
 namespace google {
 namespace protobuf {
 namespace compiler {
 namespace ast {
 
-class Visitor;
-
 /**
  * @brief Root element of the AST
  */
-class Include : public Element {
+class param : public node {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf root ast representation
+   * @param [in] desc: protobuf structure representation
    */
-  explicit Include(const FileDescriptor *desc)
-    : _name(std::string(strip_suffix(desc->name(), ".proto") + ".synapse.h")) {
-  }
+  explicit param(const Descriptor *desc);
 
   /**
    * @brief Constructor
-   * @param [in] name: name of the include
    */
-  explicit Include(const std::string& name)
-    : _name(name) {
-  }
+  param(const std::string& name, composite *type);
 
   /**
-   * @brief Destructor
+   * @brief destructor
    */
-  virtual ~Include() {}
+  virtual ~param();
 
   /**
-   * @brief part of the visitor design pattern
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
    */
-  virtual std::string accept(Visitor *visitor);
+  virtual std::string accept(visitor *visitor) const;
 
   /**
-   * @brief Get the include name
+   * @brief Get the parameter name
    * @return a string
    */
-  const std::string& get_name() const {
+  const std::string get_name() const {
     return _name;
   }
 
-private:
+  /**
+   * @brief Get the parameter type
+   * @return the param composite
+   */
+  const composite *get_composite() const {
+    return _type;
+  }
+
+  /**
+   * @brief Generate a new name
+   * @return a string
+   */
+  std::string generate_name() const {
+    static uint32_t index = 0;
+    return std::string(_name + std::to_string(index));
+  }
+
+protected:
+  const Descriptor *_desc;
   std::string _name;
+  composite *_type;
 };
 
 };  // namespace ast
@@ -78,4 +89,4 @@ private:
 };  // namespace protobuf
 };  // namespace google
 
-#endif /* !_AST_SYNAPSE_INCLUDE_HH_ */
+#endif /* _AST_SYNAPSE_PARAMS_HH_ */

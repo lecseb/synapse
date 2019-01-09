@@ -1,5 +1,4 @@
-/** This file is part of synapse.
- *
+/**
  * synapse is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
@@ -14,19 +13,28 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#ifndef _SYNAPSE_CONNECTION_SYNAPSE_H_
+# define _SYNAPSE_CONNECTION_SYNAPSE_H_
 
-namespace google {
-namespace protobuf {
-namespace compiler {
-namespace ast {
+enum type {
+  dbus = 0,
+  client_ssl = 1,
+  server_ssl = 2
+};
 
-std::string Include::accept(Visitor *visitor) {
-  return visitor->visite(this);
-}
+struct SearchRequest {
+  uint32_t test;
+  uint32_t tetst_2;
+  struct s_synapse_bytes *test3;
+};
 
-};  // namespace ast
-};  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+struct SearchResponse {
+  uint32_t test;
+  uint32_t tetst_2;
+  struct s_synapse_bytes *test3;
+};
+
+struct SearchRequest *SearchRequest0Search(
+  struct SearchResponse *SearchResponse0);
+
+#endif /* !_SYNAPSE_CONNECTION_SYNAPSE_H_ */
