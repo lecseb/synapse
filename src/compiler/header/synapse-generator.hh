@@ -18,6 +18,8 @@
 # define _HEADER_SYNAPSE_GENERATOR_HH_
 
 # include <string>
+# include <utility>
+# include <vector>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include "synapse-header.hh"
