@@ -26,8 +26,6 @@ namespace ast {
 
 decls::decls(const google::protobuf::FileDescriptor *desc)
   : _decls(std::list<decl *>()) {
-  _decls.push_back(new include("synapse/export.hh"));
-
   for (int32_t i = 0; i < desc->dependency_count(); i++) {
     const google::protobuf::FileDescriptor *dependency = desc->dependency(i);
     _decls.push_back(new include(dependency));

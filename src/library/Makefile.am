@@ -23,7 +23,8 @@ include $(top_builddir)/script/checkpatch.mk
 lib_LTLIBRARIES= libsynapse.la
 
 libsynapse_la_CFLAGS= \
-	$(synapse_CFLAGS)
+	$(synapse_CFLAGS) \
+	-I$(top_srcdir)/src/library
 
 noinst_HEADERS= \
 	synapse/alloc.h \
