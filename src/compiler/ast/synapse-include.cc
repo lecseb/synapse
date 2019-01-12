@@ -17,12 +17,11 @@
 #include "synapse-include.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-include::include(const FileDescriptor *desc)
+include::include(const google::protobuf::FileDescriptor *desc)
   : include(desc->name()) {
 }
 
@@ -36,5 +35,4 @@ std::string include::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

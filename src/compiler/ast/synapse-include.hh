@@ -20,8 +20,7 @@
 # include <string>
 # include "synapse-decl.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
@@ -34,7 +33,7 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf file descriptor
    */
-  explicit include(const FileDescriptor *desc);
+  explicit include(const google::protobuf::FileDescriptor *desc);
 
   /**
    * @brief Constructor
@@ -64,7 +63,6 @@ public:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_INCLUDE_HH_ */

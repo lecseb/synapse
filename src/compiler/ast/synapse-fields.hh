@@ -20,23 +20,22 @@
 # include <map>
 # include <string>
 # include "synapse-field.hh"
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief Root element of the AST
  */
-class fields : public node {
+class fields : public interface {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf structure descriptor
    */
-  explicit fields(const Descriptor *desc);
+  explicit fields(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief Constructor
@@ -68,7 +67,6 @@ private:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_FIELDS_HH_ */

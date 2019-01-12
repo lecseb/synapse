@@ -17,8 +17,7 @@
 #include "synapse-enumerator.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
@@ -28,5 +27,4 @@ std::string enumerator::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

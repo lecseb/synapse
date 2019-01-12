@@ -22,8 +22,7 @@
 # include "synapse-decl.hh"
 # include "synapse-fields.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
@@ -36,7 +35,7 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf structure descriptor
    */
-  explicit structure(const Descriptor *desc)
+  explicit structure(const google::protobuf::Descriptor *desc)
     : structure(desc->name(), new fields(desc)) {
     _desc = desc;
   }
@@ -71,13 +70,12 @@ public:
   }
 
 private:
-  const Descriptor *_desc;
+  const google::protobuf::Descriptor *_desc;
   fields *_fields;
 };
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_STRUCTURE_HH_ */

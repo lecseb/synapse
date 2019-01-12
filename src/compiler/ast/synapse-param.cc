@@ -17,14 +17,14 @@
 #include "synapse-param.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-param::param(const Descriptor *desc)
-  : param(desc->name(), new composite(FieldDescriptor::TYPE_MESSAGE,
-      desc->name(), true)) {
+param::param(const google::protobuf::Descriptor *desc)
+  : param(desc->name(),
+      new composite(google::protobuf::FieldDescriptor::TYPE_MESSAGE,
+        desc->name(), true)) {
 }
 
 param::param(const std::string& name, composite *type)
@@ -42,5 +42,4 @@ std::string param::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

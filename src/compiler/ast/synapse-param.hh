@@ -19,23 +19,22 @@
 
 # include <string>
 # include "synapse-composite.hh"
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief Root element of the AST
  */
-class param : public node {
+class param : public interface {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf structure representation
    */
-  explicit param(const Descriptor *desc);
+  explicit param(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief Constructor
@@ -70,14 +69,13 @@ public:
   }
 
 protected:
-  const Descriptor *_desc;
+  const google::protobuf::Descriptor *_desc;
   std::string _name;
   composite *_type;
 };
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_PARAMS_HH_ */

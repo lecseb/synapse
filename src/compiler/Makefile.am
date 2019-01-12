@@ -22,29 +22,29 @@ bin_PROGRAMS= synapse-header
 synapse_header_CXXFLAGS= \
 	$(synapse_CPPFLAGS) \
 	$(libprotobuf_CFLAGS) \
-	-I$(synapse_compdir)/include
+	-I.
 
 noinst_HEADERS= \
-	synapse-file.hh \
-	synapse-stream.hh \
-	synapse-string.hh \
-	header/synapse-definition.hh \
-	header/synapse-factory.hh \
-	header/synapse-generator.hh \
-	header/synapse-header.hh
+	parser/synapse-generator.hh \
+	parser/synapse-interface.hh \
+	parser/synapse-stream.hh \
+	parser/declaration/synapse-declaration.hh \
+	parser/definition/synapse-api.hh \
+	parser/definition/synapse-definition.hh \
+	parser/definition/synapse-factory.hh
 
 synapse_header_SOURCES= \
-	synapse-file.cc \
-	synapse-stream.cc \
-	header/synapse-definition.cc \
-	header/synapse-factory.cc \
-	header/synapse-header.cc \
-	header/synapse-main.cc
+	synapse-header.cc \
+	parser/synapse-stream.cc \
+	parser/declaration/synapse-declaration.cc \
+	parser/definition/synapse-api.cc \
+	parser/definition/synapse-definition.cc \
+	parser/definition/synapse-factory.hh
 
 synapse_header_LDFLAGS= \
 	-lprotoc \
 	$(libprotobuf_LIBS) \
-	$(synapse_compdir)/ast/libsynapse-ast.a
+	$(top_srcdir)/src/compiler/ast/libsynapse-ast.a
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(synapse_header_SOURCES))))

@@ -19,22 +19,21 @@
 
 # include <string>
 # include "synapse-composite.hh"
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief Root element of the AST
  */
-class field : public node {
+class field : public interface {
 public:
   /**
    * @brief Constructor
    */
-  explicit field(const FieldDescriptor *desc)
+  explicit field(const google::protobuf::FieldDescriptor *desc)
     : field(desc->name(), new composite(desc)) {
     _desc = desc;
   }
@@ -75,14 +74,13 @@ public:
   }
 
 private:
-  const FieldDescriptor *_desc;
+  const google::protobuf::FieldDescriptor *_desc;
   std::string _name;
   composite *_type;
 };
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_FIELD_HH_ */

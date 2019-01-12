@@ -14,35 +14,42 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEADER_SYNAPSE_HEADER_HH_
-# define _HEADER_SYNAPSE_HEADER_HH_
+#ifndef _PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_
+# define _PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include "synapse-definition.hh"
 # include "ast/synapse-decls.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
-namespace header {
+namespace parser {
+namespace definition {
 
-class synapse : public definition {
+class api : public definition {
 public:
   /**
    * @brief Constructor
-   * @param [in] name: file name
-   * @param [in] extension: extension of the file to write
-   * @param [in] params: parameter given to the compiler
-   * @param [in] out: protobuf out structure
+   * @param [in] options: options given by the user
+   * @param [in] name: name of the file to file to generate
+   * @param [in] out: output file structure
    */
-  synapse(const std::string& name, const std::string& extension,
-    const std::string& params, OutputDirectory *out);
+  api(const std::string& name,
+    google::protobuf::compiler::OutputDirectory *out)
+    : definition(name, ".synapse.h", out) {
+  }
 
   /**
    * @brief Destructor
    */
-  virtual ~synapse() {}
+  virtual ~api() {}
+
+  /**
+   * @brief Get the parser option
+   * @return an option
+   */
+  static const interface::option& get_option();
 
   /**
    * @brief Visite an composite node
@@ -143,9 +150,9 @@ public:
   virtual std::string visite(const ast::structure *node);
 };
 
-};  // namespace header
+};  // namespace definition
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
-#endif /* !_HEADER_SYNAPSE_HEADER_HH_ */
+#endif /* !_PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_ */

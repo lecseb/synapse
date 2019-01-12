@@ -14,52 +14,45 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEADER_SYNAPSE_DEFINITION_HH_
-# define _HEADER_SYNAPSE_DEFINITION_HH_
+#ifndef _PARSER_COMMON_SYNAPSE_DECLARATION_HH_
+# define _PARSER_COMMON_SYNAPSE_DECLARATION_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>
 # include <google/protobuf/io/zero_copy_stream_impl.h>
-# include "synapse-file.hh"
-# include "synapse-stream.hh"
-# include "ast/synapse-visitor.hh"
+# include "parser/synapse-interface.hh"
+# include "parser/synapse-stream.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
-namespace header {
+namespace parser {
+namespace common {
 
-class definition : public file {
+class declaration : public interface {
 public:
   /**
    * @brief Constructor
+   * @param [in] name: name of the file to generate
+   * @param [in] extension: generate file extension
    * @param [in] out: protobuf out structure
-   * @param [in] extension: extension of the file to write
    */
-  definition(const std::string& filename, const std::string& extension,
-    const std::string& params, OutputDirectory *out);
+  declaration(const std::string& name, const std::string& extension,
+    google::protobuf::compiler::OutputDirectory *out);
 
   /**
    * @brief Destructor
    */
-  virtual ~definition();
-
-  /**
-   * @brief Order the parsing and start the ast construction
-   * @param [in] desc: protobuf file structure
-   * @return a string
-   */
-  virtual std::string parse(const FileDescriptor *desc);
+  virtual ~declaration();
 
 protected:
-  std::string _include_path;
+  stream _stream;
 };
 
-};  // namespace header
+};  // namespace common
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
-#endif /* !_HEADER_SYNAPSE_DEFITION_HH_ */
+#endif /* !_PARSER_COMMON_SYNAPSE_DECLARATION_HH_ */

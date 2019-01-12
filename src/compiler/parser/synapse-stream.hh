@@ -14,18 +14,17 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _SYNAPSE_STREAM_HH_
-# define _SYNAPSE_STREAM_HH_
+#ifndef _PARSER_SYNAPSE_STREAM_HH_
+# define _PARSER_SYNAPSE_STREAM_HH_
 
 # include <string>
-# include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>
 # include <google/protobuf/io/zero_copy_stream_impl.h>
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
+namespace parser {
 
 class stream {
 public:
@@ -37,11 +36,11 @@ public:
   /**
    * @brief Constructor
    * @param [in] name: file name
-   * @param [in] out: protobuf out structure
    * @param [in] extension: extension of the file to write
+   * @param [in] out: protobuf out structure
    */
-  stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension);
+  stream(const std::string& name, const std::string& extension,
+    google::protobuf::compiler::OutputDirectory *out);
 
   /**
    * @brief Destructor
@@ -82,12 +81,12 @@ public:
 
 private:
   std::string _name;
-  io::ZeroCopyOutputStream *_stream;
-  io::Printer *_printer;
+  google::protobuf::io::ZeroCopyOutputStream *_stream;
+  google::protobuf::io::Printer *_printer;
 };
 
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
-#endif /* !_SYNAPSE_STREAM_HH_ */
+#endif /* !_PARSER_SYNAPSE_STREAM_HH_ */

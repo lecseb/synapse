@@ -15,19 +15,33 @@
  */
 
 #include "synapse-stream.hh"
-#include "synapse-string.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
+namespace parser {
 
 const std::string stream::endl = "\n";
 
-stream::stream(const std::string& name, OutputDirectory *out,
-    const std::string& extension)
+/**
+ * @brief Strip a suffix from a string given in parameter
+ * @param [in] var: var to strip
+ * @param [in] suffix: suffix to find and remove
+ * @return a string
+ */
+static std::string strip_suffix(const std::string& var,
+    const std::string& suffix) {
+  if (suffix.size() > var.size())
+    return var;
+  if (var.compare(var.size() - suffix.size(), suffix.size(), suffix) == 0)
+    return var.substr(0, var.size() - suffix.size());
+  return std::string("");
+}
+
+stream::stream(const std::string& name, const std::string& extension,
+  google::protobuf::compiler::OutputDirectory *out)
   : _name(std::string(strip_suffix(name, ".proto") + extension)),
     _stream(out->Open(_name)),
-    _printer(new io::Printer(_stream, '$')) {
+    _printer(new google::protobuf::io::Printer(_stream, '$')) {
 }
 
 stream::~stream() {
@@ -35,6 +49,6 @@ stream::~stream() {
   delete _stream;
 }
 
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

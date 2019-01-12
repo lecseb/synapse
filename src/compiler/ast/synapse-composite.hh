@@ -18,25 +18,24 @@
 # define _AST_SYNAPSE_COMPOSITE_HH_
 
 # include <string>
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-class composite : public node {
+class composite : public interface {
 public:
   /**
    * @brief Constructor
    */
-  explicit composite(const FieldDescriptor *desc);
+  explicit composite(const google::protobuf::FieldDescriptor *desc);
 
   /**
    * @brief Constructor
    */
-  composite(const FieldDescriptor::Type& type, const std::string& name,
-      bool pointer = false)
+  composite(const google::protobuf::FieldDescriptor::Type& type,
+      const std::string& name, bool pointer = false)
     : _desc(NULL),
       _is_pointer(pointer),
       _name(name),
@@ -77,10 +76,11 @@ public:
    * @param [in] type: type to convert
    * @return a string
    */
-  static std::string to_string(const FieldDescriptor::Type& type);
+  static std::string to_string(
+    const google::protobuf::FieldDescriptor::Type& type);
 
 private:
-  const FieldDescriptor *_desc;
+  const google::protobuf::FieldDescriptor *_desc;
   bool _is_pointer;
   std::string _name;
   std::string _type;
@@ -88,7 +88,6 @@ private:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* !_AST_SYNAPSE_COMPOSITE_HH_ */

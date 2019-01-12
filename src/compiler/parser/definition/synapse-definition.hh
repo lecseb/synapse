@@ -14,42 +14,45 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _SYNAPSE_FILE_HH_
-# define _SYNAPSE_FILE_HH_
+#ifndef _PARSER_DEFINITION_SYNAPSE_DEFINITION_HH_
+# define _PARSER_DEFINITION_SYNAPSE_DEFINITION_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/code_generator.h>
 # include <google/protobuf/io/printer.h>
 # include <google/protobuf/io/zero_copy_stream_impl.h>
-# include "synapse-stream.hh"
-# include "ast/synapse-visitor.hh"
+# include "parser/synapse-interface.hh"
+# include "parser/synapse-stream.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
+namespace parser {
+namespace definition {
 
-class file : public ast::visitor {
+class definition : public interface {
 public:
   /**
    * @brief Constructor
+   * @param [in] name: name of the file to generate
+   * @param [in] extension: generate file extension
    * @param [in] out: protobuf out structure
-   * @param [in] extension: extension of the file to write
    */
-  file(const std::string& filename, OutputDirectory *out,
-    const std::string& extension);
+  definition(const std::string& name, const std::string& extension,
+    google::protobuf::compiler::OutputDirectory *out);
 
   /**
    * @brief Destructor
    */
-  virtual ~file() {}
+  virtual ~definition();
 
 protected:
   stream _stream;
 };
 
+};  // namespace definition
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
-#endif /* !_SYNAPSE_FILE_HH_ */
+#endif /* !_PARSER_DEFINITION_SYNAPSE_DEFITION_HH_ */

@@ -20,23 +20,22 @@
 # include <list>
 # include <string>
 # include "synapse-decl.hh"
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief declaration list
  */
-class decls : public node {
+class decls : public interface {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf file descriptor structure
    */
-  explicit decls(const FileDescriptor *desc);
+  explicit decls(const google::protobuf::FileDescriptor *desc);
 
   /**
    * @brief Constructor
@@ -69,7 +68,6 @@ private:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_DECLS_HH_ */

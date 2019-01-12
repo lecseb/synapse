@@ -14,14 +14,37 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-factory.hh"
+#ifndef _AST_SYNAPSE_INTERFACE_HH_
+# define _AST_SYNAPSE_INTERFACE_HH_
 
-namespace google {
-namespace protobuf {
+# include <string>
+# include <google/protobuf/descriptor.h>
+
+namespace synapse {
 namespace compiler {
-namespace header {
+namespace ast {
 
-};  // namespace header
+class visitor;
+
+/**
+ * @brief Root element of the AST
+ */
+class interface {
+public:
+  /**
+   * @brief destructor
+   */
+  virtual ~interface() {}
+
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   */
+  virtual std::string accept(visitor *visitor) const = 0;
+};
+
+};  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
+
+#endif /* _AST_SYNAPSE_INTERFACE_HH_ */

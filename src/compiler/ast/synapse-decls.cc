@@ -20,17 +20,16 @@
 #include "synapse-structure.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-decls::decls(const FileDescriptor *desc)
+decls::decls(const google::protobuf::FileDescriptor *desc)
   : _decls(std::list<decl *>()) {
   _decls.push_back(new include("synapse/export.hh"));
 
   for (int32_t i = 0; i < desc->dependency_count(); i++) {
-    const FileDescriptor *dependency = desc->dependency(i);
+    const google::protobuf::FileDescriptor *dependency = desc->dependency(i);
     _decls.push_back(new include(dependency));
   }
 
@@ -50,5 +49,4 @@ std::string decls::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

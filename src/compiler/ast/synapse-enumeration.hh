@@ -22,8 +22,7 @@
 # include "synapse-decl.hh"
 # include "synapse-enumerators.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
@@ -36,7 +35,7 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf enumeration descriptor
    */
-  explicit enumeration(const EnumDescriptor *desc)
+  explicit enumeration(const google::protobuf::EnumDescriptor *desc)
     : enumeration(std::string(desc->name()), new enumerators(desc)) {
     _desc = desc;
   }
@@ -74,13 +73,12 @@ public:
   }
 
 private:
-  const EnumDescriptor *_desc;
+  const google::protobuf::EnumDescriptor *_desc;
   enumerators *_enumerators;
 };
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_ENUMERATION_HH_ */

@@ -1,5 +1,4 @@
-/** This file is part of synapse.
- *
+/**
  * synapse is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
@@ -14,16 +13,30 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <google/protobuf/compiler/command_line_interface.h>
-#include "synapse-generator.hh"
+#ifndef _SYNAPSE_CONNECTION_SYNAPSE_H_
+# define _SYNAPSE_CONNECTION_SYNAPSE_H_
 
-int main(int argc, char *argv[]) {
-  static const std::string _cmd_out = "--synapse_out";
-  static const std::string _cmd_brief = "Generate synapse headers/sources";
-  google::protobuf::compiler::CommandLineInterface client;
-  google::protobuf::compiler::header::Generator generator;
+# include <synapse/export.hh>
 
-  client.SetVersionInfo("libprotoc 3.5.1");
-  client.RegisterGenerator(_cmd_out, &generator, _cmd_brief);
-  return client.Run(argc, argv);
-}
+synapse_export enum type {
+  dbus = 0,
+  client_ssl = 1,
+  server_ssl = 2
+};
+
+synapse_export struct SearchRequest {
+  uint32_t test;
+  uint32_t tetst_2;
+  struct s_synapse_bytes *test3;
+};
+
+synapse_export struct SearchResponse {
+  uint32_t test;
+  uint32_t tetst_2;
+  struct s_synapse_bytes *test3;
+};
+
+synapse_export struct SearchRequest *Search(
+  struct SearchResponse *msg);
+
+#endif /* !_SYNAPSE_CONNECTION_SYNAPSE_H_ */

@@ -14,19 +14,26 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-header.hh"
+#include "synapse-api.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
-namespace header {
+namespace parser {
+namespace definition {
 
-synapse::synapse(const std::string& name, const std::string& extension,
-    const std::string& params, OutputDirectory *out)
-  : definition(name, extension, params, out) {
+static const std::string& _g_name = "synapse_out";
+static const std::string& _g_opt = "--synapse_out";
+static const std::string& _g_brief = "generate synapse.h/synapse.c";
+
+const interface::option& api::get_option() {
+  static interface::option g_option = interface::option(
+    "synapse_out",
+    "--synapse_out",
+    "generate synapse.h/synapse.c");
+  return g_option;
 }
 
-std::string synapse::visite(const ast::composite *node) {
+std::string api::visite(const ast::composite *node) {
   std::string error = std::string();
 
   _stream << node->get_type();
@@ -36,7 +43,7 @@ std::string synapse::visite(const ast::composite *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::decls *node) {
+std::string api::visite(const ast::decls *node) {
   std::string error = std::string();
   const std::list<ast::decl *>& decls = node->get_declarations();
 
@@ -49,7 +56,7 @@ std::string synapse::visite(const ast::decls *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::enumeration *node) {
+std::string api::visite(const ast::enumeration *node) {
   std::string error = std::string();
 
   _stream << stream::endl << "synapse_export enum ";
@@ -61,12 +68,12 @@ std::string synapse::visite(const ast::enumeration *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::enumerator *node) {
+std::string api::visite(const ast::enumerator *node) {
   _stream << node->get_name() << " = " << std::to_string(node->get_value());
   return std::string();
 }
 
-std::string synapse::visite(const ast::enumerators *node) {
+std::string api::visite(const ast::enumerators *node) {
   std::string error = std::string();
   const std::map<uint32_t, ast::enumerator *>& enums = node->get_enumerators();
   std::map<uint32_t, ast::enumerator *>::const_iterator enum_it = enums.begin();
@@ -82,7 +89,7 @@ std::string synapse::visite(const ast::enumerators *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::field *node) {
+std::string api::visite(const ast::field *node) {
   std::string error = std::string();
   ast::composite *type = node->get_type();
 
@@ -91,7 +98,7 @@ std::string synapse::visite(const ast::field *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::fields *node) {
+std::string api::visite(const ast::fields *node) {
   std::string error = std::string();
   const std::map<uint32_t, ast::field *>& fields = node->get_fields();
 
@@ -103,7 +110,7 @@ std::string synapse::visite(const ast::fields *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::function *node) {
+std::string api::visite(const ast::function *node) {
   std::string error = std::string();
 
   _stream << stream::endl << "synapse_export ";
@@ -116,7 +123,7 @@ std::string synapse::visite(const ast::function *node) {
   return std::string();
 }
 
-std::string synapse::visite(const ast::function::out *node) {
+std::string api::visite(const ast::function::out *node) {
   std::string error = std::string();
 
   const ast::composite *cmp = node->get_composite();
@@ -124,14 +131,14 @@ std::string synapse::visite(const ast::function::out *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::include *node) {
+std::string api::visite(const ast::include *node) {
   std::string error = std::string();
 
   _stream << "# include <" << node->get_name() << ">";
   return error;
 }
 
-std::string synapse::visite(const ast::param *node) {
+std::string api::visite(const ast::param *node) {
   std::string error = std::string();
 
   const ast::composite *cmp = node->get_composite();
@@ -140,7 +147,7 @@ std::string synapse::visite(const ast::param *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::params *node) {
+std::string api::visite(const ast::params *node) {
   std::string error = std::string();
   const std::list<ast::param *>& params = node->get_params();
   std::list<ast::param *>::const_iterator param = params.begin();
@@ -155,7 +162,7 @@ std::string synapse::visite(const ast::params *node) {
   return error;
 }
 
-std::string synapse::visite(const ast::service *service) {
+std::string api::visite(const ast::service *service) {
   std::string error = std::string();
   const std::list<ast::function *>& functions = service->get_functions();
 
@@ -165,7 +172,7 @@ std::string synapse::visite(const ast::service *service) {
   return error;
 }
 
-std::string synapse::visite(const ast::structure *node) {
+std::string api::visite(const ast::structure *node) {
   std::string error = std::string();
 
   _stream << stream::endl << "synapse_export struct ";
@@ -177,7 +184,7 @@ std::string synapse::visite(const ast::structure *node) {
   return error;
 }
 
-};  // namespace header
+};  // namespace definition
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

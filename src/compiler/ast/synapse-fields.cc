@@ -17,15 +17,14 @@
 #include "synapse-fields.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-fields::fields(const Descriptor *desc)
+fields::fields(const google::protobuf::Descriptor *desc)
   : _fields(std::map<uint32_t, field *>()) {
   for (int32_t i = 0; i < desc->field_count(); i++) {
-    const FieldDescriptor *field_desc = desc->field(i);
+    const google::protobuf::FieldDescriptor *field_desc = desc->field(i);
     _fields[field_desc->index()] = new field(field_desc);
   }
 }
@@ -49,5 +48,4 @@ std::string fields::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

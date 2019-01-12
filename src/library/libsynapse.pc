@@ -1,0 +1,14 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+bindir=${exec_prefix}/bin
+
+Name: libsynapse
+Description: Synapse communication library
+Version: 0.1
+Libs: -L${libdir} -lsynapse
+Libs.private:
+Cflags: -I${includedir} -I${includedir}/proto
+Libdir: ${libdir}
+Requires: @DEP_DBUS@

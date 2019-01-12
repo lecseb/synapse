@@ -14,15 +14,20 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-file.hh"
+#include "synapse-declaration.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
+namespace parser {
+namespace common {
 
-file::file(const std::string& filename, OutputDirectory *out,
-    const std::string& extension)
-  : _stream(stream(filename, out, extension)) {
+declaration::declaration(const std::string& name, const std::string& extension,
+  google::protobuf::compiler::OutputDirectory *out)
+  : _stream(stream(name, extension, out)) {
+  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+
   _stream << "/**\n"
     << " * synapse is free software: you can redistribute it and/or modify\n"
     << " * it under the terms of the GNU General Public License as "
@@ -41,8 +46,26 @@ file::file(const std::string& filename, OutputDirectory *out,
     << " * along with synapse.  If not, see <https://www.gnu.org/licenses/>."
     << "\n"
     << " */\n\n";
+  _stream << "#ifndef " << temp << stream::endl;
+  _stream << "# define " << temp << stream::endl;
+  _stream << stream::endl;
 }
 
+declaration::~declaration() {
+  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
+  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
+  _stream << "#endif /* !" << temp << " */" << stream::endl;
+}
+
+// std::string definition::parse(const FileDescriptor *desc) {
+//   ast::decls *_decls = new ast::decls(desc);
+//   std::string error = _decls->accept(this);
+//   delete _decls;
+//   return error;
+// }
+
+};  // namespace common
+};  // namespace parser
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

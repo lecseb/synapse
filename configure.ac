@@ -16,7 +16,7 @@
 AC_INIT([libsynapse], [0.1])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 AM_CONFIG_HEADER([config.h])
-AM_SILENT_RULES([yes])
+#AM_SILENT_RULES([yes])
 
 # Check programs
 AC_PROG_CC
@@ -63,6 +63,7 @@ AC_SUBST([synapse_CPPFLAGS], ["$AM_CPPFLAGS $synapse_CPPFLAGS $extra_CPPFLAGS"])
 AC_SUBST([synapse_CFLAGS], ["$AM_CFLAGS $synapse_CFLAGS $extra_CFLAGS"])
 AC_SUBST([synapse_libdir], ["`pwd`/src/library"])
 AC_SUBST([synapse_compdir], ["`pwd`/src/compiler"])
+AC_SUBST([LDFLAGS], ["$LDFLAGS -I/src/library/synapse"])
 AM_CONDITIONAL([synapse_SILENT], [test "$AM_DEFAULT_VERBOSITY"="0"])
 
 # Output generated file

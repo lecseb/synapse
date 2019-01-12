@@ -17,12 +17,11 @@
 #include "synapse-function.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-function::function(const MethodDescriptor *desc)
+function::function(const google::protobuf::MethodDescriptor *desc)
   : decl(desc->name()),
     _params(new params(desc->output_type())),
     _return(new out(desc->input_type())) {
@@ -50,5 +49,4 @@ std::string function::out::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

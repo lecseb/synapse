@@ -24,8 +24,7 @@
 # include "synapse-params.hh"
 # include "synapse-structure.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
@@ -43,7 +42,7 @@ public:
      * @brief Constructor
      * @param [in] desc: protobuf output function type
      */
-    explicit out(const Descriptor *desc)
+    explicit out(const google::protobuf::Descriptor *desc)
       : param(desc) {}
 
     /**
@@ -62,7 +61,7 @@ public:
    * @brief Constructor
    * @param [in] desc: protobuf service descriptor structure
    */
-  explicit function(const MethodDescriptor *desc);
+  explicit function(const google::protobuf::MethodDescriptor *desc);
 
   /**
    * @brief Constructor
@@ -107,7 +106,6 @@ private:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_FUNCTION_HH_ */

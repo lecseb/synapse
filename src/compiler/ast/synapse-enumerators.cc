@@ -17,15 +17,14 @@
 #include "synapse-enumerators.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-enumerators::enumerators(const EnumDescriptor *desc)
+enumerators::enumerators(const google::protobuf::EnumDescriptor *desc)
   : _enumerators(std::map<uint32_t, enumerator *>()) {
   for (int32_t i = 0; i < desc->value_count(); i++) {
-    const EnumValueDescriptor *enum_desc = desc->value(i);
+    const google::protobuf::EnumValueDescriptor *enum_desc = desc->value(i);
     _enumerators[enum_desc->number()] = new enumerator(enum_desc);
   }
 }
@@ -49,5 +48,4 @@ std::string enumerators::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

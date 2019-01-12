@@ -18,23 +18,22 @@
 # define _AST_SYNAPSE_ENUMERATOR_HH_
 
 # include <string>
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief Root element of the AST
  */
-class enumerator : public node {
+class enumerator : public interface {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf enumerator descriptor
    */
-  explicit enumerator(const EnumValueDescriptor *desc)
+  explicit enumerator(const google::protobuf::EnumValueDescriptor *desc)
     : _name(desc->name()),
       _value(desc->number()) {}
 
@@ -76,14 +75,13 @@ public:
   }
 
 private:
-  const EnumValueDescriptor *_desc;
+  const google::protobuf::EnumValueDescriptor *_desc;
   std::string _name;
   uint32_t _value;
 };
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_ENUMERATOR_HH_ */

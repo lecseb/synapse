@@ -17,39 +17,39 @@
 #include "synapse-composite.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-std::string composite::to_string(const FieldDescriptor::Type& type) {
+std::string composite::to_string(
+  const google::protobuf::FieldDescriptor::Type& type) {
   switch (type) {
-  case FieldDescriptor::TYPE_DOUBLE:
+  case google::protobuf::FieldDescriptor::TYPE_DOUBLE:
     return "double";
-  case FieldDescriptor::TYPE_FLOAT:
+  case google::protobuf::FieldDescriptor::TYPE_FLOAT:
     return "float";
-  case FieldDescriptor::TYPE_SINT64:
-  case FieldDescriptor::TYPE_SFIXED64:
-  case FieldDescriptor::TYPE_INT64:
+  case google::protobuf::FieldDescriptor::TYPE_SINT64:
+  case google::protobuf::FieldDescriptor::TYPE_SFIXED64:
+  case google::protobuf::FieldDescriptor::TYPE_INT64:
     return "int64_t";
-  case FieldDescriptor::TYPE_FIXED64:
-  case FieldDescriptor::TYPE_UINT64:
+  case google::protobuf::FieldDescriptor::TYPE_FIXED64:
+  case google::protobuf::FieldDescriptor::TYPE_UINT64:
     return "uint64_t";
-  case FieldDescriptor::TYPE_SFIXED32:
-  case FieldDescriptor::TYPE_SINT32:
-  case FieldDescriptor::TYPE_INT32:
+  case google::protobuf::FieldDescriptor::TYPE_SFIXED32:
+  case google::protobuf::FieldDescriptor::TYPE_SINT32:
+  case google::protobuf::FieldDescriptor::TYPE_INT32:
     return "int32_t";
-  case FieldDescriptor::TYPE_FIXED32:
-  case FieldDescriptor::TYPE_UINT32:
+  case google::protobuf::FieldDescriptor::TYPE_FIXED32:
+  case google::protobuf::FieldDescriptor::TYPE_UINT32:
     return "uint32_t";
-  case FieldDescriptor::TYPE_BOOL:
+  case google::protobuf::FieldDescriptor::TYPE_BOOL:
     return "uint8_t";
-  case FieldDescriptor::TYPE_STRING:
+  case google::protobuf::FieldDescriptor::TYPE_STRING:
     return "char";
-  case FieldDescriptor::TYPE_MESSAGE:
-  case FieldDescriptor::TYPE_BYTES:
+  case google::protobuf::FieldDescriptor::TYPE_MESSAGE:
+  case google::protobuf::FieldDescriptor::TYPE_BYTES:
     return "struct";
-  case FieldDescriptor::TYPE_ENUM:
+  case google::protobuf::FieldDescriptor::TYPE_ENUM:
     return "enum";
   default:
     break;
@@ -57,21 +57,21 @@ std::string composite::to_string(const FieldDescriptor::Type& type) {
   return "unknown";
 }
 
-composite::composite(const FieldDescriptor *desc)
+composite::composite(const google::protobuf::FieldDescriptor *desc)
   : _desc(desc),
     _is_pointer(desc->is_repeated()),
     _name(std::string()),
     _type(composite::to_string(desc->type())) {
   switch (desc->type()) {
-  case FieldDescriptor::TYPE_BYTES:
+  case google::protobuf::FieldDescriptor::TYPE_BYTES:
     /* TODO: should we support the repeated bytes field ? */
     _name = "s_synapse_bytes";
     _is_pointer = true;
     break;
-  case FieldDescriptor::TYPE_ENUM:
+  case google::protobuf::FieldDescriptor::TYPE_ENUM:
     _name = desc->enum_type()->name();
     break;
-  case FieldDescriptor::TYPE_MESSAGE:
+  case google::protobuf::FieldDescriptor::TYPE_MESSAGE:
     _name = desc->message_type()->name();
     _is_pointer = true;
     break;
@@ -87,5 +87,4 @@ std::string composite::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

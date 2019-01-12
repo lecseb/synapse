@@ -17,16 +17,15 @@
 #include "synapse-service.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-service::service(const ServiceDescriptor *desc)
+service::service(const google::protobuf::ServiceDescriptor *desc)
   : decl(desc->name()),
     _functions(std::list<function *>()) {
   for (int32_t i = 0; i < desc->method_count(); i++) {
-    const MethodDescriptor *method = desc->method(i);
+    const google::protobuf::MethodDescriptor *method = desc->method(i);
     _functions.push_back(new function(method));
   }
 }
@@ -49,5 +48,4 @@ std::string service::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse

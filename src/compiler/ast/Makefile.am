@@ -33,7 +33,7 @@ noinst_HEADERS= \
 	synapse-fields.hh \
 	synapse-function.hh \
 	synapse-include.hh \
-	synapse-node.hh \
+	synapse-interface.hh \
 	synapse-param.hh \
 	synapse-params.hh \
 	synapse-service.hh \

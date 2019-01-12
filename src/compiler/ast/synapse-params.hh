@@ -19,24 +19,23 @@
 
 # include <list>
 # include <string>
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 # include "synapse-param.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief Root element of the AST
  */
-class params : public node {
+class params : public interface {
 public:
   /**
    * @brief Constructor
    * @param [in] desc: protobuf structure
    */
-  explicit params(const Descriptor *desc);
+  explicit params(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief Constructor
@@ -68,7 +67,6 @@ private:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_PARAMS_HH_ */

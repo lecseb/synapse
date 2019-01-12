@@ -18,17 +18,16 @@
 # define _AST_SYNAPSE_DECL_HH_
 
 # include <string>
-# include "synapse-node.hh"
+# include "synapse-interface.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
  * @brief declaration
  */
-class decl : public node {
+class decl : public interface {
 public:
   /**
    * @brief Constructor
@@ -62,7 +61,6 @@ protected:
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
 
 #endif /* _AST_SYNAPSE_DECL_HH_ */

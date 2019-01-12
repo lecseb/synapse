@@ -17,12 +17,11 @@
 #include "synapse-params.hh"
 #include "synapse-visitor.hh"
 
-namespace google {
-namespace protobuf {
+namespace synapse {
 namespace compiler {
 namespace ast {
 
-params::params(const Descriptor *desc)
+params::params(const google::protobuf::Descriptor *desc)
   : _params({ new param(desc) }) {
 }
 
@@ -42,5 +41,4 @@ std::string params::accept(visitor *visitor) const {
 
 };  // namespace ast
 };  // namespace compiler
-};  // namespace protobuf
-};  // namespace google
+};  // namespace synapse
