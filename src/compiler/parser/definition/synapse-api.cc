@@ -59,7 +59,8 @@ std::string api::visite(const ast::decls *node) {
 std::string api::visite(const ast::enumeration *node) {
   std::string error = std::string();
 
-  _stream << stream::endl << "synapse_export enum ";
+  _stream << stream::endl;
+  _stream << (_export ? "synapse_export enum " : "enum ");
   _stream << node->get_name() << " {" << stream::endl;
   _stream.indent();
   error = node->get_enumerators()->accept(this);
@@ -113,7 +114,8 @@ std::string api::visite(const ast::fields *node) {
 std::string api::visite(const ast::function *node) {
   std::string error = std::string();
 
-  _stream << stream::endl << "synapse_export ";
+  _stream << stream::endl;
+  _stream << (_export ? "synapse_export " : "");
   error += node->get_return_type()->accept(this);
   _stream << node->get_name() << "(" << stream::endl;
   _stream.indent();
@@ -175,7 +177,8 @@ std::string api::visite(const ast::service *service) {
 std::string api::visite(const ast::structure *node) {
   std::string error = std::string();
 
-  _stream << stream::endl << "synapse_export struct ";
+  _stream << stream::endl;
+  _stream << (_export ? "synapse_export struct " : "struct ");
   _stream << node->get_name() << " {" << stream::endl;
   _stream.indent();
   error = node->get_fields()->accept(this);

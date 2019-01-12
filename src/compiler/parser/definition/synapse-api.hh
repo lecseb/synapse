@@ -18,6 +18,8 @@
 # define _PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_
 
 # include <string>
+# include <utility>
+# include <vector>
 # include <google/protobuf/descriptor.h>
 # include "synapse-definition.hh"
 # include "ast/synapse-decls.hh"
@@ -35,9 +37,17 @@ public:
    * @param [in] name: name of the file to file to generate
    * @param [in] out: output file structure
    */
-  api(const std::string& name,
-    google::protobuf::compiler::OutputDirectory *out)
+  api(const std::vector<std::pair<std::string, std::string> >& params,
+      const std::string& name, google::protobuf::compiler::OutputDirectory *out)
     : definition(name, ".synapse.h", out) {
+    /* TODO: find a way to do it more... sexy */
+    std::vector<std::pair<std::string, std::string> >::const_iterator it;
+    for (it = params.begin(); it != params.end(); it++) {
+      if (it->first == "export") {
+	_export = true;
+	break;
+      }
+    }
   }
 
   /**
@@ -148,6 +158,9 @@ public:
    * @return a string representation of an error
    */
   virtual std::string visite(const ast::structure *node);
+
+private:
+  bool _export;
 };
 
 };  // namespace definition

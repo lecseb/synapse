@@ -32,7 +32,7 @@ namespace parser {
 /**
  * @brief generator class: use to generate both source and header
  */
-template<class definition>
+template<class T>
 class generator : public google::protobuf::compiler::CodeGenerator {
 public:
   /**
@@ -56,15 +56,13 @@ public:
    * the problem (e.g. "invalid parameter") and returns false.
    */
   virtual bool Generate(const google::protobuf::FileDescriptor *desc,
-    const std::string& params, google::protobuf::compiler::OutputDirectory *out,
-    std::string *error) const {
-    std::vector<std::pair<std::string, std::string> > vector;
-    google::protobuf::compiler::ParseGeneratorParameter(params, &vector);
-    for (uint32_t i = 0; i < vector.size(); i++)
-      std::cout << "param: " << vector[i].first << "="
-	<< vector[i].second << std::endl;
+      const std::string& params_str,
+      google::protobuf::compiler::OutputDirectory *out,
+      std::string *error) const {
+    std::vector<std::pair<std::string, std::string> > params;
+    google::protobuf::compiler::ParseGeneratorParameter(params_str, &params);
 
-    definition *def = new definition(desc->name(), out);
+    T *def = new T(params, desc->name(), out);
     *error = def->parse(desc);
     delete def;
     return !error->size();
