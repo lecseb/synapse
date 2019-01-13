@@ -38,7 +38,7 @@ public:
   /**
    * @brief Constructor
    */
-  generator() {}
+  generator(int argc, char *argv[]);
 
   /**
    * @brief Destructor
@@ -58,21 +58,16 @@ public:
   virtual bool Generate(const google::protobuf::FileDescriptor *desc,
       const std::string& params_str,
       google::protobuf::compiler::OutputDirectory *out,
-      std::string *error) const {
-    std::vector<std::pair<std::string, std::string> > params;
-    google::protobuf::compiler::ParseGeneratorParameter(params_str, &params);
+      std::string *error) const;
 
-    T *def = new T(params, desc->name(), out);
-    bool ret = def->parse(desc);
-    if (!ret)
-      error::get_instance() >> *error;
-    delete def;
-    return ret;
-  }
+private:
+  std::vector<std::pair<std::string, std::string> > _params;
 };
 
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
+
+# include "synapse-generator.hxx"
 
 #endif /* !_PARSER_SYNAPSE_GENERATOR_HH_ */

@@ -14,8 +14,8 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_
-# define _PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_
+#ifndef _PARSER_DEFINITION_SYNAPSE_API_HH_
+# define _PARSER_DEFINITION_SYNAPSE_API_HH_
 
 # include <string>
 # include <utility>
@@ -38,17 +38,8 @@ public:
    * @param [in] out: output file structure
    */
   api(const std::vector<std::pair<std::string, std::string> >& params,
-      const std::string& name, google::protobuf::compiler::OutputDirectory *out)
-    : definition(name, ".synapse.h", out) {
-    /* TODO: find a way to do it more... sexy */
-    std::vector<std::pair<std::string, std::string> >::const_iterator it;
-    for (it = params.begin(); it != params.end(); it++) {
-      if (it->first == "export") {
-	_export = true;
-	break;
-      }
-    }
-  }
+      const std::string& name,
+      google::protobuf::compiler::OutputDirectory *out);
 
   /**
    * @brief Destructor
@@ -167,7 +158,9 @@ public:
   virtual bool visite(const ast::structure *node);
 
 private:
+  ast::decls *_decls;
   bool _export;
+  std::string _include_path;
 };
 
 };  // namespace definition
@@ -175,4 +168,4 @@ private:
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_DEFINITION_SYNAPSE_API_HEADER_HH_ */
+#endif /* !_PARSER_DEFINITION_SYNAPSE_API_HH_ */

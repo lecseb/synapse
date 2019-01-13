@@ -33,8 +33,10 @@ noinst_HEADERS= \
 	synapse/log.h
 
 include_HEADERS= \
+	synapse/bytes.synapse.h \
 	synapse/connection.synapse.h \
-	synapse/export.h
+	synapse/export.h \
+	synapse/type.synapse.h
 
 libsynapse_la_SOURCES= \
 	synapse.c

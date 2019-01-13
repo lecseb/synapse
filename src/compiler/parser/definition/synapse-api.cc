@@ -34,14 +34,28 @@ const interface::option& api::get_option() {
   return g_option;
 }
 
+api::api(const std::vector<std::pair<std::string, std::string> >& params,
+    const std::string& name, google::protobuf::compiler::OutputDirectory *out)
+  : definition(name, ".synapse.h", out) {
+  /* TODO: find a way to do it more... sexy */
+  std::vector<std::pair<std::string, std::string> >::const_iterator it;
+  for (it = params.begin(); it != params.end(); it++) {
+    if (it->first == "export") {
+      _export = true;
+    } else if (it->first == "proto_path") {
+      _include_path = it->second;
+    }
+  }
+  if (_include_path.size() == 0)
+    _include_path = std::string(".");
+}
+
 bool api::parse(const google::protobuf::FileDescriptor *desc) {
-  ast::decls *decls = new ast::decls(desc);
+  _decls = new ast::decls(desc);
   if (_export)
-    decls->add_decl(new ast::include("synapse/export.h"));
-  factory factory(decls);
-  bool error = decls->accept(&factory);
-  error &= decls->accept(this);
-  delete decls;
+    _decls->add_decl(new ast::include("synapse/export.h"));
+  bool error = _decls->accept(this);
+  delete _decls;
   return error;
 }
 
@@ -76,6 +90,9 @@ bool api::visite(const ast::enumeration *node) {
   error &= node->get_enumerators()->accept(this);
   _stream.outdent();
   _stream << "};";
+
+  factory factory(_decls);
+  error &= node->accept(&factory);
   return error;
 }
 
@@ -152,7 +169,14 @@ bool api::visite(const ast::function::out *node) {
 }
 
 bool api::visite(const ast::include *node) {
-  _stream << "# include <" << node->get_name() << ">";
+  std::string name = std::string();
+
+  if (_include_path == ".")
+    name = node->get_name();
+  else
+    name = std::string(_include_path + "/" + node->get_name());
+
+  _stream << "# include <" << name << ">";
   return true;
 }
 
@@ -195,11 +219,15 @@ bool api::visite(const ast::structure *node) {
 
   _stream << stream::endl;
   _stream << (_export ? "synapse_export struct " : "struct ");
-  _stream << node->get_name() << " {" << stream::endl;
-  _stream.indent();
-  error &= node->get_fields()->accept(this);
-  _stream.outdent();
-  _stream << "};";
+  _stream << node->get_name() << ";";
+  // _stream << node->get_name() << " {" << stream::endl;
+  // _stream.indent();
+  // error &= node->get_fields()->accept(this);
+  // _stream.outdent();
+  // _stream << "};";
+
+  factory factory(_decls);
+  error &= node->accept(&factory);
   return error;
 }
 

@@ -27,6 +27,7 @@ synapse_header_CXXFLAGS= \
 noinst_HEADERS= \
 	parser/synapse-error.hh \
 	parser/synapse-generator.hh \
+	parser/synapse-generator.hxx \
 	parser/synapse-interface.hh \
 	parser/synapse-stream.hh \
 	parser/declaration/synapse-declaration.hh \

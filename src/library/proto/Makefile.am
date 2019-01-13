@@ -18,29 +18,42 @@ include $(top_builddir)/script/checkpatch.mk
 noinst_LTLIBRARIES= libsynapse-proto.la
 
 noinst_DATA= \
-	connection.proto
+	bytes.proto \
+	connection.proto \
+	type.proto
 
 noinst_HEADERS= \
-	$(synapse_libdir)/synapse/connection.synapse.h
+	bytes.synapse.h \
+	connection.synapse.h \
+	type.synapse.h
 
 libsynapse_proto_la_SOURCES= \
+	bytes.synapse.c \
 	connection.synapse.c
 
 if synapse_SILENT
-%.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-header
+%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
 	@echo "  proto    $< -> $(synapse_libdir)/synapse/$(basename $<).synapse.h"
 	@LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
-		--proto_path=$(synapse_libdir)/proto \
+		--proto_path=. \
 		--synapse_out=export:$(top_srcdir)/src/library/synapse $<
+
+%.synapse.c: %.proto
 	@echo "  proto    $< -> $(basename $<).synapse.c"
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
 else
-%.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-header
+%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
 	LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
-		--proto_path=$(synapse_libdir)/proto \
+		--proto_path=. \
 		--synapse_out=export:$(top_srcdir)/src/library/synapse $<
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
+
+%.synapse.c:
+	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
+
 endif
+
+all-local: $(noinst_HEADERS)
 
 clean-local:
 	rm -f $(libsynapse_proto_la_SOURCES) $(noinst_HEADERS)

@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
   } else {
     google::protobuf::compiler::CommandLineInterface client;
     synapse::compiler::parser::generator<
-      synapse::compiler::parser::definition::api> gen;
+      synapse::compiler::parser::definition::api> gen(argc, argv);
 
     client.RegisterGenerator(opt.cmd, &gen, opt.brief);
     client.SetVersionInfo("libprotoc 3.5.1");
