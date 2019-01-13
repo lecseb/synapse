@@ -30,6 +30,15 @@ namespace ast {
 class include : public decl {
 public:
   /**
+   * @brief Define the type of include
+   */
+  enum e_type {
+    e_type_synapse,
+    e_type_protobuf,
+    e_type_libc
+  };
+
+  /**
    * @brief Constructor
    * @param [in] desc: protobuf file descriptor
    */
@@ -37,9 +46,10 @@ public:
 
   /**
    * @brief Constructor
+   * @param [in] type: type of the include
    * @param [in] name: name of the include
    */
-  explicit include(const std::string& name, bool global = true);
+  include(enum e_type type, const std::string& name);
 
   /**
    * @brief destructor
@@ -61,12 +71,16 @@ public:
     return _name;
   }
 
-  bool is_global() const {
-    return _is_global;
+  /**
+   * @brief Get the inclusion type
+   * @return a type
+   */
+  enum e_type get_type() const {
+    return _type;
   }
 
 private:
-  bool _is_global;
+  enum e_type _type;
 };
 
 };  // namespace ast

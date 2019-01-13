@@ -14,38 +14,56 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_DEFINITION_SYNAPSE_FACTORY_HH_
-# define _PARSER_DEFINITION_SYNAPSE_FACTORY_HH_
+#ifndef _PARSER_DECLARATION_SYNAPSE_API_HH_
+# define _PARSER_DECLARATION_SYNAPSE_API_HH_
 
+# include <map>
 # include <string>
-# include "ast/synapse-visitor.hh"
+# include <google/protobuf/descriptor.h>
+# include "synapse-declaration.hh"
+# include "ast/synapse-decls.hh"
 
 namespace synapse {
 namespace compiler {
 namespace parser {
-namespace definition {
+namespace declaration {
 
-/**
- * @brief Allow the generator to create callback and link depending on
- * the context (the current ast evaluation)
- */
-class factory : public ast::visitor {
+class api : public declaration {
 public:
   /**
    * @brief Constructor
-   * @param [in] decls: root of the ast
+   * @param [in] options: options given by the user
+   * @param [in] name: name of the file to file to generate
+   * @param [in] out: output file structure
    */
-  explicit factory(ast::decls *decls)
-    : _decls(decls) {}
+  api(const std::map<std::string, std::string>& params,
+      const std::string& name,
+      google::protobuf::compiler::OutputDirectory *out);
+
+  /**
+   * @brief Destructor
+   */
+  virtual ~api() {}
+
+  /**
+   * @brief Get the parser option
+   * @return an option
+   */
+  static const interface::option& get_option();
+
+  /**
+   * @brief Order the parsing and start the ast construction
+   * @param [in] desc: protobuf file structure
+   * @return true on success, false otherwise
+   */
+  virtual bool parse(const google::protobuf::FileDescriptor *desc);
 
   /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::composite *) {
-    return true;
-  }
+  virtual bool visite(const ast::composite *node);
 
   /**
    * @brief Visite an decls node
@@ -139,7 +157,7 @@ public:
   }
 
   /**
-   * @brief Visite an service node
+   * @brief Visite an structure node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
@@ -156,11 +174,12 @@ public:
 
 private:
   ast::decls *_decls;
+  std::string _include_path;
 };
 
-};  // namespace definition
+};  // namespace declaration
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_DEFINITION_SYNAPSE_FACTORY_HH_ */
+#endif /* !_PARSER_DECLARATION_SYNAPSE_API_HH_ */

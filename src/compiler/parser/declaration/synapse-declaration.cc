@@ -19,15 +19,11 @@
 namespace synapse {
 namespace compiler {
 namespace parser {
-namespace common {
+namespace declaration {
 
 declaration::declaration(const std::string& name, const std::string& extension,
-  google::protobuf::compiler::OutputDirectory *out)
+    google::protobuf::compiler::OutputDirectory *out)
   : _stream(stream(name, extension, out)) {
-  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
-  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-
   _stream << "/**\n"
     << " * synapse is free software: you can redistribute it and/or modify\n"
     << " * it under the terms of the GNU General Public License as "
@@ -46,26 +42,9 @@ declaration::declaration(const std::string& name, const std::string& extension,
     << " * along with synapse.  If not, see <https://www.gnu.org/licenses/>."
     << "\n"
     << " */\n\n";
-  _stream << "#ifndef " << temp << stream::endl;
-  _stream << "# define " << temp << stream::endl;
-  _stream << stream::endl;
 }
 
-declaration::~declaration() {
-  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
-  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-  _stream << "#endif /* !" << temp << " */" << stream::endl;
-}
-
-// std::string definition::parse(const FileDescriptor *desc) {
-//   ast::decls *_decls = new ast::decls(desc);
-//   std::string error = _decls->accept(this);
-//   delete _decls;
-//   return error;
-// }
-
-};  // namespace common
+};  // namespace declaration
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse

@@ -21,13 +21,13 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(desc->name(), false) {
+include::include(enum e_type type, const std::string& name)
+  : decl(name),
+    _type(type) {
 }
 
-include::include(const std::string& name, bool global)
-  : decl(name),
-    _is_global(global) {
+include::include(const google::protobuf::FileDescriptor *desc)
+  : include(include::e_type_protobuf, desc->name()) {
 }
 
 bool include::accept(visitor *visitor) const {

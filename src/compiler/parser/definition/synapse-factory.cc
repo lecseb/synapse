@@ -52,6 +52,27 @@ bool factory::visite(const ast::enumeration *node) {
   return true;
 }
 
+bool factory::visite(const ast::field *node) {
+  /* getter */
+  ast::decl *get_func = new ast::function(
+    std::string(node->get_name() + "_get"),
+    new ast::function::out(
+      new ast::composite(node->get_type())),
+      NULL);
+  _decls->add_decl(get_func);
+  return true;
+}
+
+bool factory::visite(const ast::fields *node) {
+  bool error = true;
+  const std::map<uint32_t, ast::field *>& fields = node->get_fields();
+
+  std::map<uint32_t, ast::field *>::const_iterator field = fields.begin();
+  for (; field != fields.end(); field++)
+    error &= field->second->accept(this);
+  return error;
+}
+
 bool factory::visite(const ast::structure *node) {
   /* new function */
   ast::params *new_params = new ast::params({});

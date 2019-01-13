@@ -18,6 +18,17 @@ include $(top_builddir)/script/checkpatch.mk
 protodir= $(prefix)/include/synapse/proto
 includedir= $(prefix)/include/synapse
 
+noinst_LIBRARIES= libsynapse-proto.a
+
+libsynapse_proto_a_CFLAGS= \
+	$(synapse_CFLAGS) \
+	-I$(synapse_libdir) \
+	-I$(synapse_libdir)/synapse
+
+libsynapse_proto_a_SOURCES= \
+	bytes.synapse.c \
+	type.synapse.c
+
 proto_DATA = \
 	bytes.proto \
 	type.proto
@@ -33,16 +44,27 @@ $(synapse_libdir)/synapse/%.synapse.h: %.proto $(synapse_cmpdir)/synapse-header
 		--proto_path=proto \
 		--synapse_out=synapse \
 		--synapse_opt=export $<
+
+%.synapse.c: %.proto $(synapse_libdir)/synapse/%.synapse.h $(synapse_cmpdir)/synapse-source
+	@echo "  proto    $< -> $@"
+	@$(synapse_cmpdir)/synapse-source \
+		--proto_path=. \
+		--synapse_out=. $<
 else
 $(synapse_libdir)/synapse/%.synapse.h: %.proto $(synapse_cmpdir)/synapse-header
 	@cd ../ ; $(synapse_cmpdir)/synapse-header \
 		--proto_path=proto \
 		--synapse_out=synapse \
 		--synapse_opt=export $<
+
+%.synapse.c: %.proto $(synapse_libdir)/synapse/%.synapse.h $(synapse_cmpdir)/synapse-source
+	@$(synapse_cmpdir)/synapse-source \
+		--proto_path=. \
+		--synapse_out=. $<
 endif
 
 clean-local:
 	rm -f $(noinst_HEADERS)
 
 # eval to create the coding style rule
-$(eval $(call check, $(sort $(noinst_HEADERS))))
+$(eval $(call check, $(sort $(noinst_HEADERS) $(libsynapse_proto_a_SOURCES))))

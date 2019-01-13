@@ -21,7 +21,7 @@ lib_LTLIBRARIES= libsynapse.la
 
 libsynapse_la_CFLAGS= \
 	$(synapse_CFLAGS) \
-	-I$(top_srcdir)/src/library
+	-I$(synapse_libdir)/
 
 nobase_includedir= $(prefix)/include/synapse
 

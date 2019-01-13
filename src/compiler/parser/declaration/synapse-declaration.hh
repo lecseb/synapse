@@ -14,8 +14,8 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_COMMON_SYNAPSE_DECLARATION_HH_
-# define _PARSER_COMMON_SYNAPSE_DECLARATION_HH_
+#ifndef _PARSER_DECLARATION_SYNAPSE_DECLARATION_HH_
+# define _PARSER_DECLARATION_SYNAPSE_DECLARATION_HH_
 
 # include <string>
 # include <google/protobuf/descriptor.h>
@@ -28,7 +28,7 @@
 namespace synapse {
 namespace compiler {
 namespace parser {
-namespace common {
+namespace declaration {
 
 class declaration : public interface {
 public:
@@ -44,15 +44,15 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~declaration();
+  virtual ~declaration() {}
 
 protected:
   stream _stream;
 };
 
-};  // namespace common
+};  // namespace declaration
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_COMMON_SYNAPSE_DECLARATION_HH_ */
+#endif /* !_PARSER_DECLARATION_SYNAPSE_DECLARATION_HH_ */

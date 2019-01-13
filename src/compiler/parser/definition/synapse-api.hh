@@ -98,14 +98,18 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::field *node);
+  virtual bool visite(const ast::field *) {
+    return true;
+  }
 
   /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::fields *node);
+  virtual bool visite(const ast::fields *) {
+    return true;
+  }
 
   /**
    * @brief Visite an function node

@@ -17,7 +17,11 @@ include $(top_builddir)/script/cpplint.mk
 
 SUBDIRS= ast
 
-bin_PROGRAMS= synapse-header
+bin_PROGRAMS= synapse-header synapse-source
+
+################################################################################
+#                               header bin                                     #
+################################################################################
 
 synapse_header_CXXFLAGS= \
 	$(synapse_CPPFLAGS) \
@@ -39,7 +43,6 @@ synapse_header_SOURCES= \
 	synapse-header.cc \
 	parser/synapse-error.cc \
 	parser/synapse-stream.cc \
-	parser/declaration/synapse-declaration.cc \
 	parser/definition/synapse-api.cc \
 	parser/definition/synapse-definition.cc \
 	parser/definition/synapse-factory.cc
@@ -51,3 +54,21 @@ synapse_header_LDFLAGS= \
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(synapse_header_SOURCES))))
+
+################################################################################
+#                               source bin                                     #
+################################################################################
+
+synapse_source_CXXFLAGS= $(synapse_header_CXXFLAGS)
+
+synapse_source_LDFLAGS= $(synapse_header_LDFLAGS)
+
+synapse_source_SOURCES= \
+	synapse-source.cc \
+	parser/synapse-error.cc \
+	parser/synapse-stream.cc \
+	parser/declaration/synapse-api.cc \
+	parser/declaration/synapse-declaration.cc
+
+# eval to create the coding style rule
+$(eval $(call check, $(sort $(synapse_source_SOURCES))))

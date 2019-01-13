@@ -24,7 +24,7 @@ namespace definition {
 
 static const std::string& _g_name = "synapse_out";
 static const std::string& _g_opt = "--synapse_out";
-static const std::string& _g_brief = "generate synapse.h/synapse.c";
+static const std::string& _g_brief = "generate synapse.h";
 
 const interface::option& api::get_option() {
   static interface::option g_option = interface::option(
@@ -53,7 +53,9 @@ api::api(const std::map<std::string, std::string>& params,
 bool api::parse(const google::protobuf::FileDescriptor *desc) {
   _decls = new ast::decls(desc);
   if (_export)
-    _decls->add_decl(new ast::include("export.h"));
+    _decls->add_decl(new ast::include(ast::include::e_type_synapse,
+      "export.h"));
+  _decls->add_decl(new ast::include(ast::include::e_type_libc, "stdint.h"));
 
   bool error = _decls->accept(this);
   delete _decls;
@@ -118,27 +120,6 @@ bool api::visite(const ast::enumerators *node) {
   return error;
 }
 
-bool api::visite(const ast::field *node) {
-  bool error = true;
-  ast::composite *type = node->get_type();
-
-  error &= type->accept(this);
-  _stream << node->get_name();
-  return error;
-}
-
-bool api::visite(const ast::fields *node) {
-  bool error = true;
-  const std::map<uint32_t, ast::field *>& fields = node->get_fields();
-
-  std::map<uint32_t, ast::field *>::const_iterator field = fields.begin();
-  for (; field != fields.end(); field++) {
-    error &= field->second->accept(this);
-    _stream << ";" << stream::endl;
-  }
-  return error;
-}
-
 bool api::visite(const ast::function *node) {
   bool error = true;
 
@@ -172,14 +153,21 @@ bool api::visite(const ast::function::out *node) {
 bool api::visite(const ast::include *node) {
   std::string name = std::string();
 
-  if (node->is_global()) {
-    name = std::string("synapse/" + node->get_name());
-  } else {
+  switch (node->get_type()) {
+  case ast::include::e_type_libc:
+    name = node->get_name();
+    break;
+  case ast::include::e_type_protobuf:
     if (_include_path != ".")
       name = std::string(_include_path + "/");
     name += std::string(strip_suffix(node->get_name(), ".proto") +
       ".synapse.h");
+    break;
+  case ast::include::e_type_synapse:
+    name = std::string("synapse/" + node->get_name());
+    break;
   }
+
   _stream << "# include <" << name << ">";
   return true;
 }
@@ -223,15 +211,7 @@ bool api::visite(const ast::structure *node) {
 
   _stream << stream::endl;
   _stream << (_export ? "synapse_export struct " : "struct ");
-  _stream << node->get_name() << ";";
-  // _stream << node->get_name() << " {" << stream::endl;
-  // _stream.indent();
-  // error &= node->get_fields()->accept(this);
-  // _stream.outdent();
-  // _stream << "};";
-
-  factory factory(_decls);
-  error &= node->accept(&factory);
+  _stream << node->get_name() << ";" << stream::endl;
   return error;
 }
 
