@@ -22,11 +22,12 @@ namespace compiler {
 namespace ast {
 
 include::include(const google::protobuf::FileDescriptor *desc)
-  : include(desc->name()) {
+  : include(desc->name(), false) {
 }
 
-include::include(const std::string& name)
-  : decl(name) {
+include::include(const std::string& name, bool global)
+  : decl(name),
+    _is_global(global) {
 }
 
 bool include::accept(visitor *visitor) const {

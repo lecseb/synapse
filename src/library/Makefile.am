@@ -24,19 +24,19 @@ lib_LTLIBRARIES= libsynapse.la
 
 libsynapse_la_CFLAGS= \
 	$(synapse_CFLAGS) \
-	-I$(top_srcdir)/src/library
+	-I$(top_srcdir)/src/library \
+	-I$(top_srcdir)/src/library/proto
 
 noinst_HEADERS= \
 	synapse/alloc.h \
-	synapse/bytes.h \
 	synapse/condition.h \
 	synapse/log.h
 
 include_HEADERS= \
-	synapse/bytes.synapse.h \
-	synapse/connection.synapse.h \
 	synapse/export.h \
-	synapse/type.synapse.h
+	proto/synapse/bytes.synapse.h \
+	proto/synapse/connection.synapse.h \
+	proto/synapse/type.synapse.h
 
 libsynapse_la_SOURCES= \
 	synapse.c

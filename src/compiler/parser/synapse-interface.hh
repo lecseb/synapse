@@ -41,11 +41,12 @@ public:
 	cmd("unknown"),
 	name("unknown") {}
 
-    option(const std::string& opt_name, const std::string& opt_cmd,
-	const std::string& opt_brief)
-      : brief(opt_brief),
-	cmd(opt_cmd),
-	name(opt_name) {}
+    option(const std::string& oname, const std::string& ocmd,
+	   const std::string& ocmd_opt, const std::string& obrief)
+      : brief(obrief),
+	cmd(ocmd),
+	name(oname),
+    	cmd_opt(ocmd_opt) {}
 
     bool operator==(const option& opt) {
       return brief == opt.brief && cmd == opt.cmd && name == opt.name;
@@ -54,6 +55,7 @@ public:
     std::string brief;
     std::string cmd;
     std::string name;
+    std::string cmd_opt;
   };
 
   /**

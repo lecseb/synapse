@@ -22,14 +22,7 @@ namespace parser {
 
 const std::string stream::endl = "\n";
 
-/**
- * @brief Strip a suffix from a string given in parameter
- * @param [in] var: var to strip
- * @param [in] suffix: suffix to find and remove
- * @return a string
- */
-static std::string strip_suffix(const std::string& var,
-    const std::string& suffix) {
+std::string strip_suffix(const std::string& var, const std::string& suffix) {
   if (suffix.size() > var.size())
     return var;
   if (var.compare(var.size() - suffix.size(), suffix.size(), suffix) == 0)

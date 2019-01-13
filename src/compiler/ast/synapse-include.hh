@@ -39,7 +39,7 @@ public:
    * @brief Constructor
    * @param [in] name: name of the include
    */
-  explicit include(const std::string& name);
+  explicit include(const std::string& name, bool global = true);
 
   /**
    * @brief destructor
@@ -60,6 +60,13 @@ public:
   const std::string& get_name() const {
     return _name;
   }
+
+  bool is_global() const {
+    return _is_global;
+  }
+
+private:
+  bool _is_global;
 };
 
 };  // namespace ast

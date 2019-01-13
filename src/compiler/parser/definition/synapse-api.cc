@@ -30,30 +30,32 @@ const interface::option& api::get_option() {
   static interface::option g_option = interface::option(
     "synapse_out",
     "--synapse_out",
+    "--synapse_opt",
     "generate synapse.h/synapse.c");
   return g_option;
 }
 
-api::api(const std::vector<std::pair<std::string, std::string> >& params,
+api::api(const std::map<std::string, std::string>& params,
     const std::string& name, google::protobuf::compiler::OutputDirectory *out)
   : definition(name, ".synapse.h", out) {
-  /* TODO: find a way to do it more... sexy */
-  std::vector<std::pair<std::string, std::string> >::const_iterator it;
-  for (it = params.begin(); it != params.end(); it++) {
-    if (it->first == "export") {
-      _export = true;
-    } else if (it->first == "proto_path") {
-      _include_path = it->second;
-    }
-  }
-  if (_include_path.size() == 0)
-    _include_path = std::string(".");
+  std::map<std::string, std::string>::const_iterator it;
+
+  it = params.find("synapse_opt");
+  _export = (it != params.end()) ?
+    (it->second == "export") ? true : false :
+    false;
+
+  it = params.find("synapse_out");
+  _include_path = (it != params.end()) ?
+    it->second : ".";
 }
 
 bool api::parse(const google::protobuf::FileDescriptor *desc) {
   _decls = new ast::decls(desc);
+  _decls->add_decl(new ast::include("type.synapse.h"));
   if (_export)
-    _decls->add_decl(new ast::include("synapse/export.h"));
+    _decls->add_decl(new ast::include("export.h"));
+
   bool error = _decls->accept(this);
   delete _decls;
   return error;
@@ -171,11 +173,14 @@ bool api::visite(const ast::function::out *node) {
 bool api::visite(const ast::include *node) {
   std::string name = std::string();
 
-  if (_include_path == ".")
-    name = node->get_name();
-  else
-    name = std::string(_include_path + "/" + node->get_name());
-
+  if (node->is_global()) {
+    name = std::string("synapse/" + node->get_name());
+  } else {
+    if (_include_path != ".")
+      name = std::string(_include_path + "/");
+    name += std::string(strip_suffix(node->get_name(), ".proto") +
+      ".synapse.h");
+  }
   _stream << "# include <" << name << ">";
   return true;
 }
@@ -185,7 +190,7 @@ bool api::visite(const ast::param *node) {
 
   const ast::composite *cmp = node->get_composite();
   error &= cmp->accept(this);
-  _stream << "msg";
+  _stream << node->get_name();
   return error;
 }
 

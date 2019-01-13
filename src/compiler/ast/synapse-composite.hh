@@ -29,6 +29,16 @@ public:
   /**
    * @brief Constructor
    */
+  explicit composite(const composite *src)
+    : _desc(src->_desc),
+      _is_pointer(src->_is_pointer),
+      _name(src->_name),
+      _type(src->_type) {
+  }
+
+  /**
+   * @brief Constructor
+   */
   explicit composite(const google::protobuf::FieldDescriptor *desc);
 
   /**

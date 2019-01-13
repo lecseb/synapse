@@ -23,29 +23,31 @@ noinst_DATA= \
 	type.proto
 
 noinst_HEADERS= \
-	bytes.synapse.h \
-	connection.synapse.h \
-	type.synapse.h
+	synapse/bytes.synapse.h \
+	synapse/connection.synapse.h \
+	synapse/type.synapse.h
 
 libsynapse_proto_la_SOURCES= \
 	bytes.synapse.c \
 	connection.synapse.c
 
 if synapse_SILENT
-%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
-	@echo "  proto    $< -> $(synapse_libdir)/synapse/$(basename $<).synapse.h"
+synapse/%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
+	@echo "  proto    $< -> $(basename $<).synapse.h"
 	@LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
 		--proto_path=. \
-		--synapse_out=export:$(top_srcdir)/src/library/synapse $<
+		--synapse_out=synapse \
+		--synapse_opt=export $<
 
 %.synapse.c: %.proto
 	@echo "  proto    $< -> $(basename $<).synapse.c"
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
 else
-%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
+synapse/%.synapse.h: %.proto $(top_srcdir)/src/compiler/synapse-header
 	LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
 		--proto_path=. \
-		--synapse_out=export:$(top_srcdir)/src/library/synapse $<
+		--synapse_out=synapse
+		--synapse_opt=export $<
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
 
 %.synapse.c:

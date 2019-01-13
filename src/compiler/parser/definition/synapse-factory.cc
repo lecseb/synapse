@@ -54,6 +54,17 @@ bool factory::visite(const ast::enumeration *node) {
 
 bool factory::visite(const ast::structure *node) {
   /* new function */
+  ast::params *new_params = new ast::params({});
+  const ast::fields *new_fields = node->get_fields();
+  if (new_fields) {
+    const std::map<uint32_t, ast::field *>& fields = new_fields->get_fields();
+    std::map<uint32_t, ast::field *>::const_iterator it = fields.begin();
+    for (; it != fields.end(); it++) {
+      ast::field *field = it->second;
+      ast::composite *type = new ast::composite(field->get_type());
+      new_params->add_param(new ast::param(field->get_name(), type));
+    }
+  }
   ast::decl *new_func = new ast::function(
     std::string(node->get_name() + "_new"),
     new ast::function::out(
@@ -61,8 +72,9 @@ bool factory::visite(const ast::structure *node) {
 	google::protobuf::FieldDescriptor::TYPE_MESSAGE,
 	node->get_name(),
 	true)),
-      NULL);
+      new_params);
   _decls->add_decl(new_func);
+
   /* free function */
   ast::decl *free_func = new ast::function(
     std::string(node->get_name() + "_free"),

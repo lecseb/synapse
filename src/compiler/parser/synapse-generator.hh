@@ -17,9 +17,8 @@
 #ifndef _PARSER_SYNAPSE_GENERATOR_HH_
 # define _PARSER_SYNAPSE_GENERATOR_HH_
 
+# include <map>
 # include <string>
-# include <utility>
-# include <vector>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
@@ -61,7 +60,7 @@ public:
       std::string *error) const;
 
 private:
-  std::vector<std::pair<std::string, std::string> > _params;
+  std::map<std::string, std::string> _params;
 };
 
 };  // namespace parser

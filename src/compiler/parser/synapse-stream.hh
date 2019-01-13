@@ -26,6 +26,14 @@ namespace synapse {
 namespace compiler {
 namespace parser {
 
+/**
+ * @brief Strip a suffix from a string given in parameter
+ * @param [in] var: var to strip
+ * @param [in] suffix: suffix to find and remove
+ * @return a string
+ */
+std::string strip_suffix(const std::string& var, const std::string& suffix);
+
 class stream {
 public:
   /**

@@ -55,6 +55,14 @@ public:
   virtual bool accept(visitor *visitor) const;
 
   /**
+   * @brief Add manually parameter into the list
+   * @param [in] param: parameter to add
+   */
+  virtual void add_param(param *param) {
+    _params.push_back(param);
+  }
+
+  /**
    * @brief Get the parameter list
    * @return the param list
    */

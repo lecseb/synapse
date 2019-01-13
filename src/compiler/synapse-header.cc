@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     synapse::compiler::parser::generator<
       synapse::compiler::parser::definition::api> gen(argc, argv);
 
-    client.RegisterGenerator(opt.cmd, &gen, opt.brief);
+    client.RegisterGenerator(opt.cmd, opt.cmd_opt, &gen, opt.brief);
     client.SetVersionInfo("libprotoc 3.5.1");
     return client.Run(argc, argv);
   }

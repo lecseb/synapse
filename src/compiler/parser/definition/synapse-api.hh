@@ -17,9 +17,8 @@
 #ifndef _PARSER_DEFINITION_SYNAPSE_API_HH_
 # define _PARSER_DEFINITION_SYNAPSE_API_HH_
 
+# include <map>
 # include <string>
-# include <utility>
-# include <vector>
 # include <google/protobuf/descriptor.h>
 # include "synapse-definition.hh"
 # include "ast/synapse-decls.hh"
@@ -37,7 +36,7 @@ public:
    * @param [in] name: name of the file to file to generate
    * @param [in] out: output file structure
    */
-  api(const std::vector<std::pair<std::string, std::string> >& params,
+  api(const std::map<std::string, std::string>& params,
       const std::string& name,
       google::protobuf::compiler::OutputDirectory *out);
 
