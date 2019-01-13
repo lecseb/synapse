@@ -21,18 +21,18 @@ namespace compiler {
 namespace parser {
 namespace definition {
 
-std::string factory::visite(const ast::decls *node) {
-  std::string error = std::string();
+bool factory::visite(const ast::decls *node) {
+  bool error = true;
   const std::list<ast::decl *>& decls = node->get_declarations();
 
   std::list<ast::decl *>::const_iterator decl = decls.begin();
   for (; decl != decls.end(); decl++) {
-    error = (*decl)->accept(this);
+    error &= (*decl)->accept(this);
   }
   return error;
 }
 
-std::string factory::visite(const ast::enumeration *node) {
+bool factory::visite(const ast::enumeration *node) {
   /* tostring function */
   ast::decl *func = new ast::function(
     std::string(node->get_name() + "_tostring"),
@@ -49,10 +49,10 @@ std::string factory::visite(const ast::enumeration *node) {
 	    node->get_name()))
       }));
   _decls->add_decl(func);
-  return std::string();
+  return true;
 }
 
-std::string factory::visite(const ast::structure *node) {
+bool factory::visite(const ast::structure *node) {
   /* new function */
   ast::decl *new_func = new ast::function(
     std::string(node->get_name() + "_new"),
@@ -76,7 +76,7 @@ std::string factory::visite(const ast::structure *node) {
 	  true))
 	}));
   _decls->add_decl(free_func);
-  return std::string();
+  return true;
 }
 
 };  // namespace definition

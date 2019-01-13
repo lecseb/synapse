@@ -39,11 +39,11 @@ function::~function() {
   delete _return;
 }
 
-std::string function::accept(visitor *visitor) const {
+bool function::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
-std::string function::out::accept(visitor *visitor) const {
+bool function::out::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

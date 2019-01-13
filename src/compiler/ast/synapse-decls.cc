@@ -42,7 +42,7 @@ decls::~decls() {
     delete (*it);
 }
 
-std::string decls::accept(visitor *visitor) const {
+bool decls::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

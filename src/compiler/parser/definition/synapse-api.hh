@@ -64,107 +64,107 @@ public:
   /**
    * @brief Order the parsing and start the ast construction
    * @param [in] desc: protobuf file structure
-   * @return a string
+   * @return true on success, false otherwise
    */
-  std::string parse(const google::protobuf::FileDescriptor *desc);
+  virtual bool parse(const google::protobuf::FileDescriptor *desc);
 
   /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::composite *node);
+  virtual bool visite(const ast::composite *node);
 
   /**
    * @brief Visite an decls node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::decls *node);
+  virtual bool visite(const ast::decls *node);
 
   /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumeration *node);
+  virtual bool visite(const ast::enumeration *node);
 
   /**
    * @brief Visite an enumerator node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerator *node);
+  virtual bool visite(const ast::enumerator *node);
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerators *node);
+  virtual bool visite(const ast::enumerators *node);
 
   /**
    * @brief Visite an field node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::field *node);
+  virtual bool visite(const ast::field *node);
 
   /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::fields *node);
+  virtual bool visite(const ast::fields *node);
 
   /**
    * @brief Visite an function node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function *node);
+  virtual bool visite(const ast::function *node);
 
   /**
    * @brief Visite an function output node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function::out *node);
+  virtual bool visite(const ast::function::out *node);
 
   /**
    * @brief Visite an include node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::include *node);
+  virtual bool visite(const ast::include *node);
 
   /**
    * @brief Visite an param node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::param *node);
+  virtual bool visite(const ast::param *node);
 
   /**
    * @brief Visite an params node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::params *node);
+  virtual bool visite(const ast::params *node);
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::service *node);
+  virtual bool visite(const ast::service *node);
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::structure *node);
+  virtual bool visite(const ast::structure *node);
 
 private:
   bool _export;

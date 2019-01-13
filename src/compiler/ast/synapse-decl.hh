@@ -44,8 +44,9 @@ public:
   /**
    * @brief Accept function of the visitor design pattern
    * @param [in] visitor: visitor to browse
+   * @return true on success, false otherwise
    */
-  virtual std::string accept(visitor *visitor) const = 0;
+  virtual bool accept(visitor *visitor) const = 0;
 
   /**
    * @brief Get the declaration name

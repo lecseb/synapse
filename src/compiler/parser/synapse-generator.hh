@@ -63,9 +63,11 @@ public:
     google::protobuf::compiler::ParseGeneratorParameter(params_str, &params);
 
     T *def = new T(params, desc->name(), out);
-    *error = def->parse(desc);
+    bool ret = def->parse(desc);
+    if (!ret)
+      error::get_instance() >> *error;
     delete def;
-    return !error->size();
+    return ret;
   }
 };
 

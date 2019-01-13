@@ -14,25 +14,48 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#ifndef _PARSER_SYNAPSE_ERROR_HH_
+# define _PARSER_SYNAPSE_ERROR_HH_
+
+# include <string>
 
 namespace synapse {
 namespace compiler {
-namespace ast {
+namespace parser {
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(desc->name()) {
-}
+class error {
+public:
+  /**
+   * @brief Singleton entry point
+   */
+  static error& get_instance();
 
-include::include(const std::string& name)
-  : decl(name) {
-}
+  /**
+   * @brief Push error data into the error pipe
+   * @param [in] data: data to add
+   * @return an error instance 
+   */
+  error& operator<<(const std::string& data);
 
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+  /**
+   * @brief Pop the contained error data into the string
+   * @param [out] data: error from the handler
+   * @return an error instance
+   */
+  error& operator>>(std::string& data);
 
-};  // namespace ast
+private:
+  /**
+   * @brief Constructor
+   */
+  error()
+    : _error(std::string()) {}
+
+  std::string _error;
+};
+
+};  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* !_PARSER_SYNAPSE_ERROR_HH_ */

@@ -42,7 +42,7 @@ enumerators::~enumerators() {
     delete it->second;
 }
 
-std::string enumerators::accept(visitor *visitor) const {
+bool enumerators::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

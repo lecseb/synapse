@@ -41,122 +41,122 @@ public:
   /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::composite *) {
-    return std::string();
+  virtual bool visite(const ast::composite *) {
+    return true;
   }
 
   /**
    * @brief Visite an decls node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::decls *node);
+  virtual bool visite(const ast::decls *node);
 
   /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumeration *node);
+  virtual bool visite(const ast::enumeration *node);
 
   /**
    * @brief Visite an enumerator node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerator *) {
-    return std::string();
+  virtual bool visite(const ast::enumerator *) {
+    return true;
   }
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerators *) {
-    return std::string();
+  virtual bool visite(const ast::enumerators *) {
+    return true;
   }
 
   /**
    * @brief Visite an field node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::field *) {
-    return std::string();
+  virtual bool visite(const ast::field *) {
+    return true;
   }
 
   /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::fields *) {
-    return std::string();
+  virtual bool visite(const ast::fields *) {
+    return true;
   }
 
   /**
    * @brief Visite an function node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function *) {
-    return std::string();
+  virtual bool visite(const ast::function *) {
+    return true;
   }
 
   /**
    * @brief Visite an function output node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function::out *) {
-    return std::string();
+  virtual bool visite(const ast::function::out *) {
+    return true;
   }
 
   /**
    * @brief Visite an include node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::include *) {
-    return std::string();
+  virtual bool visite(const ast::include *) {
+    return true;
   }
 
   /**
    * @brief Visite an param node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::param *) {
-    return std::string();
+  virtual bool visite(const ast::param *) {
+    return true;
   }
 
   /**
    * @brief Visite an params node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::params *) {
-    return std::string();
+  virtual bool visite(const ast::params *) {
+    return true;
   }
 
   /**
    * @brief Visite an service node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::service *) {
-    return std::string();
+  virtual bool visite(const ast::service *) {
+    return true;
   }
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::structure *node);
+  virtual bool visite(const ast::structure *node);
 
 private:
   ast::decls *_decls;

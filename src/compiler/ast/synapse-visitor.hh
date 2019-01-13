@@ -42,100 +42,100 @@ public:
   /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const composite *node) = 0;
+  virtual bool visite(const composite *node) = 0;
 
   /**
    * @brief Visite an decls node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const decls *node) = 0;
+  virtual bool visite(const decls *node) = 0;
 
   /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const enumeration *node) = 0;
+  virtual bool visite(const enumeration *node) = 0;
 
   /**
    * @brief Visite an enumerator node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const enumerator *node) = 0;
+  virtual bool visite(const enumerator *node) = 0;
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const enumerators *node) = 0;
+  virtual bool visite(const enumerators *node) = 0;
 
   /**
    * @brief Visite an field node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const field *node) = 0;
+  virtual bool visite(const field *node) = 0;
 
   /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const fields *node) = 0;
+  virtual bool visite(const fields *node) = 0;
 
   /**
    * @brief Visite an function node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const function *node) = 0;
+  virtual bool visite(const function *node) = 0;
 
   /**
    * @brief Visite an function output node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const function::out *node) = 0;
+  virtual bool visite(const function::out *node) = 0;
 
   /**
    * @brief Visite an include node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const include *node) = 0;
+  virtual bool visite(const include *node) = 0;
 
   /**
    * @brief Visite an param node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const param *node) = 0;
+  virtual bool visite(const param *node) = 0;
 
   /**
    * @brief Visite an params node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const params *node) = 0;
+  virtual bool visite(const params *node) = 0;
 
   /**
    * @brief Visite an service node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const service *node) = 0;
+  virtual bool visite(const service *node) = 0;
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const structure *node) = 0;
+  virtual bool visite(const structure *node) = 0;
 };
 
 };  // namespace ast

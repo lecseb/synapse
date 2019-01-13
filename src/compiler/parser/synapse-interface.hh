@@ -19,6 +19,7 @@
 
 # include <string>
 # include <google/protobuf/descriptor.h>
+# include "synapse-error.hh"
 # include "ast/synapse-visitor.hh"
 
 namespace synapse {
@@ -63,107 +64,107 @@ public:
   /**
    * @brief Order the parsing and start the ast construction
    * @param [in] desc: protobuf file structure
-   * @return a string
+   * @return true on success, false otherwise
    */
-  virtual std::string parse(const google::protobuf::FileDescriptor *desc) = 0;
+  virtual bool parse(const google::protobuf::FileDescriptor *desc) = 0;
 
   /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::composite *node) = 0;
+  virtual bool visite(const ast::composite *node) = 0;
 
   /**
    * @brief Visite an decls node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::decls *node) = 0;
+  virtual bool visite(const ast::decls *node) = 0;
 
   /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumeration *node) = 0;
+  virtual bool visite(const ast::enumeration *node) = 0;
 
   /**
    * @brief Visite an enumerator node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerator *node) = 0;
+  virtual bool visite(const ast::enumerator *node) = 0;
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::enumerators *node) = 0;
+  virtual bool visite(const ast::enumerators *node) = 0;
 
   /**
    * @brief Visite an field node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::field *node) = 0;
+  virtual bool visite(const ast::field *node) = 0;
 
   /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::fields *node) = 0;
+  virtual bool visite(const ast::fields *node) = 0;
 
   /**
    * @brief Visite an function node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function *node) = 0;
+  virtual bool visite(const ast::function *node) = 0;
 
   /**
    * @brief Visite an function output node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::function::out *node) = 0;
+  virtual bool visite(const ast::function::out *node) = 0;
 
   /**
    * @brief Visite an include node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::include *node) = 0;
+  virtual bool visite(const ast::include *node) = 0;
 
   /**
    * @brief Visite an param node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::param *node) = 0;
+  virtual bool visite(const ast::param *node) = 0;
 
   /**
    * @brief Visite an params node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::params *node) = 0;
+  virtual bool visite(const ast::params *node) = 0;
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::service *node) = 0;
+  virtual bool visite(const ast::service *node) = 0;
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
-   * @return a string representation of an error
+   * @return true on success, false otherwise
    */
-  virtual std::string visite(const ast::structure *node) = 0;
+  virtual bool visite(const ast::structure *node) = 0;
 };
 
 };  // namespace parser

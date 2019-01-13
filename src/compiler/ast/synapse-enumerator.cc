@@ -21,7 +21,7 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-std::string enumerator::accept(visitor *visitor) const {
+bool enumerator::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

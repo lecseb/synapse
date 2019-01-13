@@ -42,7 +42,7 @@ service::~service() {
     delete (*it);
 }
 
-std::string service::accept(visitor *visitor) const {
+bool service::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

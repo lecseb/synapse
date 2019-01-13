@@ -58,8 +58,9 @@ public:
   /**
    * @brief Accept function of the visitor design pattern
    * @param [in] visitor: visitor to browse
+   * @return true on success, false otherwise
    */
-  virtual std::string accept(visitor *visitor) const;
+  virtual bool accept(visitor *visitor) const;
 
   /**
    * @brief Get all fields contained into the structure

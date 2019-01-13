@@ -42,7 +42,7 @@ fields::~fields() {
     delete it->second;
 }
 
-std::string fields::accept(visitor *visitor) const {
+bool fields::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

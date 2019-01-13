@@ -81,7 +81,7 @@ composite::composite(const google::protobuf::FieldDescriptor *desc)
   }
 }
 
-std::string composite::accept(visitor *visitor) const {
+bool composite::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

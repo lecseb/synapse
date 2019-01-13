@@ -36,7 +36,7 @@ param::~param() {
   delete _type;
 }
 
-std::string param::accept(visitor *visitor) const {
+bool param::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

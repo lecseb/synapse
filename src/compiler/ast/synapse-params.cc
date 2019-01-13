@@ -35,7 +35,7 @@ params::~params() {
     delete (*it);
 }
 
-std::string params::accept(visitor *visitor) const {
+bool params::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
