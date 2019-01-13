@@ -15,23 +15,18 @@
 
 include $(top_builddir)/script/checkpatch.mk
 
+SUBDIRS= proto
+
 lib_LTLIBRARIES= libsynapse.la
-
-nobase_includedir= $(prefix)/include/synapse
-protodir= $(prefix)/include/synapse/proto
-
-proto_DATA = \
-	proto/bytes.proto \
-	proto/type.proto
 
 libsynapse_la_CFLAGS= \
 	$(synapse_CFLAGS) \
 	-I$(top_srcdir)/src/library
 
+nobase_includedir= $(prefix)/include/synapse
+
 nobase_include_HEADERS= \
-	synapse/bytes.synapse.h \
-	synapse/export.h \
-	synapse/type.synapse.h
+	synapse/export.h
 
 noinst_HEADERS= \
 	synapse/alloc.h \
@@ -40,26 +35,6 @@ noinst_HEADERS= \
 
 libsynapse_la_SOURCES= \
 	synapse.c
-
-if synapse_SILENT
-synapse/%.synapse.h: proto/%.proto $(top_srcdir)/src/compiler/synapse-header
-	@echo "  proto    $< -> $@"
-	@LD_LIBRARY_PATH=/usr/local/lib \
-		$(top_srcdir)/src/compiler/synapse-header \
-			--proto_path=proto \
-			--synapse_out=synapse \
-			--synapse_opt=export $<
-else
-synapse/%.synapse.h: proto/%.proto $(top_srcdir)/src/compiler/synapse-header
-	@LD_LIBRARY_PATH=/usr/local/lib \
-		$(top_srcdir)/src/compiler/synapse-header \
-			--proto_path=proto \
-			--synapse_out=synapse \
-			--synapse_opt=export $<
-endif
-
-clean-local:
-	@rm synapse/*.synapse.h
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(nobase_include_HEADERS) \

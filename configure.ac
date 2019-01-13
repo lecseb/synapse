@@ -62,7 +62,7 @@ AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug]),
 AC_SUBST([synapse_CPPFLAGS], ["$AM_CPPFLAGS $synapse_CPPFLAGS $extra_CPPFLAGS"])
 AC_SUBST([synapse_CFLAGS], ["$AM_CFLAGS $synapse_CFLAGS $extra_CFLAGS"])
 AC_SUBST([synapse_libdir], ["`pwd`/src/library"])
-AC_SUBST([synapse_compdir], ["`pwd`/src/compiler"])
+AC_SUBST([synapse_cmpdir], ["`pwd`/src/compiler"])
 AC_SUBST([LDFLAGS], ["$LDFLAGS -I/src/library/synapse"])
 AM_CONDITIONAL([synapse_SILENT], [test "$AM_DEFAULT_VERBOSITY"="0"])
 
@@ -74,6 +74,7 @@ AC_CONFIG_FILES([
 	src/compiler/Makefile
 	src/library/libsynapse.pc
 	src/library/Makefile
+	src/library/proto/Makefile
 ])
 
 AC_OUTPUT
