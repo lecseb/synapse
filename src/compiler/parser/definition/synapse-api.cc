@@ -52,7 +52,6 @@ api::api(const std::map<std::string, std::string>& params,
 
 bool api::parse(const google::protobuf::FileDescriptor *desc) {
   _decls = new ast::decls(desc);
-  _decls->add_decl(new ast::include("type.synapse.h"));
   if (_export)
     _decls->add_decl(new ast::include("export.h"));
 

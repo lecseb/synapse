@@ -18,7 +18,6 @@
 # define _SYNAPSE_SYNAPSE_H_
 
 # include <event2/event.h>
-# include <synapse/connection.synapse.h>
 # include <synapse/export.h>
 
 /**
