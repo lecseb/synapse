@@ -46,6 +46,13 @@ public:
       : param(desc) {}
 
     /**
+     * @brief Constructor
+     * @param [in] type: composite of the return type
+     */
+    explicit out(composite *type)
+      : param(std::string(), type) {}
+
+    /**
      * @brief Destructor
      */
     virtual ~out() {}

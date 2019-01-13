@@ -65,12 +65,7 @@ public:
    * @param [in] desc: protobuf file structure
    * @return a string
    */
-  virtual std::string parse(const google::protobuf::FileDescriptor *desc) {
-    ast::decls *_decls = new ast::decls(desc);
-    std::string error = _decls->accept(this);
-    delete _decls;
-    return error;
-  }
+  virtual std::string parse(const google::protobuf::FileDescriptor *desc) = 0;
 
   /**
    * @brief Visite an composite node

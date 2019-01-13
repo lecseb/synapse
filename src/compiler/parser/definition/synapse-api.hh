@@ -62,6 +62,13 @@ public:
   static const interface::option& get_option();
 
   /**
+   * @brief Order the parsing and start the ast construction
+   * @param [in] desc: protobuf file structure
+   * @return a string
+   */
+  std::string parse(const google::protobuf::FileDescriptor *desc);
+
+  /**
    * @brief Visite an composite node
    * @param [in] node: node to visite
    * @return a string representation of an error

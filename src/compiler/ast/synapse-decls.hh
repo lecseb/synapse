@@ -46,7 +46,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~decls() {}
+  virtual ~decls();
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -61,6 +61,12 @@ public:
   const std::list<decl *>& get_declarations() const {
     return _decls;
   }
+
+  /**
+   * @brief Allow parser to add declaration inside the tree
+   * @param [in] decl: declaration to add
+   */
+  void add_decl(decl *decl);
 
 private:
   std::list<decl *> _decls;

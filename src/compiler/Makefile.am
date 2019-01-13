@@ -39,7 +39,7 @@ synapse_header_SOURCES= \
 	parser/declaration/synapse-declaration.cc \
 	parser/definition/synapse-api.cc \
 	parser/definition/synapse-definition.cc \
-	parser/definition/synapse-factory.hh
+	parser/definition/synapse-factory.cc
 
 synapse_header_LDFLAGS= \
 	-lprotoc \

@@ -26,23 +26,31 @@ namespace ast {
 
 decls::decls(const google::protobuf::FileDescriptor *desc)
   : _decls(std::list<decl *>()) {
-  for (int32_t i = 0; i < desc->dependency_count(); i++) {
-    const google::protobuf::FileDescriptor *dependency = desc->dependency(i);
-    _decls.push_back(new include(dependency));
-  }
-
+  for (int32_t i = 0; i < desc->dependency_count(); i++)
+    _decls.push_back(new include(desc->dependency(i)));
   for (int32_t i = 0; i < desc->enum_type_count(); i++)
     _decls.push_back(new enumeration(desc->enum_type(i)));
-
   for (int32_t i = 0; i < desc->message_type_count(); i++)
     _decls.push_back(new structure(desc->message_type(i)));
-
   for (int32_t i = 0; i < desc->service_count(); i++)
     _decls.push_back(new service(desc->service(i)));
 }
 
+decls::~decls() {
+  std::list<ast::decl *>::iterator it = _decls.begin();
+  for (; it != _decls.end(); it++)
+    delete (*it);
+}
+
 std::string decls::accept(visitor *visitor) const {
   return visitor->visite(this);
+}
+
+void decls::add_decl(decl *decl) {
+  if (dynamic_cast<ast::include *>(decl))
+    _decls.push_front(decl);
+  else
+    _decls.push_back(decl);
 }
 
 };  // namespace ast

@@ -35,7 +35,7 @@ if synapse_SILENT
 	@echo "  proto    $< -> $(basename $<).synapse.c"
 	@touch $(top_srcdir)/src/library/proto/$(basename $<).synapse.c
 else
-%.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-protoc
+%.synapse.c: %.proto $(top_srcdir)/src/compiler/synapse-header
 	LD_LIBRARY_PATH=/usr/local/lib $(top_srcdir)/src/compiler/synapse-header \
 		--proto_path=$(synapse_libdir)/proto \
 		--synapse_out=export:$(top_srcdir)/src/library/synapse $<

@@ -49,7 +49,9 @@ public:
   /**
    * @brief destructor
    */
-  virtual ~field() {}
+  virtual ~field() {
+    delete _type;
+  }
 
   /**
    * @brief Accept function of the visitor design pattern

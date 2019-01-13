@@ -15,6 +15,7 @@
  */
 
 #include "synapse-api.hh"
+#include "synapse-factory.hh"
 
 namespace synapse {
 namespace compiler {
@@ -31,6 +32,17 @@ const interface::option& api::get_option() {
     "--synapse_out",
     "generate synapse.h/synapse.c");
   return g_option;
+}
+
+std::string api::parse(const google::protobuf::FileDescriptor *desc) {
+  ast::decls *decls = new ast::decls(desc);
+  if (_export)
+    decls->add_decl(new ast::include("synapse/export.h"));
+  factory factory(decls);
+  std::string error = decls->accept(&factory);
+  error += decls->accept(this);
+  delete decls;
+  return error;
 }
 
 std::string api::visite(const ast::composite *node) {
@@ -116,11 +128,19 @@ std::string api::visite(const ast::function *node) {
 
   _stream << stream::endl;
   _stream << (_export ? "synapse_export " : "");
-  error += node->get_return_type()->accept(this);
-  _stream << node->get_name() << "(" << stream::endl;
-  _stream.indent();
-  error += node->get_params()->accept(this);
-  _stream.outdent();
+  if (node->get_return_type())
+    error += node->get_return_type()->accept(this);
+  else
+    _stream << "void ";
+  _stream << node->get_name() << "(";
+  if (node->get_params()) {
+    _stream << stream::endl;
+    _stream.indent();
+    error += node->get_params()->accept(this);
+    _stream.outdent();
+  } else {
+    _stream << "void";
+  }
   _stream << ");";
   return std::string();
 }
