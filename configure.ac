@@ -74,7 +74,6 @@ AC_CONFIG_FILES([
 	src/compiler/Makefile
 	src/library/libsynapse.pc
 	src/library/Makefile
-	src/library/proto/Makefile
 ])
 
 AC_OUTPUT

@@ -1,4 +1,4 @@
-prefix=/usr/local
+prefix=/home/siroz/Project/environment/apps/pouet
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

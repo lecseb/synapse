@@ -17,10 +17,10 @@ include $(top_builddir)/script/checkpatch.mk
 
 lib_LTLIBRARIES= libsynapse.la
 
-nobase_includedir= $(includedir)/synapse
-protodir= $(top_srcdir)/synapse/proto
+nobase_includedir= $(prefix)/include/synapse
+protodir= $(prefix)/include/synapse/proto
 
-nobase_proto_DATA = \
+proto_DATA = \
 	proto/bytes.proto \
 	proto/type.proto
 
