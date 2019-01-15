@@ -21,9 +21,8 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-std::string composite::to_string(
-  const google::protobuf::FieldDescriptor::Type& type) {
-  switch (type) {
+std::string composite::to_string(const composite *composite) {
+  switch (composite->_desc->type()) {
   case google::protobuf::FieldDescriptor::TYPE_DOUBLE:
     return "double";
   case google::protobuf::FieldDescriptor::TYPE_FLOAT:
@@ -60,8 +59,7 @@ std::string composite::to_string(
 composite::composite(const google::protobuf::FieldDescriptor *desc)
   : _desc(desc),
     _is_pointer(desc->is_repeated()),
-    _name(std::string()),
-    _type(composite::to_string(desc->type())) {
+    _name(std::string()) {
   switch (desc->type()) {
   case google::protobuf::FieldDescriptor::TYPE_BYTES:
     /* TODO: should we support the repeated bytes field ? */
@@ -79,6 +77,12 @@ composite::composite(const google::protobuf::FieldDescriptor *desc)
     /* the other type doesn't have composite name */
     break;
   }
+}
+
+composite::composite(const google::protobuf::Descriptor *desc)
+  : _desc(NULL),
+    _is_pointer(true),
+    _name(desc->name()) {
 }
 
 bool composite::accept(visitor *visitor) const {

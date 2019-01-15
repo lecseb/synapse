@@ -22,19 +22,11 @@ namespace parser {
 
 const std::string stream::endl = "\n";
 
-std::string strip_suffix(const std::string& var, const std::string& suffix) {
-  if (suffix.size() > var.size())
-    return var;
-  if (var.compare(var.size() - suffix.size(), suffix.size(), suffix) == 0)
-    return var.substr(0, var.size() - suffix.size());
-  return std::string("");
-}
-
-stream::stream(const std::string& name, const std::string& extension,
+stream::stream(const std::string& name,
   google::protobuf::compiler::OutputDirectory *out)
-  : _name(std::string(strip_suffix(name, ".proto") + extension)),
-    _stream(out->Open(_name)),
-    _printer(new google::protobuf::io::Printer(_stream, '$')) {
+  : _stream(out->Open(name)),
+    _printer(new google::protobuf::io::Printer(_stream, '$')),
+    _name(name) {
 }
 
 stream::~stream() {

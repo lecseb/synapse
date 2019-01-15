@@ -14,39 +14,43 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_SYNAPSE_INTERFACE_HH_
-# define _PARSER_SYNAPSE_INTERFACE_HH_
+#ifndef _PARSER_SYNAPSE_OPTIONS_HH_
+# define _PARSER_SYNAPSE_OPTIONS_HH_
 
 # include <map>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "ast/synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace parser {
 
 /**
- * @brief generator class: use to generate both source and header
+ * @brief Strip a suffix from a string given in parameter
+ * @param [in] var: var to strip
+ * @param [in] suffix: suffix to find and remove
+ * @return a string
  */
-class interface {
+std::string strip_suffix(const std::string& var, const std::string& suffix);
+
+/**
+ * @brief Params type
+ */
+class params : public std::map<std::string, std::string> {
 public:
+  /**
+   * @brief Constructor
+   * @param [in] str: parameter string to split by ','
+   */
+  explicit params(const std::string& str);
+
   /**
    * @brief Destructor
    */
-  virtual ~interface() {}
-
-  /**
-   * @brief Parse the protobuf AST and generate our own
-   * @param [in] descriptor: entry node of the ast
-   * @return true on success, false on error
-   * @note see @error class in order to get all error message
-   */
-  virtual bool parse(const google::protobuf::FileDescriptor *descriptor) = 0;
+  virtual ~params() {}
 };
 
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_SYNAPSE_GENERATOR_HH_ */
+#endif /* !_PARSER_SYNAPSE_OPTIONS_HH_ */

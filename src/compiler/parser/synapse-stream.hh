@@ -26,14 +26,6 @@ namespace synapse {
 namespace compiler {
 namespace parser {
 
-/**
- * @brief Strip a suffix from a string given in parameter
- * @param [in] var: var to strip
- * @param [in] suffix: suffix to find and remove
- * @return a string
- */
-std::string strip_suffix(const std::string& var, const std::string& suffix);
-
 class stream {
 public:
   /**
@@ -44,10 +36,9 @@ public:
   /**
    * @brief Constructor
    * @param [in] name: file name
-   * @param [in] extension: extension of the file to write
    * @param [in] out: protobuf out structure
    */
-  stream(const std::string& name, const std::string& extension,
+  stream(const std::string& name,
     google::protobuf::compiler::OutputDirectory *out);
 
   /**
@@ -80,7 +71,7 @@ public:
   }
 
   /**
-   * @brief Get the name of the file associated to the stream
+   * @brief Get the name associated to the stream
    * @return a string
    */
   const std::string& get_name() const {
@@ -88,9 +79,9 @@ public:
   }
 
 private:
-  std::string _name;
   google::protobuf::io::ZeroCopyOutputStream *_stream;
   google::protobuf::io::Printer *_printer;
+  std::string _name;
 };
 
 };  // namespace parser

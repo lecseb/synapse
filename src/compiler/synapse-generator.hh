@@ -14,31 +14,23 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_SYNAPSE_GENERATOR_HH_
-# define _PARSER_SYNAPSE_GENERATOR_HH_
+#ifndef _SYNAPSE_GENERATOR_HH_
+# define _SYNAPSE_GENERATOR_HH_
 
 # include <map>
 # include <string>
 # include <google/protobuf/descriptor.h>
 # include <google/protobuf/compiler/command_line_interface.h>
 # include <google/protobuf/compiler/code_generator.h>
-# include "synapse-interface.hh"
 
 namespace synapse {
 namespace compiler {
-namespace parser {
 
 /**
  * @brief generator class: use to generate both source and header
  */
-template<class T>
 class generator : public google::protobuf::compiler::CodeGenerator {
 public:
-  /**
-   * @brief Constructor
-   */
-  generator(int argc, char *argv[]);
-
   /**
    * @brief Destructor
    */
@@ -58,15 +50,9 @@ public:
       const std::string& params_str,
       google::protobuf::compiler::OutputDirectory *out,
       std::string *error) const;
-
-private:
-  std::map<std::string, std::string> _params;
 };
 
-};  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-# include "synapse-generator.hxx"
-
-#endif /* !_PARSER_SYNAPSE_GENERATOR_HH_ */
+#endif /* !_SYNAPSE_GENERATOR_HH_ */

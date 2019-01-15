@@ -42,10 +42,6 @@ decls::~decls() {
     delete (*it);
 }
 
-bool decls::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
-
 void decls::add_decl(decl *decl) {
   if (dynamic_cast<ast::include *>(decl))
     _decls.push_front(decl);

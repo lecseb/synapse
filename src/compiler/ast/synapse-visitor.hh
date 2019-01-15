@@ -47,13 +47,6 @@ public:
   virtual bool visite(const composite *node) = 0;
 
   /**
-   * @brief Visite an decls node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const decls *node) = 0;
-
-  /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
    * @return true on success, false otherwise
@@ -94,13 +87,6 @@ public:
    * @return true on success, false otherwise
    */
   virtual bool visite(const function *node) = 0;
-
-  /**
-   * @brief Visite an function output node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const function::out *node) = 0;
 
   /**
    * @brief Visite an include node

@@ -14,48 +14,25 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_SYNAPSE_ERROR_HH_
-# define _PARSER_SYNAPSE_ERROR_HH_
-
-# include <string>
+#include "synapse-error.hh"
 
 namespace synapse {
 namespace compiler {
-namespace parser {
 
-class error {
-public:
-  /**
-   * @brief Singleton entry point
-   */
-  static error& get_instance();
+error& error::get_instance() {
+  static error err;
+  return err;
+}
 
-  /**
-   * @brief Push error data into the error pipe
-   * @param [in] data: data to add
-   * @return an error instance 
-   */
-  error& operator<<(const std::string& data);
+error& error::operator<<(const std::string& data) {
+  _error += data;
+  return *this;
+}
 
-  /**
-   * @brief Pop the contained error data into the string
-   * @param [out] data: error from the handler
-   * @return an error instance
-   */
-  error& operator>>(std::string& data);
+error& error::operator>>(std::string& data) {
+  data = _error;
+  return *this;
+}
 
-private:
-  /**
-   * @brief Constructor
-   */
-  error()
-    : _error(std::string()) {}
-
-  std::string _error;
-};
-
-};  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
-
-#endif /* !_PARSER_SYNAPSE_ERROR_HH_ */

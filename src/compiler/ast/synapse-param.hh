@@ -37,11 +37,6 @@ public:
   explicit param(const google::protobuf::Descriptor *desc);
 
   /**
-   * @brief Constructor
-   */
-  param(const std::string& name, composite *type);
-
-  /**
    * @brief destructor
    */
   virtual ~param();
@@ -58,7 +53,7 @@ public:
    * @return a string
    */
   const std::string get_name() const {
-    return _name;
+    return _desc->name();
   }
 
   /**
@@ -66,13 +61,12 @@ public:
    * @return the param composite
    */
   const composite *get_composite() const {
-    return _type;
+    return _composite;
   }
 
 protected:
   const google::protobuf::Descriptor *_desc;
-  std::string _name;
-  composite *_type;
+  composite *_composite;
 };
 
 };  // namespace ast

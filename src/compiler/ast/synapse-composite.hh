@@ -29,27 +29,12 @@ public:
   /**
    * @brief Constructor
    */
-  explicit composite(const composite *src)
-    : _desc(src->_desc),
-      _is_pointer(src->_is_pointer),
-      _name(src->_name),
-      _type(src->_type) {
-  }
-
-  /**
-   * @brief Constructor
-   */
   explicit composite(const google::protobuf::FieldDescriptor *desc);
 
   /**
    * @brief Constructor
    */
-  composite(const google::protobuf::FieldDescriptor::Type& type,
-      const std::string& name, bool pointer = false)
-    : _desc(NULL),
-      _is_pointer(pointer),
-      _name(name),
-      _type(composite::to_string(type)) {}
+  explicit composite(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief Destructor
@@ -72,29 +57,16 @@ public:
   }
 
   /**
-   * @brief Get the declared type
-   */
-  const std::string& get_type() const {
-    return _type;
-  }
-
-  bool is_pointer() const {
-    return _is_pointer;
-  }
-
-  /**
    * @brief Convert a type from protobuf to a string
    * @param [in] type: type to convert
    * @return a string
    */
-  static std::string to_string(
-    const google::protobuf::FieldDescriptor::Type& type);
+  static std::string to_string(const composite *composite);
 
 private:
   const google::protobuf::FieldDescriptor *_desc;
   bool _is_pointer;
   std::string _name;
-  std::string _type;
 };
 
 };  // namespace ast

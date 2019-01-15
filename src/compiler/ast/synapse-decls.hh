@@ -20,7 +20,6 @@
 # include <list>
 # include <string>
 # include "synapse-decl.hh"
-# include "synapse-interface.hh"
 
 namespace synapse {
 namespace compiler {
@@ -29,7 +28,7 @@ namespace ast {
 /**
  * @brief declaration list
  */
-class decls : public interface {
+class decls {
 public:
   /**
    * @brief Constructor
@@ -47,13 +46,6 @@ public:
    * @brief Destructor
    */
   virtual ~decls();
-
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   * @return true on success, false otherwise
-   */
-  virtual bool accept(visitor *visitor) const;
 
   /**
    * @brief Return the contained declarations list

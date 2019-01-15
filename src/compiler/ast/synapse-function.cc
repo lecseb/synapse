@@ -24,10 +24,10 @@ namespace ast {
 function::function(const google::protobuf::MethodDescriptor *desc)
   : decl(desc->name()),
     _params(new params(desc->output_type())),
-    _return(new out(desc->input_type())) {
+    _return(new composite(desc->input_type())) {
 }
 
-function::function(const std::string& name, out *return_type,
+function::function(const std::string& name, composite *return_type,
     params *args)
   : decl(name),
     _params(args),
@@ -43,9 +43,9 @@ bool function::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
-bool function::out::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+// bool function::out::accept(visitor *visitor) const {
+//   return visitor->visite(this);
+// }
 
 };  // namespace ast
 };  // namespace compiler

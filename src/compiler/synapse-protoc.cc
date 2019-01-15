@@ -14,26 +14,16 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-param.hh"
-#include "synapse-visitor.hh"
+#include "synapse-generator.hh"
 
-namespace synapse {
-namespace compiler {
-namespace ast {
+int main(int argc, char *argv[]) {
+  google::protobuf::compiler::CommandLineInterface client;
+  synapse::compiler::generator generator;
 
-param::param(const google::protobuf::Descriptor *desc)
-  : _desc(desc),
-    _composite(new composite(desc)) {
+  client.RegisterGenerator("--synapse_out", "--synapse_opt",
+    &generator, "generate all synapse file and handler");
+
+  client.SetVersionInfo("libprotoc 3.5.1");
+
+  return client.Run(argc, argv);
 }
-
-param::~param() {
-  delete _composite;
-}
-
-bool param::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
-
-};  // namespace ast
-};  // namespace compiler
-};  // namespace synapse

@@ -33,37 +33,38 @@ namespace ast {
  */
 class function : public decl {
 public:
-  /**
-   * @brief Ouptu element of a function
-   */
-  class out : public param {
-  public:
-    /**
-     * @brief Constructor
-     * @param [in] desc: protobuf output function type
-     */
-    explicit out(const google::protobuf::Descriptor *desc)
-      : param(desc) {}
+  // /**
+  //  * @brief Ouptu element of a function
+  //  */
+  // class out : public composite {
+  // public:
+  //   /**
+  //    * @brief Constructor
+  //    * @param [in] desc: protobuf output function type
+  //    */
+  //   explicit out(const google::protobuf::Descriptor *desc)
+  //     : composite(google::protobuf::FieldDescriptor::TYPE_MESSAGE,
+  // 	  desc->name(), true) {}
 
-    /**
-     * @brief Constructor
-     * @param [in] type: composite of the return type
-     */
-    explicit out(composite *type)
-      : param(std::string(), type) {}
+  //   // /**
+  //   //  * @brief Constructor
+  //   //  * @param [in] type: composite of the return type
+  //   //  */
+  //   // explicit out(composite *type)
+  //   //   : param(std::string(), type) {}
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~out() {}
+  //   /**
+  //    * @brief Destructor
+  //    */
+  //   virtual ~out() {}
 
-    /**
-     * @brief Accept function of the visitor design pattern
-     * @param [in] visitor: visitor to browse
-     * @return true on success, false otherwise
-     */
-    virtual bool accept(visitor *visitor) const;
-  };
+  //   /**
+  //    * @brief Accept function of the visitor design pattern
+  //    * @param [in] visitor: visitor to browse
+  //    * @return true on success, false otherwise
+  //    */
+  //   virtual bool accept(visitor *visitor) const;
+  // };
 
   /**
    * @brief Constructor
@@ -77,7 +78,7 @@ public:
    * @param [in] out: return type
    * @param [in] input: input type
    */
-  function(const std::string& name, out *return_type,
+  function(const std::string& name, composite *return_type,
     params *args);
 
   /**
@@ -104,13 +105,13 @@ public:
    * @brief Get the argument list
    * @return the param list
    */
-  const out *get_return_type() const {
+  const composite *get_return_type() const {
     return _return;
   }
 
 private:
   params *_params;
-  out *_return;
+  composite *_return;
 };
 
 };  // namespace ast

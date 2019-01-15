@@ -14,21 +14,19 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-definition.hh"
+#include "synapse-source.hh"
 
 namespace synapse {
 namespace compiler {
 namespace parser {
-namespace definition {
 
-definition::definition(const std::string& name, const std::string& extension,
-    google::protobuf::compiler::OutputDirectory *out)
-  : _stream(stream(name, extension, out)) {
-  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
-  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-
-  _stream << "/**\n"
+source::source(const params& params, stream *stream,
+  definition::interface *definition, declaration::interface *declaration)
+  : _declaration(declaration),
+    _definition(definition),
+    _params(params),
+    _stream(stream) {
+  (*_stream) << "/**\n"
     << " * synapse is free software: you can redistribute it and/or modify\n"
     << " * it under the terms of the GNU General Public License as "
     << "published\n"
@@ -46,19 +44,35 @@ definition::definition(const std::string& name, const std::string& extension,
     << " * along with synapse.  If not, see <https://www.gnu.org/licenses/>."
     << "\n"
     << " */\n\n";
-  _stream << "#ifndef " << temp << stream::endl;
-  _stream << "# define " << temp << stream::endl;
-  _stream << stream::endl;
+  std::string name = _stream->get_name();
+  std::string header = std::string(name.substr(0, name.size() - 1) + "h");
+  (*_stream) << "#include \"" << header << "\"" << stream::endl;
+  (*_stream) << stream::endl;
 }
 
-definition::~definition() {
-  std::string temp = std::string("_SYNAPSE_" + _stream.get_name() + "_");
-  std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
-  std::replace_if(temp.begin(), temp.end(), ispunct, '_');
-  _stream << "#endif /* !" << temp << " */" << stream::endl;
+source::~source() {
+  delete _stream;
+  delete _definition;
+  delete _declaration;
 }
 
-};  // namespace definition
+bool source::parse(const ast::decls *node) {
+  bool error = true;
+  const std::list<ast::decl *>& decls = node->get_declarations();
+  std::list<ast::decl *>::const_iterator it_decls = decls.begin();
+
+  for (; it_decls != decls.end(); it_decls++) {
+    const ast::decl *decl = (*it_decls);
+    error &= decl->accept(_definition);
+    if (typeid(*decl) != typeid(ast::include)) {
+      (*_stream) << " {" << stream::endl;
+      (*_stream) << "}";
+    }
+    (*_stream) << stream::endl << stream::endl;
+  }
+  return error;
+}
+
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
