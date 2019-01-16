@@ -17,11 +17,11 @@
 #ifndef _AST_SYNAPSE_FUNCTION_HH_
 # define _AST_SYNAPSE_FUNCTION_HH_
 
-# include <list>
+# include <map>
 # include <string>
 # include "synapse-composite.hh"
 # include "synapse-decl.hh"
-# include "synapse-params.hh"
+# include "synapse-elements.hh"
 # include "synapse-structure.hh"
 
 namespace synapse {
@@ -33,53 +33,82 @@ namespace ast {
  */
 class function : public decl {
 public:
-  // /**
-  //  * @brief Ouptu element of a function
-  //  */
-  // class out : public composite {
-  // public:
-  //   /**
-  //    * @brief Constructor
-  //    * @param [in] desc: protobuf output function type
-  //    */
-  //   explicit out(const google::protobuf::Descriptor *desc)
-  //     : composite(google::protobuf::FieldDescriptor::TYPE_MESSAGE,
-  // 	  desc->name(), true) {}
+  /**
+   * @brief output element
+   */
+  class output : public interface {
+  public:
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf descriptor structure
+     */
+    output(const google::protobuf::Descriptor *desc);
 
-  //   // /**
-  //   //  * @brief Constructor
-  //   //  * @param [in] type: composite of the return type
-  //   //  */
-  //   // explicit out(composite *type)
-  //   //   : param(std::string(), type) {}
+    /**
+     * @brief Destructor
+     */
+    virtual ~output() {}
 
-  //   /**
-  //    * @brief Destructor
-  //    */
-  //   virtual ~out() {}
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
 
-  //   /**
-  //    * @brief Accept function of the visitor design pattern
-  //    * @param [in] visitor: visitor to browse
-  //    * @return true on success, false otherwise
-  //    */
-  //   virtual bool accept(visitor *visitor) const;
-  // };
+    /**
+     * @brief Get the type
+     * @return a string
+     */
+    const std::string& get_type() const {
+      return _type;
+    }
+
+  private:
+    std::string _type;
+  };
+
+  /**
+   * @brief param element
+   */
+  class param : public output {
+  public:
+    /**
+     * @brief Constructor
+     * @param [in] name: name of the parameter
+     * @param [in] desc: protobuf descriptor structure
+     */
+    param(const std::string& name, const google::protobuf::Descriptor *desc);
+
+    /**
+     * @brief destructor
+     */
+    virtual ~param() {}
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
+
+    /**
+     * @brief get the name
+     * @return a string
+     */
+    const std::string& get_name() const {
+      return _name;
+    }
+
+  private:
+    std::string _name;
+  };
 
   /**
    * @brief Constructor
    * @param [in] desc: protobuf service descriptor structure
    */
   explicit function(const google::protobuf::MethodDescriptor *desc);
-
-  /**
-   * @brief Constructor
-   * @param [in] name: name of the function
-   * @param [in] out: return type
-   * @param [in] input: input type
-   */
-  function(const std::string& name, composite *return_type,
-    params *args);
 
   /**
    * @brief destructor
@@ -97,21 +126,21 @@ public:
    * @brief Get the argument list
    * @return the param list
    */
-  const params *get_params() const {
-    return _params;
+  const param *get_param() const {
+    return _param;
   }
 
   /**
    * @brief Get the argument list
    * @return the param list
    */
-  const composite *get_return_type() const {
+  const output *get_return_type() const {
     return _return;
   }
 
 private:
-  params *_params;
-  composite *_return;
+  param *_param;
+  output *_return;
 };
 
 };  // namespace ast

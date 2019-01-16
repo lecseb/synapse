@@ -17,7 +17,7 @@
 #ifndef _AST_SYNAPSE_SERVICE_HH_
 # define _AST_SYNAPSE_SERVICE_HH_
 
-# include <list>
+# include <map>
 # include <string>
 # include "synapse-decl.hh"
 # include "synapse-function.hh"
@@ -26,8 +26,14 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-class service : public decl {
+class service : public elements<function>, public decl {
 public:
+  /**
+   * @brief Map typedef
+   */
+  typedef std::map<uint32_t, function *> map;
+  typedef std::map<uint32_t, function *>::const_iterator const_iterator;
+
   /**
    * @brief Constructor
    * @param [in] desc: protobuf service descriptor
@@ -35,17 +41,9 @@ public:
   explicit service(const google::protobuf::ServiceDescriptor *desc);
 
   /**
-   * @brief Constructor
-   * @param [in] name: name of the service
-   * @param [in] list: function list
-   */
-  explicit service(const std::string& name,
-    const std::initializer_list<function *>& list);
-
-  /**
    * @brief Destructor
    */
-  virtual ~service();
+  virtual ~service() {}
 
   /**
    * @brief Accept function of the visitor design pattern
@@ -53,17 +51,6 @@ public:
    * @return true on success, false otherwise
    */
   virtual bool accept(visitor *visitor) const;
-
-  /**
-   * @brief Get the enumerator list
-   * @return a list
-   */
-  const std::list<function *>& get_functions() const {
-    return _functions;
-  }
-
-private:
-  std::list<function *> _functions;
 };
 
 };  // namespace ast

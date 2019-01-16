@@ -22,24 +22,11 @@ namespace compiler {
 namespace ast {
 
 service::service(const google::protobuf::ServiceDescriptor *desc)
-  : decl(desc->name()),
-    _functions(std::list<function *>()) {
+  : decl(desc->name()) {
   for (int32_t i = 0; i < desc->method_count(); i++) {
     const google::protobuf::MethodDescriptor *method = desc->method(i);
-    _functions.push_back(new function(method));
+    _elements[i] = new function(method);
   }
-}
-
-service::service(const std::string& name,
-    const std::initializer_list<function *>& list)
-  : decl(name),
-    _functions(list) {
-}
-
-service::~service() {
-  std::list<function *>::iterator it = _functions.begin();
-  for (; it != _functions.end(); it++)
-    delete (*it);
 }
 
 bool service::accept(visitor *visitor) const {

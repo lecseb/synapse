@@ -59,14 +59,14 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enumerator *node);
+  virtual bool visite(const ast::enumeration::enumerator *node);
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enumerators *node);
+  virtual bool visite(const ast::enumeration::enumerators *node);
 
   /**
    * @brief Visite an function node
@@ -76,25 +76,25 @@ public:
   virtual bool visite(const ast::function *node);
 
   /**
+   * @brief Visite an function node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::function::output *node);
+
+  /**
+   * @brief Visite an param node
+   * @param [in] node: node to visite
+   * @return true on success,* false otherwise
+   */
+  virtual bool visite(const ast::function::param *node);
+
+  /**
    * @brief Visite an include node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
   virtual bool visite(const ast::include *node);
-
-  /**
-   * @brief Visite an param node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::param *node);
-
-  /**
-   * @brief Visite an params node
-   * @param [in] node: node to visite
-   * @return true on success,* false otherwise
-   */
-  virtual bool visite(const ast::params *node);
 
   /**
    * @brief Visite an structure node

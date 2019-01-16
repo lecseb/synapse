@@ -64,6 +64,7 @@ synapse_protoc_CXXFLAGS= \
 noinst_HEADERS= \
 	synapse-error.hh \
 	parser/synapse.hh \
+	parser/synapse-file.hh \
 	parser/synapse-header.hh \
 	parser/synapse-interface.hh \
 	parser/synapse-params.hh \

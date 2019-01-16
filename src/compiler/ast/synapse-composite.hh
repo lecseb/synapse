@@ -24,17 +24,19 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
+/**
+ * @brief Convert the given protobuf type into a string
+ * @param [in] type: type to convert
+ * @return a string
+ */
+std::string tostring(const google::protobuf::FieldDescriptor::Type& type);
+
 class composite : public interface {
 public:
   /**
    * @brief Constructor
    */
   explicit composite(const google::protobuf::FieldDescriptor *desc);
-
-  /**
-   * @brief Constructor
-   */
-  explicit composite(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief Destructor
@@ -61,12 +63,14 @@ public:
    * @param [in] type: type to convert
    * @return a string
    */
-  static std::string to_string(const composite *composite);
+  std::string get_type() const {
+    return _type;
+  }
 
 private:
-  const google::protobuf::FieldDescriptor *_desc;
-  bool _is_pointer;
+  const google::protobuf::FieldDescriptor *_desc;  
   std::string _name;
+  std::string _type;
 };
 
 };  // namespace ast

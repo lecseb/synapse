@@ -21,7 +21,39 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
+enumeration::enumeration(const google::protobuf::EnumDescriptor *desc)
+  : decl(desc->name()),
+    _desc(desc),
+    _enumerators(new enumerators(desc)) {
+}
+
+enumeration::~enumeration() {
+  delete _enumerators;
+}
+
 bool enumeration::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+enumeration::enumerator::enumerator(
+  const google::protobuf::EnumValueDescriptor *desc)
+  : _desc(desc) {
+}
+
+bool enumeration::enumerator::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+enumeration::enumerators::enumerators(
+  const google::protobuf::EnumDescriptor *desc)
+  : elements<enumerator>() {
+  for (int32_t i = 0; i < desc->value_count(); i++) {
+    const google::protobuf::EnumValueDescriptor *enum_desc = desc->value(i);
+    _elements[enum_desc->number()] = new enumerator(desc->value(i));
+  }
+}
+
+bool enumeration::enumerators::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

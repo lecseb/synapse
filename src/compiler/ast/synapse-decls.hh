@@ -17,9 +17,10 @@
 #ifndef _AST_SYNAPSE_DECLS_HH_
 # define _AST_SYNAPSE_DECLS_HH_
 
-# include <list>
+# include <map>
 # include <string>
 # include "synapse-decl.hh"
+# include "synapse-elements.hh"
 
 namespace synapse {
 namespace compiler {
@@ -28,8 +29,14 @@ namespace ast {
 /**
  * @brief declaration list
  */
-class decls {
+class decls : public elements<decl> {
 public:
+  /**
+   * @brief Map typedef
+   */
+  typedef std::map<uint32_t, decl *> map;
+  typedef std::map<uint32_t, decl *>::const_iterator const_iterator;
+
   /**
    * @brief Constructor
    * @param [in] desc: protobuf file descriptor structure
@@ -37,32 +44,15 @@ public:
   explicit decls(const google::protobuf::FileDescriptor *desc);
 
   /**
-   * @brief Constructor
-   */
-  decls(const std::initializer_list<decl *>& list)
-    : _decls(list) {}
-
-  /**
    * @brief Destructor
    */
-  virtual ~decls();
-
-  /**
-   * @brief Return the contained declarations list
-   * @return a list
-   */
-  const std::list<decl *>& get_declarations() const {
-    return _decls;
-  }
+  virtual ~decls() {}
 
   /**
    * @brief Allow parser to add declaration inside the tree
    * @param [in] decl: declaration to add
    */
   void add_decl(decl *decl);
-
-private:
-  std::list<decl *> _decls;
 };
 
 };  // namespace ast

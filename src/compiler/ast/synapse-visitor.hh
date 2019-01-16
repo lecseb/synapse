@@ -22,14 +22,8 @@
 # include "synapse-decl.hh"
 # include "synapse-decls.hh"
 # include "synapse-enumeration.hh"
-# include "synapse-enumerator.hh"
-# include "synapse-enumerators.hh"
-# include "synapse-field.hh"
-# include "synapse-fields.hh"
 # include "synapse-function.hh"
 # include "synapse-include.hh"
-# include "synapse-param.hh"
-# include "synapse-params.hh"
 # include "synapse-service.hh"
 # include "synapse-structure.hh"
 
@@ -58,28 +52,14 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const enumerator *node) = 0;
+  virtual bool visite(const enumeration::enumerator *node) = 0;
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const enumerators *node) = 0;
-
-  /**
-   * @brief Visite an field node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const field *node) = 0;
-
-  /**
-   * @brief Visite an fields node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const fields *node) = 0;
+  virtual bool visite(const enumeration::enumerators *node) = 0;
 
   /**
    * @brief Visite an function node
@@ -89,25 +69,25 @@ public:
   virtual bool visite(const function *node) = 0;
 
   /**
+   * @brief Visite an param node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const function::param *node) = 0;
+
+  /**
+   * @brief Visite an output node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const function::output *node) = 0;
+
+  /**
    * @brief Visite an include node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
   virtual bool visite(const include *node) = 0;
-
-  /**
-   * @brief Visite an param node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const param *node) = 0;
-
-  /**
-   * @brief Visite an params node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const params *node) = 0;
 
   /**
    * @brief Visite an service node
@@ -122,6 +102,20 @@ public:
    * @return true on success, false otherwise
    */
   virtual bool visite(const structure *node) = 0;
+
+  /**
+   * @brief Visite an field node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const structure::field *node) = 0;
+
+  /**
+   * @brief Visite an fields node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const structure::fields *node) = 0;
 };
 
 };  // namespace ast

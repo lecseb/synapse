@@ -14,38 +14,53 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-fields.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SYNAPSE_ELEMENTS_HH_
+# define _AST_SYNAPSE_ELEMENTS_HH_
+
+# include <map>
+# include <string>
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-fields::fields(const google::protobuf::Descriptor *desc)
-  : _fields(std::map<uint32_t, field *>()) {
-  for (int32_t i = 0; i < desc->field_count(); i++) {
-    const google::protobuf::FieldDescriptor *field_desc = desc->field(i);
-    _fields[field_desc->index()] = new field(field_desc);
+/**
+ * @brief Root element of the AST
+ */
+template<class type>
+class elements {
+public:
+  /**
+   * @brief Constructor
+   */
+  elements();
+
+  /**
+   * @brief Constructor
+   */
+  explicit elements(const std::initializer_list<type *>& list);
+
+  /**
+   * @brief destructor
+   */
+  virtual ~elements();
+
+  /**
+   * @brief Get the field list
+   * @return a valid pointer
+   */
+  const std::map<uint32_t, type *>& get_elements() const {
+    return _elements;
   }
-}
 
-fields::fields(const std::initializer_list<field *>& list) {
-  uint32_t index = 0;
-  std::initializer_list<field *>::iterator it = list.begin();
-  for (index = 0; it != list.end(); it++, index++)
-    _fields[index] = (*it);
-}
-
-fields::~fields() {
-  std::map<uint32_t, field *>::iterator it = _fields.begin();
-  for (; it != _fields.end(); it++)
-    delete it->second;
-}
-
-bool fields::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+protected:
+  std::map<uint32_t, type *> _elements;
+};
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+# include "synapse-elements.hxx"
+
+#endif /* _AST_SYNAPSE_ELEMENTS_HH_ */

@@ -16,6 +16,7 @@
 
 #include "synapse.hh"
 #include "synapse-stream.hh"
+#include "ast/synapse-decls.hh"
 #include "declaration/synapse.hh"
 #include "definition/synapse.hh"
 

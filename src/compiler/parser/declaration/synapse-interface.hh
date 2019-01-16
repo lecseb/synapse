@@ -39,13 +39,6 @@ public:
   virtual bool visite(const ast::composite *node) = 0;
 
   /**
-   * @brief Visite an decls node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::decls *node) = 0;
-
-  /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
    * @return true on success, false otherwise
@@ -57,28 +50,14 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enumerator *node) = 0;
+  virtual bool visite(const ast::enumeration::enumerator *node) = 0;
 
   /**
    * @brief Visite an enumerators node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enumerators *node) = 0;
-
-  /**
-   * @brief Visite an field node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::field *node) = 0;
-
-  /**
-   * @brief Visite an fields node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::fields *node) = 0;
+  virtual bool visite(const ast::enumeration::enumerators *node) = 0;
 
   /**
    * @brief Visite an function node
@@ -88,25 +67,25 @@ public:
   virtual bool visite(const ast::function *node) = 0;
 
   /**
-   * @brief Visite an include node
+   * @brief Visite an function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::include *node) = 0;
+  virtual bool visite(const ast::function::output *node) = 0;
 
   /**
    * @brief Visite an param node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::param *node) = 0;
+  virtual bool visite(const ast::function::param *node) = 0;
 
   /**
-   * @brief Visite an params node
+   * @brief Visite an include node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::params *node) = 0;
+  virtual bool visite(const ast::include *node) = 0;
 
   /**
    * @brief Visite an service node
@@ -121,6 +100,20 @@ public:
    * @return true on success, false otherwise
    */
   virtual bool visite(const ast::structure *node) = 0;
+
+  /**
+   * @brief Visite an field node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::structure::field *node) = 0;
+
+  /**
+   * @brief Visite an fields node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::structure::fields *node) = 0;
 };
 
 };  // namespace declaration

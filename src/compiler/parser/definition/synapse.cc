@@ -28,9 +28,10 @@ synapse::synapse(stream& stream, const params& params)
 }
 
 bool synapse::visite(const ast::composite *node) {
-  _stream << ast::composite::to_string(node);
-  if (node->get_name().size())
-    _stream << " " << node->get_name() << " *";
+  if (node->get_type() == "void")
+    _stream << "void";
+  else
+    _stream << node->get_type() << node->get_name();
   return true;
 }
 
@@ -45,21 +46,22 @@ bool synapse::visite(const ast::enumeration *node) {
   return error;
 }
 
-bool synapse::visite(const ast::enumerator *node) {
+bool synapse::visite(const ast::enumeration::enumerator *node) {
   _stream << node->get_name() << " = " << std::to_string(node->get_value());
   return true;
 }
 
-bool synapse::visite(const ast::enumerators *node) {
+bool synapse::visite(const ast::enumeration::enumerators *node) {
   bool error = true;
-  const std::map<uint32_t, ast::enumerator *>& enums = node->get_enumerators();
-  std::map<uint32_t, ast::enumerator *>::const_iterator enum_it = enums.begin();
 
-  if (enum_it != enums.end()) {
-    error &= enum_it->second->accept(this);
-    for (enum_it++; enum_it != enums.end(); enum_it++) {
+  const std::map<uint32_t, ast::enumeration::enumerator *>& enums =
+    node->get_elements();
+  std::map<uint32_t, ast::enumeration::enumerator *>::const_iterator it;
+  if (it != enums.end()) {
+    error &= it->second->accept(this);
+    for (it++; it != enums.end(); it++) {
       _stream << "," << stream::endl;
-      error &= enum_it->second->accept(this);
+      error &= it->second->accept(this);
     }
     _stream << stream::endl;
   }
@@ -69,22 +71,18 @@ bool synapse::visite(const ast::enumerators *node) {
 bool synapse::visite(const ast::function *node) {
   bool error = true;
 
-  if (node->get_return_type())
-    error &= node->get_return_type()->accept(this);
-  else
-    _stream << "void ";
+  error &= node->get_return_type()->accept(this);
   _stream << node->get_name() << "(";
-  if (node->get_params()) {
-    _stream << stream::endl;
-    _stream.indent();
-    error &= node->get_params()->accept(this);
-    _stream.outdent();
-  } else {
-    _stream << "void";
-  }
+  error &= node->get_param()->accept(this);
   _stream << ")";
   return error;
 }
+
+bool synapse::visite(const ast::function::output *node) {
+  _stream << node->get_type();
+  return true;
+}
+
 
 bool synapse::visite(const ast::include *node) {
   std::string name = std::string();
@@ -106,26 +104,12 @@ bool synapse::visite(const ast::include *node) {
   return true;
 }
 
-bool synapse::visite(const ast::param *node) {
-  const ast::composite *cmp = node->get_composite();
-  bool error = cmp->accept(this);
-  _stream << node->get_name();
-  return error;
-}
-
-bool synapse::visite(const ast::params *node) {
-  bool error = true;
-  const std::list<ast::param *>& params = node->get_params();
-  std::list<ast::param *>::const_iterator param = params.begin();
-
-  if (param != params.end()) {
-    error &= (*param)->accept(this);
-    for (param++; param != params.end(); param++) {
-      _stream << "," << stream::endl;
-      error &= (*param)->accept(this);
-    }
-  }
-  return error;
+bool synapse::visite(const ast::function::param *node) {
+  if (node->get_type() == "void ")
+    _stream << "void";
+  else
+    _stream << node->get_type() << node->get_name();
+  return true;
 }
 
 bool synapse::visite(const ast::structure *node) {

@@ -19,6 +19,7 @@
 
 # include <map>
 # include <string>
+# include "synapse-file.hh"
 # include "synapse-params.hh"
 # include "synapse-stream.hh"
 # include "definition/synapse-interface.hh"
@@ -27,7 +28,7 @@ namespace synapse {
 namespace compiler {
 namespace parser {
 
-class header {
+class header : public file {
 public:
   /**
    * @brief Constructor
@@ -45,31 +46,43 @@ public:
   virtual ~header();
 
   /**
-   * @brief Parse a decls node
+   * @brief Parse the entire tree
+   * @param [in] node: node to parse
+   * @return true on success, false otherwise
+   */
+  bool parse(const ast::decls *node);
+
+  /**
+   * @brief Visite an enumeration node
+   * @param [in] node: node node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::enumeration *node);
+
+  /**
+   * @brief Visite an function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool parse(const ast::decls *node);
+  virtual bool visite(const ast::function *node);
+
+  /**
+   * @brief Visite an include node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::include *node);
+
+  /**
+   * @brief Visite an structure node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::structure *node);
 
 private:
-  /**
-   * @brief Parse a service node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool _parse(const ast::service *node);
-
-  /**
-   * @brief Parse a function node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool _parse(const ast::function *node);
-
   definition::interface *_definition;
-  const std::map<std::string, std::string>& _params;
   std::map<std::string, bool> _services;
-  stream *_stream;
 };
 
 };  // namespace parser

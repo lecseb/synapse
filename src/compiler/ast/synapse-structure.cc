@@ -21,7 +21,42 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
+structure::structure(const google::protobuf::Descriptor *desc)
+  : decl(desc->name()),
+    _desc(desc),
+    _fields(new fields(desc)) {
+}
+
+structure::~structure() {
+  delete _fields;
+}
+
 bool structure::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+structure::field::field(const google::protobuf::FieldDescriptor *desc)
+  : _desc(desc),
+    _composite(new composite(desc)) {
+}
+
+structure::field::~field() {
+  delete _composite;
+}
+
+bool structure::field::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+structure::fields::fields(const google::protobuf::Descriptor *desc)
+  : elements<field>() {
+  for (int32_t i = 0; i < desc->field_count(); i++) {
+    const google::protobuf::FieldDescriptor *field_desc = desc->field(i);
+    _elements[field_desc->index()] = new field(field_desc);
+  }
+}
+
+bool structure::fields::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

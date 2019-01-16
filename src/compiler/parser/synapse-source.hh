@@ -19,6 +19,7 @@
 
 # include <map>
 # include <string>
+# include "synapse-file.hh"
 # include "synapse-params.hh"
 # include "synapse-stream.hh"
 # include "declaration/synapse-interface.hh"
@@ -28,7 +29,7 @@ namespace synapse {
 namespace compiler {
 namespace parser {
 
-class source {
+class source : public file {
 public:
   /**
    * @brief Constructor
@@ -54,11 +55,39 @@ public:
    */
   virtual bool parse(const ast::decls *node);
 
+  /**
+   * @brief Visite an enumeration node
+   * @param [in] node: node node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::enumeration *) {
+    return true;
+  }
+
+  /**
+   * @brief Visite an function node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::function *node);
+
+  /**
+   * @brief Visite an include node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::include *node);
+
+  /**
+   * @brief Visite an structure node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::structure *node);
+
 private:
   declaration::interface *_declaration;
   definition::interface *_definition;
-  const std::map<std::string, std::string>& _params;
-  stream *_stream;
 };
 
 };  // namespace parser

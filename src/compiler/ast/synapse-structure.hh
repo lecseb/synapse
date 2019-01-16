@@ -19,8 +19,9 @@
 
 # include <map>
 # include <string>
+# include "synapse-composite.hh"
 # include "synapse-decl.hh"
-# include "synapse-fields.hh"
+# include "synapse-elements.hh"
 
 namespace synapse {
 namespace compiler {
@@ -32,28 +33,89 @@ namespace ast {
 class structure : public decl {
 public:
   /**
-   * @brief Constructor
-   * @param [in] desc: protobuf structure descriptor
+   * @brief field element
    */
-  explicit structure(const google::protobuf::Descriptor *desc)
-    : structure(desc->name(), new fields(desc)) {
-    _desc = desc;
-  }
+  class field : public interface {
+  public:
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf field descriptor structure
+     */
+    explicit field(const google::protobuf::FieldDescriptor *desc);
+
+    /**
+     * @brief destructor
+     */
+    virtual ~field();
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
+
+    /**
+     * @brief Get the declared name
+     * @return a string
+     */
+    const std::string& get_name() const {
+      return _desc->name();
+    }
+
+    /**
+     * @brief Get the declared type
+     * @return a type
+     */
+    composite *get_composite() const {
+      return _composite;
+    }
+
+  private:
+    const google::protobuf::FieldDescriptor *_desc;
+    composite *_composite;
+  };
+
+  /**
+   * @brief field list
+   */
+  class fields : public elements<field>, public interface {
+  public:
+    /**
+     * @brief Map typedef
+     */
+    typedef std::map<uint32_t, fields *> map;
+    typedef std::map<uint32_t, fields *>::const_iterator const_iterator;
+
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf descriptor structure
+     */
+    explicit fields(const google::protobuf::Descriptor *desc);
+
+    /**
+     * @brief destructor
+     */
+    virtual ~fields() {}
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
+  };
 
   /**
    * @brief Constructor
+   * @param [in] desc: protobuf structure descriptor
    */
-  structure(const std::string& name, fields *fields)
-    : decl(name),
-      _desc(NULL),
-      _fields(fields) {}
+  explicit structure(const google::protobuf::Descriptor *desc);
 
   /**
    * @brief destructor
    */
-  virtual ~structure() {
-    delete _fields;
-  }
+  virtual ~structure();
 
   /**
    * @brief Accept function of the visitor design pattern

@@ -14,6 +14,7 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "synapse-interface.hh"
 #include "synapse-composite.hh"
 #include "synapse-visitor.hh"
 
@@ -21,8 +22,8 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-std::string composite::to_string(const composite *composite) {
-  switch (composite->_desc->type()) {
+std::string tostring(const google::protobuf::FieldDescriptor::Type& type) {
+  switch (type) {
   case google::protobuf::FieldDescriptor::TYPE_DOUBLE:
     return "double";
   case google::protobuf::FieldDescriptor::TYPE_FLOAT:
@@ -43,13 +44,6 @@ std::string composite::to_string(const composite *composite) {
     return "uint32_t";
   case google::protobuf::FieldDescriptor::TYPE_BOOL:
     return "uint8_t";
-  case google::protobuf::FieldDescriptor::TYPE_STRING:
-    return "char";
-  case google::protobuf::FieldDescriptor::TYPE_MESSAGE:
-  case google::protobuf::FieldDescriptor::TYPE_BYTES:
-    return "struct";
-  case google::protobuf::FieldDescriptor::TYPE_ENUM:
-    return "enum";
   default:
     break;
   }
@@ -58,31 +52,32 @@ std::string composite::to_string(const composite *composite) {
 
 composite::composite(const google::protobuf::FieldDescriptor *desc)
   : _desc(desc),
-    _is_pointer(desc->is_repeated()),
-    _name(std::string()) {
+    _name(desc->name()),
+    _type(std::string()) {
   switch (desc->type()) {
   case google::protobuf::FieldDescriptor::TYPE_BYTES:
     /* TODO: should we support the repeated bytes field ? */
-    _name = "s_synapse_bytes";
-    _is_pointer = true;
+    _type = std::string("struct s_synapse_bytes *");
     break;
   case google::protobuf::FieldDescriptor::TYPE_ENUM:
-    _name = desc->enum_type()->name();
+    _type = std::string("enum " + desc->enum_type()->name());
     break;
   case google::protobuf::FieldDescriptor::TYPE_MESSAGE:
-    _name = desc->message_type()->name();
-    _is_pointer = true;
+    if (desc->message_type()->name() == "void")
+      _type = "void";
+    else
+      _type = std::string("struct " + desc->message_type()->name());
+    break;
+  case google::protobuf::FieldDescriptor::TYPE_STRING:
+    _type = std::string("char *");
     break;
   default:
-    /* the other type doesn't have composite name */
+    if (desc->is_repeated())
+      _type = std::string(tostring(desc->type()) + " *");
+    else
+      _type = std::string(tostring(desc->type()) + " ");
     break;
   }
-}
-
-composite::composite(const google::protobuf::Descriptor *desc)
-  : _desc(NULL),
-    _is_pointer(true),
-    _name(desc->name()) {
 }
 
 bool composite::accept(visitor *visitor) const {

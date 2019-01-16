@@ -20,43 +20,100 @@
 # include <map>
 # include <string>
 # include "synapse-decl.hh"
-# include "synapse-enumerators.hh"
+# include "synapse-elements.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
 /**
- * @brief Root element of the AST
+ * @brief enumeration element
  */
 class enumeration : public decl {
 public:
   /**
-   * @brief Constructor
-   * @param [in] desc: protobuf enumeration descriptor
+   * @brief enumerator element
    */
-  explicit enumeration(const google::protobuf::EnumDescriptor *desc)
-    : enumeration(std::string(desc->name()), new enumerators(desc)) {
-    _desc = desc;
-  }
+  class enumerator : public interface {
+  public:
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf enumerator value descriptor
+     */
+    explicit enumerator(const google::protobuf::EnumValueDescriptor *desc);
+
+    /**
+     * @brief destructor
+     */
+    virtual ~enumerator() {}
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
+
+    /**
+     * @brief Get the declaration name
+     * @return a string
+     */
+    const std::string& get_name() const {
+      return _desc->name();
+    }
+
+    /**
+     * @brief Get the declaration value
+     * @return a string
+     */
+    uint32_t get_value() const {
+      return _desc->number();
+    }
+
+  private:
+    const google::protobuf::EnumValueDescriptor *_desc;
+  };
+
+  /**
+   * @brief enumerator list
+   */
+  class enumerators : public elements<enumerator>, public interface {
+  public:
+    /**
+     * @brief Map typedef
+     */
+    typedef std::map<uint32_t, enumerator *> map;
+    typedef std::map<uint32_t, enumerator *>::const_iterator const_iterator;
+
+    /**
+     * @brief Constructor
+     * @param [in] desc: protobuf enumeration descriptor structure
+     */
+    explicit enumerators(const google::protobuf::EnumDescriptor *desc);
+
+    /**
+     * @brief destructor
+     */
+    virtual ~enumerators() {}
+
+    /**
+     * @brief Accept function of the visitor design pattern
+     * @param [in] visitor: visitor to browse
+     * @return true on success, false otherwise
+     */
+    virtual bool accept(visitor *visitor) const;
+  };
 
   /**
    * @brief Constructor
-   * @param [in] name: name of the enumeration
-   * @param [in] enumerators: list of enumerator
+   * @param [in] desc: protobuf enumeration descriptor
    */
-  enumeration(const std::string& name, enumerators *enumerators)
-    : decl(name),
-      _desc(NULL),
-      _enumerators(enumerators) {
-  }
+  explicit enumeration(const google::protobuf::EnumDescriptor *desc);
 
   /**
    * @brief destructor
    */
-  virtual ~enumeration() {
-    delete _enumerators;
-  }
+  virtual ~enumeration();
 
   /**
    * @brief Accept function of the visitor design* pattern

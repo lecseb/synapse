@@ -23,19 +23,12 @@ namespace ast {
 
 function::function(const google::protobuf::MethodDescriptor *desc)
   : decl(desc->name()),
-    _params(new params(desc->output_type())),
-    _return(new composite(desc->input_type())) {
-}
-
-function::function(const std::string& name, composite *return_type,
-    params *args)
-  : decl(name),
-    _params(args),
-    _return(return_type) {
+    _param(new param("msg", desc->input_type())),
+    _return(new output(desc->output_type())) {
 }
 
 function::~function() {
-  delete _params;
+  delete _param;
   delete _return;
 }
 
@@ -43,9 +36,27 @@ bool function::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
-// bool function::out::accept(visitor *visitor) const {
-//   return visitor->visite(this);
-// }
+function::output::output(const google::protobuf::Descriptor *desc)
+  : _type(std::string()) {
+  if (desc->name() == "void")
+    _type = std::string("void ");
+  else
+    _type = std::string("struct " + desc->name() + " *");
+}
+
+bool function::output::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+function::param::param(const std::string& name,
+  const google::protobuf::Descriptor *desc)
+  : output(desc),
+    _name(name) {
+}
+
+bool function::param::accept(visitor *visitor) const {
+  return visitor->visite(this);
+}
 
 };  // namespace ast
 };  // namespace compiler

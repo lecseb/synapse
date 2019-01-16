@@ -26,16 +26,11 @@ noinst_HEADERS= \
 	synapse-composite.hh \
 	synapse-decl.hh \
 	synapse-decls.hh \
+	synapse-elements.hh \
 	synapse-enumeration.hh \
-	synapse-enumerator.hh \
-	synapse-enumerators.hh \
-	synapse-field.hh \
-	synapse-fields.hh \
 	synapse-function.hh \
 	synapse-include.hh \
 	synapse-interface.hh \
-	synapse-param.hh \
-	synapse-params.hh \
 	synapse-service.hh \
 	synapse-structure.hh \
 	synapse-visitor.hh
@@ -45,14 +40,8 @@ libsynapse_ast_a_SOURCES= \
 	synapse-decl.cc \
 	synapse-decls.cc \
 	synapse-enumeration.cc \
-	synapse-enumerator.cc \
-	synapse-enumerators.cc \
-	synapse-field.cc \
-	synapse-fields.cc \
 	synapse-function.cc \
 	synapse-include.cc \
-	synapse-param.cc \
-	synapse-params.cc \
 	synapse-service.cc \
 	synapse-structure.cc
 

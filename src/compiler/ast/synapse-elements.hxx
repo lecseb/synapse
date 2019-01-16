@@ -14,26 +14,39 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-param.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SYNAPSE_ELEMENTS_HXX_
+# define _AST_SYNAPSE_ELEMENTS_HXX_
+
+# include <map>
+# include <string>
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-param::param(const google::protobuf::Descriptor *desc)
-  : _desc(desc),
-    _composite(new composite(desc)) {
+template<class type>
+elements<type>::elements()
+  : _elements(std::map<uint32_t, type *>()) {
 }
 
-param::~param() {
-  delete _composite;
+template<class type>
+elements<type>::elements(const std::initializer_list<type *>& list)
+  : _elements(std::map<uint32_t, type *>()) {
+  uint32_t index = 0;
+  typename std::initializer_list<type *>::iterator it = list.begin();
+  for (index = 0; it != list.end(); it++, index++)
+    _elements[index] = (*it);
 }
 
-bool param::accept(visitor *visitor) const {
-  return visitor->visite(this);
+template<class type>
+elements<type>::~elements() {
+  typename std::map<uint32_t, type *>::iterator it = _elements.begin();
+  for (; it != _elements.end(); it++)
+    delete it->second;
 }
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* _AST_SYNAPSE_ELEMENTS_HXX_ */
