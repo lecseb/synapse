@@ -14,26 +14,21 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#include "synapse-function.hh"
+#include "ast/synapse-adaptor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace svcs {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+function::function(const google::protobuf::MethodDescriptor *desc)
+  : _desc(desc),
+    _input(desc->input_type()),
+    _output(desc->output_type()) {
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
-
+};  // namespace svcs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

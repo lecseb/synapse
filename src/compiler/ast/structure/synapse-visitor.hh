@@ -14,38 +14,45 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_DECL_HH_
-# define _AST_SYNAPSE_DECL_HH_
+#ifndef _AST_STRUCTURE_SYNAPSE_VISITOR_HH_
+# define _AST_STRUCTURE_SYNAPSE_VISITOR_HH_
 
-# include <string>
-# include <google/protobuf/descriptor.h>
+# include "synapse-fields.hh"
+# include "synapse-structure.hh"
+# include "synapse-error.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace structs {
 
-class visitor;
-
-/**
- * @brief declaration
- */
-class decl {
+class visitor {
 public:
   /**
-   * @brief destructor
-   */
-  virtual ~decl() {}
-
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
+   * @brief Visite an error node
+   * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool accept(visitor *visitor) const = 0;
+  virtual bool visite(const error *node) = 0;
+
+  /**
+   * @brief Visite an structure list of field node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const fields *node) = 0;
+
+  /**
+   * @brief Visite an structure node
+   * @param [in] node: node node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const structure *node) = 0;
 };
 
+};  // namespace structs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_DECL_HH_ */
+#endif /* !_AST_STRUCTURE_SYNAPSE_VISITOR_HH_ */

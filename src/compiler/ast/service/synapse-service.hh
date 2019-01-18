@@ -14,26 +14,33 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SERVICE_SYNAPSE_SERVICE_HH_
+# define _AST_SERVICE_SYNAPSE_SERVICE_HH_
+
+# include <string>
+# include "ast/synapse-decl.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
-}
+class service : public ast::decl {
+public:
+  /**
+   * @brief Destructor
+   */
+  virtual ~service() {}
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   * @return true on success, false otherwise
+   */
+  virtual bool accept(ast::visitor *visitor) const = 0;
+};
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* !_AST_SERVICE_SYNAPSE_SERVICE_HH_ */

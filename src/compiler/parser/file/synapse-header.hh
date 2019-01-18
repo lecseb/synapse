@@ -14,31 +14,42 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_FILE_DEFINITION_SYNAPSE_HH_
-# define _PARSER_FILE_DEFINITION_SYNAPSE_HH_
+#ifndef _PARSER_FILE_SYNAPSE_HEADER_HH_
+# define _PARSER_FILE_SYNAPSE_HEADER_HH_
 
 # include <map>
+# include <string>
 # include "synapse-interface.hh"
-# include "parser/synapse-params.hh"
-# include "parser/synapse-stream.hh"
+# include "parser/definition/synapse-interface.hh"
 
 namespace synapse {
 namespace compiler {
 namespace parser {
-namespace definition {
+namespace file {
 
-class synapse : public interface {
+class header : public interface {
 public:
   /**
    * @brief Constructor
-   * @param [in] stream: file stream to write the result
+   * @param [in] params: user params
+   * @param [in] stream: file stream to generate the file
+   * @param [in] definition: definition generator
+   * @note header instance take the ownership of the stream and definition
    */
-  synapse(parser::stream& stream, const params& params);
+  header(const params& params, stream *stream,
+    definition::interface *defition);
 
   /**
    * @brief Destructor
    */
-  virtual ~synapse() {}
+  virtual ~header();
+
+  /**
+   * @brief Parse the entire tree
+   * @param [in] node: node to parse
+   * @return true on success, false otherwise
+   */
+  virtual bool parse(const ast::decls *node);
 
   /**
    * @brief Visite an enumeration node
@@ -48,11 +59,18 @@ public:
   virtual bool visite(const ast::enumeration *node);
 
   /**
-   * @brief Visite an enumerators node
+   * @brief Visite an error node
+   * @param [in] node: node node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::error *node);
+
+  /**
+   * @brief Visite an include node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enums::enumerators *node);
+  virtual bool visite(const ast::include *node);
 
   /**
    * @brief Visite an structure node
@@ -62,34 +80,20 @@ public:
   virtual bool visite(const ast::structure *node);
 
   /**
-   * @brief Visite a duplicate allocation function node
+   * @brief Visite an service node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::svcs::alloc::function_dup *node);
-
-  /**
-   * @brief Visite a free allocation function node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::svcs::alloc::function_free *node);
-
-  /**
-   * @brief Visite a new allocation function node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::svcs::alloc::function_new *node);
+  virtual bool visite(const ast::svcs::alloc::allocator *node);
 
 private:
-  const params& _params;
-  parser::stream& _stream;
+  definition::interface *_definition;
+  std::map<std::string, bool> _services;
 };
 
-};  // namespace definition
+};  // namespace file
 };  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_FILE_DEFINITION_SYNAPSE_HH_ */
+#endif /* !_PARSER_FILE_SYNAPSE_HEADER_HH_ */

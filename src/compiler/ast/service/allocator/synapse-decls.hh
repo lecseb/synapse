@@ -14,26 +14,37 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_SERVICE_ALLOCATOR_SYNAPSE_DECLS_HH_
+# define _AST_SERVICE_ALLOCATOR_SYNAPSE_DECLS_HH_
+
+# include <list>
+# include "synapse-decl.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace svcs {
+namespace alloc {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
-}
+/**
+ * @brief Root element of the AST
+ */
+class decls : public std::list<decl *> {
+public:
+  /**
+   * @brief destructor
+   */
+  virtual ~decls() {
+    typename std::list<decl *>::iterator it = begin();
+    for (; it != end(); it++)
+      delete (*it);
+  }
+};
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
-
+};  // namespace alloc
+};  // namespace svcs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* _AST_SERVICE_ALLOCATOR_SYNAPSE_DECLS_HH_ */

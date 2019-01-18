@@ -14,78 +14,49 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_INCLUDE_HH_
-# define _AST_SYNAPSE_INCLUDE_HH_
+#ifndef _AST_SERVICE_ALLOCATOR_SYNAPSE_ALLOCATOR_HH_
+# define _AST_SERVICE_ALLOCATOR_SYNAPSE_ALLOCATOR_HH_
 
 # include <string>
-# include "synapse-decl.hh"
+# include "synapse-decls.hh"
+# include "ast/service/synapse-service.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace svcs {
+namespace alloc {
 
-/**
- * @brief declaration
- */
-class include : public decl {
+class allocator : public decls, public service {
 public:
   /**
-   * @brief Define the type of include
+   * @brief Name of the service
    */
-  enum e_type {
-    e_type_synapse,
-    e_type_protobuf,
-    e_type_libc
-  };
+  static std::string name;
 
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf file descriptor
+   * @param [in] desc: protobuf service descriptor structure
    */
-  explicit include(const google::protobuf::FileDescriptor *desc);
+  explicit allocator(const google::protobuf::ServiceDescriptor *desc);
 
   /**
-   * @brief Constructor
-   * @param [in] type: type of the include
-   * @param [in] name: name of the include
+   * @brief Destructor
    */
-  include(enum e_type type, const std::string& name);
-
-  /**
-   * @brief destructor
-   */
-  virtual ~include() {}
+  virtual ~allocator() {}
 
   /**
    * @brief Accept function of the visitor design pattern
    * @param [in] visitor: visitor to browse
    * @return true on success, false otherwise
    */
-  virtual bool accept(visitor *visitor) const;
-
-  /**
-   * @brief Get the declaration name
-   * @return a string
-   */
-  const std::string& get_name() const {
-    return _name;
-  }
-
-  /**
-   * @brief Get the inclusion type
-   * @return a type
-   */
-  enum e_type get_type() const {
-    return _type;
-  }
-
-private:
-  std::string _name;
-  enum e_type _type;
+  virtual bool accept(ast::visitor *visitor) const;
 };
 
+};  // namespace alloc
+};  // namespace svcs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_INCLUDE_HH_ */
+#endif /* !_AST_SERVICE_ALLOCATOR_SYNAPSE_ALLOCATOR_HH_ */

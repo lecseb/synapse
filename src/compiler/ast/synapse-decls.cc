@@ -15,29 +15,37 @@
  */
 
 #include "synapse-decls.hh"
-#include "synapse-enumeration.hh"
+#include "synapse-error.hh"
 #include "synapse-include.hh"
-#include "synapse-structure.hh"
-#include "synapse-visitor.hh"
+#include "enumeration/synapse-enumeration.hh"
+#include "structure/synapse-structure.hh"
+#include "service/synapse-factory.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-decls::decls(const google::protobuf::FileDescriptor *desc)
-  : elements<decl>() {
+decls::decls(const google::protobuf::FileDescriptor *desc) {
   for (int32_t i = 0; i < desc->dependency_count(); i++)
-    add_decl(new include(desc->dependency(i)));
+    push_back(new include(desc->dependency(i)));
   for (int32_t i = 0; i < desc->enum_type_count(); i++)
-    add_decl(new enumeration(desc->enum_type(i)));
+    push_back(new enumeration(desc->enum_type(i)));
   for (int32_t i = 0; i < desc->message_type_count(); i++)
-    add_decl(new structure(desc->message_type(i)));
-  for (int32_t i = 0; i < desc->service_count(); i++)
-    add_decl(new service(desc->service(i)));
+    push_back(new structure(desc->message_type(i)));
+
+  for (int32_t i = 0; i < desc->service_count(); i++) {
+    if (svcs::factory::check_name(desc->service(i)->name())) {
+      push_back(svcs::factory::create_service(desc->service(i)));
+    } else {
+      push_back(new error(desc->service(i), "no matching service for that"));
+    }
+  }
 }
 
-void decls::add_decl(decl *decl) {
-  _elements[_elements.size()] = decl;
+decls::~decls() {
+  typename std::list<decl *>::iterator it = begin();
+  for (; it != end(); it++)
+    delete (*it);
 }
 
 };  // namespace ast

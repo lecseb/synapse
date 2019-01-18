@@ -19,12 +19,10 @@
 
 # include <map>
 # include <string>
-# include "synapse-header.hh"
 # include "synapse-interface.hh"
 # include "synapse-params.hh"
-# include "synapse-source.hh"
-# include "declaration/synapse-interface.hh"
-# include "definition/synapse-interface.hh"
+# include "file/synapse-header.hh"
+# include "file/synapse-source.hh"
 
 namespace synapse {
 namespace compiler {
@@ -67,7 +65,8 @@ private:
      * @param [in] output: output file representation
      * @return a valid pointer
      */
-    static header *create_header(const std::string& name, const params& params,
+    static file::header *create_header(const std::string& name,
+      const params& params,
       google::protobuf::compiler::OutputDirectory *output);
 
     /**
@@ -77,12 +76,13 @@ private:
      * @param [in] output: output file representation
      * @return a valid pointer
      */
-    static source *create_source(const std::string& name, const params& params,
+    static file::source *create_source(const std::string& name,
+      const params& params,
       google::protobuf::compiler::OutputDirectory *output);
   };
 
-  header *_header;
-  source *_source;
+  file::header *_header;
+  file::source *_source;
 };
 
 };  // namespace parser

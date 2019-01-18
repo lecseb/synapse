@@ -14,26 +14,28 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#include "synapse-factory.hh"
+#include "allocator/synapse-allocator.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace svcs {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+bool factory::check_name(const std::string& name) {
+  if (name == alloc::allocator::name)
+    return true;
+  return false;
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
+ast::service *factory::create_service(
+  const google::protobuf::ServiceDescriptor *desc) {
+  if (desc->name() == alloc::allocator::name)
+    return new alloc::allocator(desc);
+  return NULL;
 }
 
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
-
+};  // namespace svcs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

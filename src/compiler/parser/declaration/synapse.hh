@@ -14,8 +14,8 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_DECLARATION_SYNAPSE_HH_
-# define _PARSER_DECLARATION_SYNAPSE_HH_
+#ifndef _PARSER_FILE_DECLARATION_SYNAPSE_HH_
+# define _PARSER_FILE_DECLARATION_SYNAPSE_HH_
 
 # include "synapse-interface.hh"
 # include "parser/synapse-stream.hh"
@@ -39,69 +39,6 @@ public:
   virtual ~synapse() {}
 
   /**
-   * @brief Visite an composite node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::composite *node);
-
-  /**
-   * @brief Visite an enumeration node
-   * @param [in] node: node node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::enumeration *node);
-
-  /**
-   * @brief Visite an enumerator node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::enumeration::enumerator *node);
-
-  /**
-   * @brief Visite an enumerators node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::enumeration::enumerators *node);
-
-  /**
-   * @brief Visite an function node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::function *node);
-
-  /**
-   * @brief Visite an function node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::function::output *node);
-
-  /**
-   * @brief Visite an param node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::function::param *node);
-
-  /**
-   * @brief Visite an include node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::include *node);
-
-  /**
-   * @brief Visite an service node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::service *node);
-
-  /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
@@ -109,18 +46,11 @@ public:
   virtual bool visite(const ast::structure *node);
 
   /**
-   * @brief Visite an field node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::structure::field *node);
-
-  /**
    * @brief Visite an fields node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structure::fields *node);
+  virtual bool visite(const ast::structs::fields *node);
 
 private:
   parser::stream& _stream;
@@ -131,4 +61,4 @@ private:
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_DECLARATION_SYNAPSE_HH_ */
+#endif /* !_PARSER_FILE_DECLARATION_SYNAPSE_HH_ */

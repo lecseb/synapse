@@ -14,61 +14,89 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_VISITOR_HH_
-# define _AST_SYNAPSE_VISITOR_HH_
+#ifndef _PARSER_FILE_SYNAPSE_SOURCE_HH_
+# define _PARSER_FILE_SYNAPSE_SOURCE_HH_
 
+# include <map>
 # include <string>
-# include "synapse-decl.hh"
-# include "synapse-error.hh"
-# include "synapse-include.hh"
-# include "enumeration/synapse-enumeration.hh"
-# include "service/allocator/synapse-allocator.hh"
-# include "structure/synapse-structure.hh"
+# include "synapse-interface.hh"
+# include "parser/declaration/synapse-interface.hh"
+# include "parser/definition/synapse-interface.hh"
 
 namespace synapse {
 namespace compiler {
-namespace ast {
+namespace parser {
+namespace file {
 
-class visitor {
+class source : public interface {
 public:
+  /**
+   * @brief Constructor
+   * @brief Constructor
+   * @param [in] params: user params
+   * @param [in] stream: file stream to generate the file
+   * @param [in] definition: definition generator
+   * @param [in] declaration: declaration generator
+   * @note header instance take the ownership of the stream and definition
+   */
+  source(const params& params, stream *stream,
+    definition::interface *definition, declaration::interface *declaration);
+
+  /**
+   * @brief Destructor
+   */
+  virtual ~source();
+
+  /**
+   * @brief Parse a decls node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool parse(const ast::decls *node);
+
   /**
    * @brief Visite an enumeration node
    * @param [in] node: node node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const enumeration *node) = 0;
+  virtual bool visite(const ast::enumeration *node);
 
   /**
    * @brief Visite an error node
    * @param [in] node: node node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const error *node) = 0;
+  virtual bool visite(const ast::error *node);
 
   /**
    * @brief Visite an include node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const include *node) = 0;
+  virtual bool visite(const ast::include *node);
 
   /**
    * @brief Visite an service node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const svcs::alloc::allocator *node) = 0;
+  virtual bool visite(const ast::svcs::alloc::allocator *node);
 
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const structure *node) = 0;
+  virtual bool visite(const ast::structure *node);
+
+private:
+  declaration::interface *_declaration;
+  definition::interface *_definition;
 };
 
-};  // namespace ast
+};  // namespace file
+};  // namespace parser
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_VISITOR_HH_ */
+#endif /* !_PARSER_FILE_SYNAPSE_SOURCE_HH_ */

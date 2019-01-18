@@ -14,26 +14,26 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
+#include "synapse-error.hh"
 #include "synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace svcs {
+namespace alloc {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+error::error(const google::protobuf::MethodDescriptor *,
+  const std::string& value)
+  : _error(value) {
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
+bool error::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
+};  // namespace alloc
+};  // namespace svcs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

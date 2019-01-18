@@ -25,51 +25,11 @@ synapse::synapse(parser::stream& stream)
   : _stream(stream) {
 }
 
-bool synapse::visite(const ast::composite *) {
-  return true;
-}
-
-bool synapse::visite(const ast::enumeration *) {
-  return true;
-}
-
-bool synapse::visite(const ast::enumeration::enumerator *) {
-  return true;
-}
-
-bool synapse::visite(const ast::enumeration::enumerators *) {
-  return true;
-}
-
-bool synapse::visite(const ast::function *) {
-  return true;
-}
-
-bool synapse::visite(const ast::function::output *) {
-  return true;
-}
-
-bool synapse::visite(const ast::function::param *) {
-  return true;
-}
-
-bool synapse::visite(const ast::include *) {
-  return true;
-}
-
-bool synapse::visite(const ast::service *) {
-  return true;
-}
-
 bool synapse::visite(const ast::structure *) {
   return true;
 }
 
-bool synapse::visite(const ast::structure::field *) {
-  return true;
-}
-
-bool synapse::visite(const ast::structure::fields *) {
+bool synapse::visite(const ast::structs::fields *) {
   return true;
 }
 

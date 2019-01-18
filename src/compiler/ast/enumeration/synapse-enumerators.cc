@@ -14,26 +14,26 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
+#include "synapse-enumerators.hh"
 #include "synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace enums {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+enumerators::enumerators(const google::protobuf::EnumDescriptor *desc) {
+  for (int32_t i = 0; i < desc->value_count(); i++) {
+    const google::protobuf::EnumValueDescriptor *enum_desc = desc->value(i);
+    (*this)[enum_desc->number()] = enum_desc;
+  }
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
+bool enumerators::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 
+};  // namespace enums
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

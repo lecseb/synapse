@@ -24,20 +24,20 @@ namespace synapse {
 namespace compiler {
 namespace parser {
 
-header *synapse::factory::create_header(const std::string& name,
+file::header *synapse::factory::create_header(const std::string& name,
   const params& params, google::protobuf::compiler::OutputDirectory *output) {
   std::string filename = std::string(name + ".synapse.h");
   stream *file = new stream(filename, output);
 
-  return new header(params, file, new definition::synapse(*file, params));
+  return new file::header(params, file, new definition::synapse(*file, params));
 }
 
-source *synapse::factory::create_source(const std::string& name,
+file::source *synapse::factory::create_source(const std::string& name,
   const params& params, google::protobuf::compiler::OutputDirectory *output) {
   std::string filename = std::string(name + ".synapse.c");
   stream *file = new stream(filename, output);
 
-  return new source(params, file, new definition::synapse(*file, params),
+  return new file::source(params, file, new definition::synapse(*file, params),
     new declaration::synapse(*file));
 }
 
@@ -54,7 +54,8 @@ synapse::~synapse() {
 
 bool synapse::parse(const google::protobuf::FileDescriptor *desc) {
   ast::decls *decls = new ast::decls(desc);
-  bool error = _header->parse(decls) && _source->parse(decls);
+  bool error = _header->parse(decls);
+  error &= _source->parse(decls);
   delete decls;
   return error;
 }

@@ -14,71 +14,55 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARSER_FILE_DEFINITION_SYNAPSE_INTERFACE_HH_
-# define _PARSER_FILE_DEFINITION_SYNAPSE_INTERFACE_HH_
+#ifndef _AST_SERVICE_ALLOCATOR_SYNAPSE_VISITOR_HH_
+# define _AST_SERVICE_ALLOCATOR_SYNAPSE_VISITOR_HH_
 
+# include "synapse-dup.hh"
 # include "synapse-error.hh"
-# include "ast/enumeration/synapse-visitor.hh"
-# include "ast/structure/synapse-visitor.hh"
-# include "ast/service/allocator/synapse-visitor.hh"
+# include "synapse-free.hh"
+# include "synapse-new.hh"
 
 namespace synapse {
 namespace compiler {
-namespace parser {
-namespace definition {
+namespace ast {
+namespace svcs {
+namespace alloc {
 
-class interface : public ast::enums::visitor, public ast::structs::visitor,
-  public ast::svcs::alloc::visitor {
+class visitor {
 public:
   /**
-   * @brief Destructor
-   */
-  virtual ~interface() {}
-
-  /**
    * @brief Visite an error node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enums::error *node) {
-    error::get_instance() << node->get();
-    return false;
-  }
+  virtual bool visite(const error *node) = 0;
 
   /**
-   * @brief Visite an error node
+   * @brief Visite a duplicate allocation function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structs::error *node) {
-    error::get_instance() << node->get();
-    return false;
-  }
+  virtual bool visite(const function_dup *node) = 0;
 
   /**
-   * @brief Visite an error node
+   * @brief Visite a free allocation function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::svcs::alloc::error *node) {
-    error::get_instance() << node->get();
-    return false;
-  }
+  virtual bool visite(const function_free *node) = 0;
 
   /**
-   * @brief Visite an structure node
+   * @brief Visite a new allocation function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structs::fields *) {
-    /* nothing to do here */
-    return true;
-  }
+  virtual bool visite(const function_new *node) = 0;
 };
 
-};  // namespace definition
-};  // namespace parser
+};  // namespace alloc
+};  // namespace svcs
+};  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_PARSER_FILE_DEFINITION_SYNAPSE_INTERFACE_HH_ */
+#endif /* !_AST_SERVICE_ALLOCATOR_SYNAPSE_VISITOR_HH_ */

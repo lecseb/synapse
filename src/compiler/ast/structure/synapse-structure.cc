@@ -14,23 +14,29 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
+#include "synapse-adaptor.hh"
+#include "synapse-structure.hh"
 #include "synapse-visitor.hh"
+#include "ast/synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+structure::structure(const google::protobuf::Descriptor *desc)
+  : _desc(desc),
+    _fields(new structs::fields(desc)) {
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
+structure::~structure() {
+  delete _fields;
 }
 
-bool include::accept(visitor *visitor) const {
+bool structure::accept(ast::visitor *visitor) const {
+  return visitor->visite(this);
+}
+
+bool structure::accept(structs::visitor *visitor) const {
   return visitor->visite(this);
 }
 

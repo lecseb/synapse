@@ -17,10 +17,7 @@
 #ifndef _PARSER_SYNAPSE_INTERFACE_HH_
 # define _PARSER_SYNAPSE_INTERFACE_HH_
 
-# include <map>
-# include <string>
 # include <google/protobuf/descriptor.h>
-# include "ast/synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {

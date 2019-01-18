@@ -14,26 +14,39 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-include.hh"
-#include "synapse-visitor.hh"
+#ifndef _AST_STRUCTURE_SYNAPSE_DECL_HH_
+# define _AST_STRUCTURE_SYNAPSE_DECL_HH_
+
+# include <google/protobuf/descriptor.h>
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace structs {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
-}
+class visitor;
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
+/**
+ * @brief enumeration declaration
+ */
+class decl {
+public:
+  /**
+   * @brief Destructor
+   */
+  virtual ~decl() {}
 
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
-}
+  /**
+   * @brief Accept function of the visitor design pattern
+   * @param [in] visitor: visitor to browse
+   * @return true on success, false otherwise
+   */
+  virtual bool accept(visitor *visitor) const = 0;
+};
 
+};  // namespace structs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* !_AST_STRUCTURE_SYNAPSE_DECL_HH_ */

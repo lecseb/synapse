@@ -16,6 +16,7 @@
 
 #include "synapse.hh"
 #include "synapse-error.hh"
+#include "ast/synapse-adaptor.hh"
 
 namespace synapse {
 namespace compiler {
@@ -27,17 +28,8 @@ synapse::synapse(stream& stream, const params& params)
     _stream(stream) {
 }
 
-bool synapse::visite(const ast::composite *node) {
-  if (node->get_type() == "void")
-    _stream << "void";
-  else
-    _stream << node->get_type() << node->get_name();
-  return true;
-}
-
 bool synapse::visite(const ast::enumeration *node) {
-  _stream << "enum " << node->get_name();
-  _stream << node->get_name() << " {" << stream::endl;
+  _stream << "enum " << node->get_name() << " {" << stream::endl;
   _stream.indent();
   bool error = node->get_enumerators()->accept(this);
   _stream.outdent();
@@ -46,74 +38,81 @@ bool synapse::visite(const ast::enumeration *node) {
   return error;
 }
 
-bool synapse::visite(const ast::enumeration::enumerator *node) {
-  _stream << node->get_name() << " = " << std::to_string(node->get_value());
-  return true;
-}
-
-bool synapse::visite(const ast::enumeration::enumerators *node) {
+bool synapse::visite(const ast::enums::enumerators *node) {
   bool error = true;
 
-  const std::map<uint32_t, ast::enumeration::enumerator *>& enums =
-    node->get_elements();
-  std::map<uint32_t, ast::enumeration::enumerator *>::const_iterator it;
-  if (it != enums.end()) {
-    error &= it->second->accept(this);
-    for (it++; it != enums.end(); it++) {
+  ast::enums::enumerators::const_iterator it = node->begin();
+    node->begin();
+  if (it != node->end()) {
+    _stream << ast::adaptor::enumerator_tostring(it->second);
+    for (it++; it != node->end(); it++) {
       _stream << "," << stream::endl;
-      error &= it->second->accept(this);
+      _stream << ast::adaptor::enumerator_tostring(it->second);
     }
     _stream << stream::endl;
   }
   return error;
 }
 
-bool synapse::visite(const ast::function *node) {
-  bool error = true;
-
-  error &= node->get_return_type()->accept(this);
-  _stream << node->get_name() << "(";
-  error &= node->get_param()->accept(this);
-  _stream << ")";
-  return error;
-}
-
-bool synapse::visite(const ast::function::output *node) {
-  _stream << node->get_type();
-  return true;
-}
-
-
-bool synapse::visite(const ast::include *node) {
-  std::string name = std::string();
-
-  switch (node->get_type()) {
-  case ast::include::e_type_libc:
-    name = node->get_name();
-    break;
-  case ast::include::e_type_protobuf:
-    name += std::string(strip_suffix(node->get_name(), ".proto") +
-      ".synapse.h");
-    break;
-  case ast::include::e_type_synapse:
-    name = std::string("synapse/" + node->get_name());
-    break;
-  }
-
-  _stream << "# include <" << name << ">";
-  return true;
-}
-
-bool synapse::visite(const ast::function::param *node) {
-  if (node->get_type() == "void ")
-    _stream << "void";
-  else
-    _stream << node->get_type() << node->get_name();
-  return true;
-}
-
 bool synapse::visite(const ast::structure *node) {
   _stream << "struct " << node->get_name();
+  return true;
+}
+
+bool synapse::visite(const ast::svcs::alloc::function_dup *node) {
+  const google::protobuf::Descriptor *ins = node->get_input();
+  const google::protobuf::Descriptor *out = node->get_output();
+
+  _stream << "/**" << stream::endl;
+  _stream << " * @brief duplicate a specific structure of type ";
+  _stream << ins->name() << stream::endl;
+  _stream << " * @return a valid pointer on success, NULL on error";
+  _stream << stream::endl << " */" << stream::endl;
+  _stream << ast::adaptor::return_tostring(out) << node->get_name()  << "(";
+  _stream << "struct " << ins->name() << " *msg";
+  _stream << ")";
+
+  return true;
+}
+
+bool synapse::visite(const ast::svcs::alloc::function_free *node) {
+  const google::protobuf::Descriptor *ins = node->get_input();
+  const google::protobuf::Descriptor *out = node->get_output();
+
+  _stream << "/**" << stream::endl;
+  _stream << " * @brief deallocate a specific structure of type ";
+  _stream << ins->name() << stream::endl;
+  _stream << " */" << stream::endl;
+  _stream << ast::adaptor::return_tostring(out) << node->get_name()  << "(";
+  _stream << "struct " << ins->name() << " *msg";
+  _stream << ")";
+
+  return true;
+}
+
+bool synapse::visite(const ast::svcs::alloc::function_new *node) {
+  const google::protobuf::Descriptor *ins = node->get_input();
+  const google::protobuf::Descriptor *out = node->get_output();
+
+  _stream << "/**" << stream::endl;
+  _stream << " * @brief allocate a new structure of type " << ins->name();
+  _stream << stream::endl;
+  _stream << " * @return a valid pointer on success, NULL on error";
+  _stream << stream::endl;
+  _stream << " */" << stream::endl;
+
+  _stream << ast::adaptor::return_tostring(out) << node->get_name() << "(";
+  if (ins) {
+    _stream.indent();
+    _stream << ast::adaptor::field_tostring(ins->field(0));
+    for (int i = 1; i < ins->field_count(); i++) {
+      _stream << "," << stream::endl;
+      _stream << ast::adaptor::field_tostring(ins->field(i));
+    }
+    _stream.outdent();
+  }
+  _stream << ")";
+
   return true;
 }
 

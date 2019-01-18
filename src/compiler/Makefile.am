@@ -17,43 +17,6 @@ include $(top_builddir)/script/cpplint.mk
 
 SUBDIRS= ast
 
-#bin_PROGRAMS= synapse-header synapse-source
-
-#noinst_HEADERS=
-
-################################################################################
-#                               header bin                                     #
-################################################################################
-
-#synapse_header_CXXFLAGS= \
-#	$(synapse_CPPFLAGS) \
-#	$(libprotobuf_CFLAGS) \
-#	-I.
-
-#synapse_header_SOURCES=
-#	synapse-header.cc
-
-#synapse_header_LDFLAGS= \
-#	-lprotoc \
-#	$(libprotobuf_LIBS) \
-#	$(top_srcdir)/src/compiler/ast/libsynapse-ast.a
-
-################################################################################
-#                               source bin                                     #
-################################################################################
-
-#synapse_source_CXXFLAGS= $(synapse_header_CXXFLAGS)
-
-#synapse_source_LDFLAGS= $(synapse_header_LDFLAGS)
-
-#synapse_source_SOURCES=
-#	synapse-source.cc
-
-################################################################################
-#                               coding style                                   #
-################################################################################
-
-
 bin_PROGRAMS= synapse-protoc
 
 synapse_protoc_CXXFLAGS= \
@@ -64,28 +27,28 @@ synapse_protoc_CXXFLAGS= \
 noinst_HEADERS= \
 	synapse-error.hh \
 	parser/synapse.hh \
-	parser/synapse-file.hh \
-	parser/synapse-header.hh \
 	parser/synapse-interface.hh \
 	parser/synapse-params.hh \
-	parser/synapse-source.hh \
 	parser/synapse-stream.hh \
 	parser/declaration/synapse.hh \
 	parser/declaration/synapse-interface.hh \
 	parser/definition/synapse.hh \
-	parser/definition/synapse-interface.hh
+	parser/definition/synapse-interface.hh \
+	parser/file/synapse-interface.hh \
+	parser/file/synapse-header.hh \
+	parser/file/synapse-source.hh
 
 synapse_protoc_SOURCES= \
 	synapse-error.cc \
 	synapse-generator.cc \
 	synapse-protoc.cc \
 	parser/synapse.cc \
-	parser/synapse-header.cc \
 	parser/synapse-params.cc \
-	parser/synapse-source.cc \
 	parser/synapse-stream.cc \
 	parser/declaration/synapse.cc \
-	parser/definition/synapse.cc
+	parser/definition/synapse.cc \
+	parser/file/synapse-header.cc \
+	parser/file/synapse-source.cc
 
 synapse_protoc_LDFLAGS= \
 	-lprotoc \
