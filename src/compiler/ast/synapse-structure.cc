@@ -14,47 +14,26 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_STRUCTURE_SYNAPSE_FIELDS_HH_
-# define _AST_STRUCTURE_SYNAPSE_FIELDS_HH_
-
-# include <map>
-# include <string>
-# include "synapse-decls.hh"
+#include "synapse-adaptor.hh"
+#include "synapse-structure.hh"
+#include "synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
-namespace structs {
 
-class visitor;
+structure::structure(const google::protobuf::Descriptor *desc)
+  : _desc(desc) {
+  for (int i = 0; i < desc->field_count(); i++) {
+    const google::protobuf::FieldDescriptor *value = desc->field(i);
+    (*this)[i] = value;
+  }
+}
 
-/**
- * @brief field list
- */
-class fields : public decls {
-public:
-  /**
-   * @brief Constructor
-   * @param [in] desc: protobuf descriptor structure
-   */
-  explicit fields(const google::protobuf::Descriptor *desc);
+bool structure::accept(ast::visitor *visitor) const {
+  return visitor->visite(this);
+}
 
-  /**
-   * @brief destructor
-   */
-  virtual ~fields() {}
-
-  /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] visitor: visitor to browse
-   * @return true on success, false otherwise
-   */
-  virtual bool accept(visitor *visitor) const;
-};
-
-};  // namespace structs
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
-
-#endif /* _AST_STRUCTURE_SYNAPSE_FIELDS_HH_ */

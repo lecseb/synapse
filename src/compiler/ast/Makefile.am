@@ -26,15 +26,11 @@ noinst_HEADERS= \
 	synapse-adaptor.hh \
 	synapse-decl.hh \
 	synapse-decls.hh \
+	synapse-enumeration.hh \
 	synapse-error.hh \
 	synapse-include.hh \
+	synapse-structure.hh \
 	synapse-visitor.hh \
-	enumeration/synapse-decl.hh \
-	enumeration/synapse-decls.hh \
-	enumeration/synapse-enumeration.hh \
-	enumeration/synapse-enumerators.hh \
-	enumeration/synapse-error.hh \
-	enumeration/synapse-visitor.hh \
 	service/synapse-factory.hh \
 	service/synapse-function.hh \
 	service/synapse-service.hh \
@@ -45,33 +41,22 @@ noinst_HEADERS= \
 	service/allocator/synapse-error.hh \
 	service/allocator/synapse-free.hh \
 	service/allocator/synapse-new.hh \
-	service/allocator/synapse-visitor.hh \
-	structure/synapse-decl.hh \
-	structure/synapse-decls.hh \
-	structure/synapse-error.hh \
-	structure/synapse-fields.hh \
-	structure/synapse-structure.hh \
-	structure/synapse-visitor.hh
+	service/allocator/synapse-visitor.hh
 
 libsynapse_ast_a_SOURCES= \
 	synapse-adaptor.cc \
+	synapse-decls.cc \
+	synapse-enumeration.cc \
 	synapse-error.cc \
 	synapse-include.cc \
-	synapse-decls.cc \
-	enumeration/synapse-enumeration.cc \
-	enumeration/synapse-enumerators.cc \
-	enumeration/synapse-error.cc \
+	synapse-structure.cc \
 	service/synapse-factory.cc \
 	service/allocator/synapse-allocator.cc \
 	service/allocator/synapse-dup.cc \
 	service/allocator/synapse-error.cc \
 	service/allocator/synapse-free.cc \
 	service/allocator/synapse-new.cc \
-	service/synapse-function.cc \
-	structure/synapse-error.cc \
-	structure/synapse-fields.cc \
-	structure/synapse-structure.cc
-
+	service/synapse-function.cc
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(libsynapse_ast_a_SOURCES))))

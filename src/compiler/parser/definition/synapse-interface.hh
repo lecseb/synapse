@@ -18,8 +18,7 @@
 # define _PARSER_FILE_DEFINITION_SYNAPSE_INTERFACE_HH_
 
 # include "synapse-error.hh"
-# include "ast/enumeration/synapse-visitor.hh"
-# include "ast/structure/synapse-visitor.hh"
+# include "ast/synapse-visitor.hh"
 # include "ast/service/allocator/synapse-visitor.hh"
 
 namespace synapse {
@@ -27,8 +26,7 @@ namespace compiler {
 namespace parser {
 namespace definition {
 
-class interface : public ast::enums::visitor, public ast::structs::visitor,
-  public ast::svcs::alloc::visitor {
+class interface : public ast::visitor, public ast::svcs::alloc::visitor {
 public:
   /**
    * @brief Destructor
@@ -40,17 +38,7 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::enums::error *node) {
-    error::get_instance() << node->get();
-    return false;
-  }
-
-  /**
-   * @brief Visite an error node
-   * @param [in] node: node to visite
-   * @return true on success, false otherwise
-   */
-  virtual bool visite(const ast::structs::error *node) {
+  virtual bool visite(const ast::error *node) {
     error::get_instance() << node->get();
     return false;
   }
@@ -66,11 +54,21 @@ public:
   }
 
   /**
-   * @brief Visite an structure node
-   * @param [in] node: node to visite
+   * @brief Visite an include node
+   * @param [in] node: node node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structs::fields *) {
+  virtual bool visite(const ast::include *) {
+    /* nothing to do here */
+    return true;
+  }
+
+  /**
+   * @brief Visite an include node
+   * @param [in] node: node node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::svcs::alloc::allocator *) {
     /* nothing to do here */
     return true;
   }

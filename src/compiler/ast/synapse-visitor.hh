@@ -19,11 +19,11 @@
 
 # include <string>
 # include "synapse-decl.hh"
+# include "synapse-enumeration.hh"
 # include "synapse-error.hh"
 # include "synapse-include.hh"
-# include "enumeration/synapse-enumeration.hh"
+# include "synapse-structure.hh"
 # include "service/allocator/synapse-allocator.hh"
-# include "structure/synapse-structure.hh"
 
 namespace synapse {
 namespace compiler {

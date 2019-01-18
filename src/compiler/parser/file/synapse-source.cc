@@ -15,6 +15,7 @@
  */
 
 #include "synapse-source.hh"
+#include "ast/synapse-adaptor.hh"
 
 namespace synapse {
 namespace compiler {
@@ -47,7 +48,6 @@ source::source(const params& params, stream *stream,
   std::string name = _stream.get_name();
   std::string header = std::string(name.substr(0, name.size() - 1) + "h");
   _stream << "#include \"" << header << "\"" << stream::endl;
-  _stream << stream::endl;
 }
 
 source::~source() {
@@ -80,21 +80,49 @@ bool source::visite(const ast::error *node) {
 bool source::visite(const ast::include *node) {
   _stream << "#include \"";
   bool error = interface::visite(node);
-  _stream << "\"";
-  _stream << stream::endl;
+  _stream << "\"" << stream::endl;
   return error;
 }
 
 bool source::visite(const ast::structure *node) {
+  _stream << stream::endl;
   bool error = node->accept(_definition);
   _stream << " {" << stream::endl;
+  _stream.indent();
+  ast::structure::const_iterator it = node->begin();
+  for (; it != node->end(); it++) {
+    _stream << ast::adaptor::field_tostring(it->second) << ";" << stream::endl;
+  }
+  _stream.outdent();
   _stream << "};" << stream::endl;
-  _stream << stream::endl;
   return error;
 }
 
-bool source::visite(const ast::svcs::alloc::allocator *) {
-  return true;
+bool source::visite(const ast::svcs::alloc::allocator *node) {
+  bool error = true;
+
+  ast::svcs::alloc::allocator::const_iterator it = node->begin();
+  if (it != node->end()) {
+    _stream << stream::endl;
+    error &= (*it)->accept(_definition);
+    _stream << " {" << stream::endl;
+    _stream.indent();
+    error &= (*it)->accept(_declaration);
+    _stream.outdent();
+    _stream << "}";
+    _stream << stream::endl;
+    for (it++; it != node->end(); it++) {
+      _stream << stream::endl;
+      error &= (*it)->accept(_definition);
+      _stream << " {" << stream::endl;
+      _stream.indent();
+      error &= (*it)->accept(_declaration);
+      _stream.outdent();
+      _stream << "}";
+      _stream << stream::endl;
+    }
+  }
+  return error;
 }
 };  // namespace file
 };  // namespace parser

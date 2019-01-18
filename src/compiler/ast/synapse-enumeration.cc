@@ -16,26 +16,20 @@
 
 #include "synapse-enumeration.hh"
 #include "synapse-visitor.hh"
-#include "ast/synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
 enumeration::enumeration(const google::protobuf::EnumDescriptor *desc)
-  : _desc(desc),
-    _enumerators(new enums::enumerators(desc)) {
+  : _desc(desc) {
+  for (int i = 0; i < desc->value_count(); i++) {
+    const google::protobuf::EnumValueDescriptor *value = desc->value(i);
+    (*this)[value->number()] = value;
+  }
 }
 
-enumeration::~enumeration() {
-  delete _enumerators;
-}
-
-bool enumeration::accept(ast::visitor *visitor) const {
-  return visitor->visite(this);
-}
-
-bool enumeration::accept(enums::visitor *visitor) const {
+bool enumeration::accept(visitor *visitor) const {
   return visitor->visite(this);
 }
 

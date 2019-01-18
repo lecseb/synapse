@@ -55,6 +55,7 @@ header::header(const params& params, stream *stream,
 }
 
 header::~header() {
+  _stream << stream::endl;
   std::string temp = std::string("_" + _stream.get_name() + "_");
   std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
   std::replace_if(temp.begin(), temp.end(), ispunct, '_');
@@ -70,12 +71,12 @@ bool header::parse(const ast::decls *node) {
   for (; it != node->end(); it++) {
     const ast::decl *decl = (*it);
     error &= decl->accept(this);
-    _stream << stream::endl;
   }
   return error;
 }
 
 bool header::visite(const ast::enumeration *node) {
+  _stream << stream::endl;
   bool error = node->accept(_definition);
   _stream << ";" << stream::endl;
   return error;
@@ -89,11 +90,13 @@ bool header::visite(const ast::error *node) {
 bool header::visite(const ast::include *node) {
   _stream << "# include <";
   bool error = interface::visite(node);
-  _stream << ">" << stream::endl;
+  _stream << ">";
+  _stream << stream::endl;
   return error;
 }
 
 bool header::visite(const ast::structure *node) {
+  _stream << stream::endl;
   bool error = node->accept(_definition);
   _stream << ";" << stream::endl;
   return error;
@@ -104,6 +107,7 @@ bool header::visite(const ast::svcs::alloc::allocator *node) {
 
   ast::svcs::alloc::allocator::const_iterator it = node->begin();
   if (it != node->end()) {
+    _stream << stream::endl;
     error &= (*it)->accept(_definition);
     _stream << ";" << stream::endl;
 

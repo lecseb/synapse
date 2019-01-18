@@ -14,45 +14,58 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_ENUMERATION_SYNAPSE_ENUMERATORS_HH_
-# define _AST_ENUMERATION_SYNAPSE_ENUMERATORS_HH_
+#ifndef _AST_SYNAPSE_ENUMERATION_HH_
+# define _AST_SYNAPSE_ENUMERATION_HH_
 
 # include <map>
 # include <string>
-# include "synapse-decls.hh"
+# include "synapse-decl.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
-namespace enums {
+
+class visitor;
 
 /**
- * @brief enumerator list
+ * @brief enumeration element
  */
-class enumerators : public decls {
+class enumeration :
+  public std::map<uint32_t, const google::protobuf::EnumValueDescriptor *>,
+  public ast::decl {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf enumeration descriptor structure
+   * @param [in] desc: protobuf enumeration descriptor
    */
-  explicit enumerators(const google::protobuf::EnumDescriptor *desc);
+  explicit enumeration(const google::protobuf::EnumDescriptor *desc);
 
   /**
    * @brief destructor
    */
-  virtual ~enumerators() {}
+  virtual ~enumeration() {}
 
   /**
-   * @brief Accept function of the visitor design pattern
+   * @brief Accept function of the visitor design* pattern
    * @param [in] visitor: visitor to browse
    * @return true on success, false otherwise
    */
   virtual bool accept(visitor *visitor) const;
+
+  /**
+   * @brief Get the name of the enumeration
+   * @return a string
+   */
+  const std::string& get_name() const {
+    return _desc->name();
+  }
+
+private:
+  const google::protobuf::EnumDescriptor *_desc;
 };
 
-};  // namespace enums
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_AST_ENUMERATION_SYNAPSE_ENUMERATORS_HH_ */
+#endif /* _AST_SYNAPSE_ENUMERATION_HH_ */

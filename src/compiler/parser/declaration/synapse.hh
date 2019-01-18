@@ -39,18 +39,25 @@ public:
   virtual ~synapse() {}
 
   /**
-   * @brief Visite an structure node
+   * @brief Visite a duplicate allocation function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structure *node);
+  virtual bool visite(const ast::svcs::alloc::function_dup *node);
 
   /**
-   * @brief Visite an fields node
+   * @brief Visite a free allocation function node
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structs::fields *node);
+  virtual bool visite(const ast::svcs::alloc::function_free *node);
+
+  /**
+   * @brief Visite a new allocation function node
+   * @param [in] node: node to visite
+   * @return true on success, false otherwise
+   */
+  virtual bool visite(const ast::svcs::alloc::function_new *node);
 
 private:
   parser::stream& _stream;

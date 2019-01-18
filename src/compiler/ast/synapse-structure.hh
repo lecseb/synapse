@@ -14,39 +14,56 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_ENUMERATION_SYNAPSE_DECL_HH_
-# define _AST_ENUMERATION_SYNAPSE_DECL_HH_
+#ifndef _AST_STRUCTURE_SYNAPSE_STRUCTURE_HH_
+# define _AST_STRUCTURE_SYNAPSE_STRUCTURE_HH_
 
-# include <google/protobuf/descriptor.h>
+# include <map>
+# include <string>
+# include "ast/synapse-decl.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
-namespace enums {
-
-class visitor;
 
 /**
- * @brief enumeration declaration
+ * @brief Root element of the AST
  */
-class decl {
+class structure :
+  public std::map<uint32_t, const google::protobuf::FieldDescriptor *>,
+  public ast::decl {
 public:
   /**
-   * @brief Destructor
+   * @brief Constructor
+   * @param [in] desc: protobuf structure descriptor
    */
-  virtual ~decl() {}
+  explicit structure(const google::protobuf::Descriptor *desc);
+
+  /**
+   * @brief destructor
+   */
+  virtual ~structure() {}
 
   /**
    * @brief Accept function of the visitor design pattern
    * @param [in] visitor: visitor to browse
    * @return true on success, false otherwise
    */
-  virtual bool accept(visitor *visitor) const = 0;
+  virtual bool accept(visitor *visitor) const;
+
+  /**
+   * @brief Get the name of the enumeration
+   * @return a string
+   */
+  const std::string& get_name() const {
+    return _desc->name();
+  }
+
+private:
+  const google::protobuf::Descriptor *_desc;
 };
 
-};  // namespace enums
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* !_AST_ENUMERATION_SYNAPSE_DECL_HH_ */
+#endif /* _AST_SYNAPSE_STRUCTURE_HH_ */

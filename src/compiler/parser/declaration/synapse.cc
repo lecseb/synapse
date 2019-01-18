@@ -15,6 +15,7 @@
  */
 
 #include "synapse.hh"
+#include "ast/synapse-adaptor.hh"
 
 namespace synapse {
 namespace compiler {
@@ -25,11 +26,15 @@ synapse::synapse(parser::stream& stream)
   : _stream(stream) {
 }
 
-bool synapse::visite(const ast::structure *) {
+bool synapse::visite(const ast::svcs::alloc::function_dup *) {
   return true;
 }
 
-bool synapse::visite(const ast::structs::fields *) {
+bool synapse::visite(const ast::svcs::alloc::function_free *) {
+  return true;
+}
+
+bool synapse::visite(const ast::svcs::alloc::function_new *) {
   return true;
 }
 

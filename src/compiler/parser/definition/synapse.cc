@@ -31,18 +31,7 @@ synapse::synapse(stream& stream, const params& params)
 bool synapse::visite(const ast::enumeration *node) {
   _stream << "enum " << node->get_name() << " {" << stream::endl;
   _stream.indent();
-  bool error = node->get_enumerators()->accept(this);
-  _stream.outdent();
-  _stream << "}";
-
-  return error;
-}
-
-bool synapse::visite(const ast::enums::enumerators *node) {
-  bool error = true;
-
-  ast::enums::enumerators::const_iterator it = node->begin();
-    node->begin();
+  ast::enumeration::const_iterator it = node->begin();
   if (it != node->end()) {
     _stream << ast::adaptor::enumerator_tostring(it->second);
     for (it++; it != node->end(); it++) {
@@ -51,7 +40,10 @@ bool synapse::visite(const ast::enums::enumerators *node) {
     }
     _stream << stream::endl;
   }
-  return error;
+  _stream.outdent();
+  _stream << "}";
+
+  return true;
 }
 
 bool synapse::visite(const ast::structure *node) {

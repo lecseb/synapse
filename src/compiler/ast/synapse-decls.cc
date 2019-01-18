@@ -15,10 +15,10 @@
  */
 
 #include "synapse-decls.hh"
+#include "synapse-enumeration.hh"
 #include "synapse-error.hh"
 #include "synapse-include.hh"
-#include "enumeration/synapse-enumeration.hh"
-#include "structure/synapse-structure.hh"
+#include "synapse-structure.hh"
 #include "service/synapse-factory.hh"
 
 namespace synapse {

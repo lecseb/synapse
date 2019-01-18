@@ -18,14 +18,14 @@
 # define _PARSER_FILE_DECLARATION_SYNAPSE_INTERFACE_HH_
 
 # include "synapse-error.hh"
-# include "ast/structure/synapse-visitor.hh"
+# include "ast/service/allocator/synapse-visitor.hh"
 
 namespace synapse {
 namespace compiler {
 namespace parser {
 namespace declaration {
 
-class interface : public ast::structs::visitor {
+class interface : public ast::svcs::alloc::visitor {
 public:
   /**
    * @brief Destructor
@@ -37,7 +37,7 @@ public:
    * @param [in] node: node to visite
    * @return true on success, false otherwise
    */
-  virtual bool visite(const ast::structs::error *node) {
+  virtual bool visite(const ast::svcs::alloc::error *node) {
     error::get_instance() << node->get();
     return false;
   }
