@@ -46,7 +46,7 @@ public:
    * @return true on success, false otherwise
    */
   virtual bool visite(const ast::enumeration *node);
-  
+
   /**
    * @brief Visite an structure node
    * @param [in] node: node to visite
