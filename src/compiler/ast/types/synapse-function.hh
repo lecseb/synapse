@@ -14,53 +14,60 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_INCLUDE_HH_
-# define _AST_SYNAPSE_INCLUDE_HH_
+#ifndef _AST_TYPES_SYNAPSE_FUNCTION_HH_
+# define _AST_TYPES_SYNAPSE_FUNCTION_HH_
 
 # include <string>
-# include "synapse-decl.hh"
+# include "ast/synapse-function.hh"
+# include "ast/synapse-type.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace types {
 
 /**
- * @brief include declaration (dependancy)
+ * @brief structure description
  */
-class include : public decl {
+class function : public ast::type {
 public:
   /**
    * @brief Constructor
-   * @param [in] name: name of the include
+   * @param [in] name: name of the type
+   * @param [in] function: function linked to the type
    */
-  explicit include(const std::string& name);
+  function(const std::string& name, const ast::function *function);
 
   /**
    * @brief destructor
    */
-  virtual ~include() {}
+  virtual ~function() {}
 
   /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] stream: stream file
-   * @param [in] visitor: visitor to browse
+   * @brief Get the function contained into the type
+   * @retun a valid pointer
    */
-  virtual void accept(stream& stream, visitor *visitor) const;
+  virtual const ast::function *get_function() const;
 
   /**
-   * @brief Get the declaration name
-   * @return a string
+   * @brief Get the return form of the descriptor
+   * @retun a string
    */
-  const std::string& get_name() const {
-    return _name;
-  }
+  virtual std::string get_type_form() const;
+
+  /**
+   * @brief Duplicate the given type
+   * @return a valid pointer on success, nullptr on error
+   */
+  virtual type *duplicate() const;
 
 private:
-  std::string _name;
+  const ast::function *_function;
 };
 
+};  // namespace types
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_INCLUDE_HH_ */
+#endif /* _AST_TYPES_SYNAPSE_FUNCTION_HH_ */

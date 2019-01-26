@@ -14,39 +14,41 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <list>
+#include <map>
 #include "synapse-error.hh"
 #include "synapse-generator.hh"
-#include "parser/synapse.hh"
-#include "parser/synapse-interface.hh"
-#include "parser/synapse-params.hh"
+#include "synapse-params.hh"
+#include "api/synapse-header.hh"
+#include "api/synapse-source.hh"
+#include "ast/synapse-decls.hh"
+#include "file/synapse-interface.hh"
 
 namespace synapse {
 namespace compiler {
 
-bool generator::Generate(const google::protobuf::FileDescriptor *descriptor,
-    const std::string& str, google::protobuf::compiler::OutputDirectory *output,
+bool generator::Generate(const google::protobuf::FileDescriptor *desc,
+    const std::string& str, google::protobuf::compiler::OutputDirectory *out,
     std::string *error) const {
-  std::list<parser::interface *>::iterator it;
-  parser::params params(str);
-  std::list<parser::interface *> parsers = std::list<parser::interface *>();
-  bool ret = true;
+  ast::decls *decls = new ast::decls(desc);
+  std::map<stream *, file::interface *> _files;
+  params params(str);
+  std::string name = strip_suffix(desc->name(), ".proto");
 
-  std::string basename = synapse::compiler::parser::strip_suffix(
-    descriptor->name(), ".proto");
-  parsers.push_back(new parser::synapse(basename, params, output));
-  // if (params.find("--with-dbus") != params.end())
-  //   parsers.push_back(new dbus(basename, params, output));
-  // if (params.find("--with-protobuf") != params.end())
-  //   parsers.push_back(new protobuf(basename, params, output));
+  /* api files: mandatory and the least */
+  std::string api = "synapse-" + name;
+  _files[new stream(std::string(api + ".h"), out)] = new api::header(params);
+  _files[new stream(std::string(api + ".c"), out)] = new api::source(params);
 
-  for (it = parsers.begin(); it != parsers.end(); it++) {
-    ret &= (*it)->parse(descriptor);
-    delete (*it);
+  std::map<stream *, file::interface *>::iterator it = _files.begin();
+  for (; it != _files.end(); it++) {
+    stream *stream = it->first;
+    file::interface *file = it->second;
+    file->parse(*stream, decls);
+    delete stream;
+    delete file;
   }
-
   error::get_instance() >> *error;
-  return ret;
+  return error->size() ? false : true;
 }
 
 };  // namespace compiler

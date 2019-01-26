@@ -14,24 +14,63 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "synapse-adaptor.hh"
-#include "synapse-structure.hh"
-#include "synapse-visitor.hh"
+#include "synapse-string.hh"
+#include "ast/synapse-structure.hh"
+#include "ast/synapse-visitor.hh"
+#include "ast/types/synapse-enumeration.hh"
+#include "ast/types/synapse-simple.hh"
+#include "ast/types/synapse-structure.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-structure::structure(const google::protobuf::Descriptor *desc)
-  : _desc(desc) {
-  for (int i = 0; i < desc->field_count(); i++) {
-    const google::protobuf::FieldDescriptor *value = desc->field(i);
-    (*this)[i] = value;
-  }
+structure::structure(const std::string& name, const fields& fields)
+  : std::map<uint32_t, type *>(fields.begin(), fields.end()),
+    _name(name) {
 }
 
-bool structure::accept(ast::visitor *visitor) const {
-  return visitor->visite(this);
+structure::~structure() {
+  iterator it = begin();
+  for (; it != end(); it++)
+    delete it->second;
+}
+
+void structure::add_function(ast::function *func) {
+  _funcs[func->get_name()] = func;
+}
+
+void structure::accept(stream& stream, visitor *visitor) const {
+  visitor->visite(stream, this);
+}
+
+void structure::factory::create_new(ast::structure *str) {
+  std::string name = str->get_name() + "_new";
+  ast::type *return_type = new types::structure("", str);
+
+  str->add_function(new ast::function(name, *str, return_type));
+}
+
+void structure::factory::create_free(ast::structure *str) {
+  std::string param = std::string("msg");
+  ast::function::arguments args = {
+    { 0,  new types::structure(param, str) }
+  };
+
+  std::string name = str->get_name() + "_free";
+  str->add_function(new ast::function(name, args, nullptr));
+}
+
+void structure::factory::create_dup(ast::structure *str) {
+  std::string param = std::string("msg");
+  ast::function::arguments args = {
+    { 0,  new types::structure(param, str) }
+  };
+
+  std::string name = str->get_name() + "_dup";
+  ast::type *return_type = new types::structure("", str);
+
+  str->add_function(new ast::function(name, args, return_type));
 }
 
 };  // namespace ast

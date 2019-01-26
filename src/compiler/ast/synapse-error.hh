@@ -18,6 +18,7 @@
 # define _AST_SYNAPSE_ERROR_HH_
 
 # include <string>
+# include <google/protobuf/descriptor.h>
 # include "synapse-decl.hh"
 
 namespace synapse {
@@ -31,25 +32,32 @@ class error : public decl {
 public:
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf descriptor structure
    * @param [in] str: string error
    */
-  error(const google::protobuf::Descriptor *desc, const std::string& str);
+  explicit error(const std::string& str)
+    : _error(str) {
+  }
 
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf enumeration descriptor
+   * @param [in] d: protobuf descriptor structure
    * @param [in] str: string error
    */
-  error(const google::protobuf::EnumDescriptor *desc, const std::string& str);
+  error(const google::protobuf::Descriptor *d, const std::string& str);
 
   /**
    * @brief Constructor
-   * @param [in] desc: protobuf enumeration descriptor
+   * @param [in] d: protobuf enumeration descriptor
    * @param [in] str: string error
    */
-  error(const google::protobuf::ServiceDescriptor *desc,
-    const std::string& str);
+  error(const google::protobuf::EnumDescriptor *d, const std::string& str);
+
+  /**
+   * @brief Constructor
+   * @param [in] d: protobuf enumeration descriptor
+   * @param [in] str: string error
+   */
+  error(const google::protobuf::ServiceDescriptor *d, const std::string& str);
 
   /**
    * @brief destructor
@@ -58,16 +66,16 @@ public:
 
   /**
    * @brief Accept function of the visitor design* pattern
+   * @param [in] stream: file stream
    * @param [in] visitor: visitor to browse
-   * @return true on success, false otherwise
    */
-  virtual bool accept(visitor *visitor) const;
+  virtual void accept(stream& stream, visitor *visitor) const;
 
   /**
    * @brief Get the error
    * @return a string
    */
-  const std::string& get() const {
+  std::string get() const {
     return _error;
   }
 

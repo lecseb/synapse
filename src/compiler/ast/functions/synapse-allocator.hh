@@ -14,15 +14,14 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_VISITOR_HH_
-# define _AST_SYNAPSE_VISITOR_HH_
+#ifndef _AST_FUNCTIONS_SYNAPSE_ALLOCATOR_HH_
+# define _AST_FUNCTIONS_SYNAPSE_ALLOCATOR_HH_
 
 # include <string>
 # include "synapse-stream.hh"
-# include "ast/synapse-enumeration.hh"
-# include "ast/synapse-error.hh"
-# include "ast/synapse-include.hh"
-# include "ast/synapse-structure.hh"
+# include "ast/functions/synapse-dup.hh"
+# include "ast/functions/synapse-free.hh"
+# include "ast/functions/synapse-new.hh"
 
 namespace synapse {
 namespace compiler {
@@ -31,36 +30,29 @@ namespace ast {
 class visitor {
 public:
   /**
-   * @brief Visite an enumeration node
+   * @brief Visite a dup function node
    * @param [in] stream: file stream
    * @param [in] node: node to visite
    */
-  virtual void visite(stream& stream, const enumeration *node) = 0;
+  virtual void visite(stream& stream, const function_dup *node) = 0;
 
   /**
-   * @brief Visite an error node
+   * @brief Visite a free function node
    * @param [in] stream: file stream
    * @param [in] node: node to visite
    */
-  virtual void visite(stream& stream, const error *node) = 0;
+  virtual void visite(stream& stream, const function_free *node) = 0;
 
   /**
-   * @brief Visite an include node
+   * @brief Visite a new function node
    * @param [in] stream: file stream
    * @param [in] node: node to visite
    */
-  virtual void visite(stream& stream, const include *node) = 0;
-
-  /**
-   * @brief Visite an structure node
-   * @param [in] stream: file stream
-   * @param [in] node: node to visite
-   */
-  virtual void visite(stream& stream, const structure *node) = 0;
+  virtual void visite(stream& stream, const function_new *node) = 0;
 };
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_VISITOR_HH_ */
+#endif /* _AST_FUNCTIONS_SYNAPSE_ALLOCATOR_HH_ */

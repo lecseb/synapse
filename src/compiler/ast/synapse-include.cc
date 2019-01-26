@@ -21,17 +21,12 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-include::include(enum e_type type, const std::string& name)
-  : _name(name),
-    _type(type) {
+include::include(const std::string& name)
+  : _name(name) {
 }
 
-include::include(const google::protobuf::FileDescriptor *desc)
-  : include(include::e_type_protobuf, desc->name()) {
-}
-
-bool include::accept(visitor *visitor) const {
-  return visitor->visite(this);
+void include::accept(stream& stream, visitor *visitor) const {
+  visitor->visite(stream, this);
 }
 
 };  // namespace ast

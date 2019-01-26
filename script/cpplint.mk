@@ -14,6 +14,7 @@
 # along with cerebellum.  If not, see <https://www.gnu.org/licenses/>.
 
 define check
+
 check: coding-style
 coding-style:
 	@RET=0; \
@@ -22,7 +23,7 @@ coding-style:
 		python $(top_srcdir)/script/cpplint.py \
 			--extension hpp,cpp,cc,hh,hxx \
 			--verbose 0 \
-			--filter=-whitespace/tab,-legal/copyright,-build/include_order \
+			--filter=-whitespace/tab,-legal/copyright,-build/include_order,-readability/function \
 			$$$$i 2> $$$$i.tmp; \
 		if [ $$$$? -ne 0 ]; then \
 			cat $$$$i.tmp; \

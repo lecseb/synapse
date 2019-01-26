@@ -15,8 +15,6 @@
 
 include $(top_builddir)/script/cpplint.mk
 
-SUBDIRS= ast
-
 bin_PROGRAMS= synapse-protoc
 
 synapse_protoc_CXXFLAGS= \
@@ -26,35 +24,60 @@ synapse_protoc_CXXFLAGS= \
 
 noinst_HEADERS= \
 	synapse-error.hh \
-	parser/synapse.hh \
-	parser/synapse-interface.hh \
-	parser/synapse-params.hh \
-	parser/synapse-stream.hh \
-	parser/declaration/synapse.hh \
-	parser/declaration/synapse-interface.hh \
-	parser/definition/synapse.hh \
-	parser/definition/synapse-interface.hh \
-	parser/file/synapse-interface.hh \
-	parser/file/synapse-header.hh \
-	parser/file/synapse-source.hh
+	synapse-params.hh \
+	synapse-stream.hh \
+	synapse-string.hh \
+	api/synapse-header.hh \
+	api/synapse-source.hh \
+	ast/synapse-decl.hh \
+	ast/synapse-decls.hh \
+	ast/synapse-enumeration.hh \
+	ast/synapse-error.hh \
+	ast/synapse-function.hh \
+	ast/synapse-include.hh \
+	ast/synapse-service.hh \
+	ast/synapse-structure.hh \
+	ast/synapse-type.hh \
+	ast/synapse-visitor.hh \
+	ast/functions/synapse-allocator.hh \
+	ast/functions/synapse-dup.hh \
+	ast/functions/synapse-free.hh \
+	ast/functions/synapse-new.hh \
+	ast/types/synapse-enumerator.hh \
+	ast/types/synapse-enumeration.hh \
+	ast/types/synapse-function.hh \
+	ast/types/synapse-list.hh \
+	ast/types/synapse-simple.hh \
+	ast/types/synapse-structure.hh \
+	file/synapse-header.hh \
+	file/synapse-interface.hh \
+	file/synapse-source.hh
 
 synapse_protoc_SOURCES= \
 	synapse-error.cc \
 	synapse-generator.cc \
+	synapse-params.cc \
 	synapse-protoc.cc \
-	parser/synapse.cc \
-	parser/synapse-params.cc \
-	parser/synapse-stream.cc \
-	parser/declaration/synapse.cc \
-	parser/definition/synapse.cc \
-	parser/file/synapse-header.cc \
-	parser/file/synapse-source.cc
+	synapse-stream.cc \
+	synapse-string.cc \
+	api/synapse-header.cc \
+	api/synapse-source.cc \
+	ast/synapse-decls.cc \
+	ast/synapse-enumeration.cc \
+	ast/synapse-error.cc \
+	ast/synapse-function.cc \
+	ast/synapse-include.cc \
+	ast/synapse-structure.cc \
+	ast/synapse-type.cc \
+	ast/types/synapse-enumeration.cc \
+	ast/types/synapse-function.cc \
+	ast/types/synapse-list.cc \
+	ast/types/synapse-simple.cc \
+	ast/types/synapse-structure.cc
 
 synapse_protoc_LDFLAGS= \
 	-lprotoc \
-	$(libprotobuf_LIBS) \
-	$(top_srcdir)/src/compiler/ast/libsynapse-ast.a
-
+	$(libprotobuf_LIBS)
 
 # eval to create the coding style rule
 $(eval $(call check, $(sort $(noinst_HEADERS) $(synapse_protoc_SOURCES))))

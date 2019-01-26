@@ -14,33 +14,36 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ast/synapse-enumeration.hh"
-#include "ast/synapse-visitor.hh"
+#include "synapse-list.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace types {
 
-enumeration::enumeration(const std::string& name, const enumerators& enums)
-  : _name(name) {
-  enumerators::const_iterator it = enums.begin();
-  for (; it != enums.end(); it++) {
-    const types::enumerator *enumerator = it->second;
-    (*this)[it->first] = new types::enumerator(enumerator->get_name(),
-      enumerator->get_default_value());
+list::list(const std::string& name,
+    const google::protobuf::FieldDescriptor::Type& target_type,
+    const ast::structure *str)
+  : types::structure(name, str),
+    _target_type(target_type) {
+}
+
+type *list::create(const google::protobuf::FieldDescriptor *field,
+  const std::map<std::string, decl *>& decls) {
+  std::map<std::string, decl *>::const_iterator it = decls.end();
+
+  it = decls.find("s_synapse_list");
+  if (it != decls.end()) {
+    const ast::decl *decl = it->second;
+    if (typeid(*decl) == typeid(ast::structure)) {
+      const ast::structure *s = dynamic_cast<const ast::structure *>(decl);
+      return new types::structure(field->name(), s);
+    }
   }
+  return nullptr;
 }
 
-enumeration::~enumeration() {
-  enumerators::iterator it = begin();
-  for (; it != end(); it++)
-    delete it->second;
-}
-
-void enumeration::accept(stream& stream, visitor *visitor) const {
-  visitor->visite(stream, this);
-}
-
+};  // namespace types
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

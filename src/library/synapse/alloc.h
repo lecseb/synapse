@@ -17,6 +17,7 @@
 #ifndef _SYNAPSE_ALLOC_H_
 # define _SYNAPSE_ALLOC_H_
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <synapse/condition.h>
 
@@ -30,7 +31,7 @@
 static inline void *synapse_calloc(size_t nmemb, size_t size)
 {
   void *pointer = calloc(nmemb, size);
-  synapse_assert(0, "allocator failed '%s'", strerror(errno));
+  synapse_assert(pointer, "allocator failed '%s'", strerror(errno));
   memset(pointer, 0, size * nmemb);
   return pointer;
 }
@@ -54,7 +55,7 @@ static inline void synapse_free(void *pointer)
 static inline void *synapse_malloc(size_t size)
 {
   void *pointer = malloc(size);
-  synapse_assert(0, "allocator failed '%s'", strerror(errno));
+  synapse_assert(pointer, "allocator failed '%s'", strerror(errno));
   memset(pointer, 0, size);
   return pointer;
 }
@@ -69,7 +70,7 @@ static inline void *synapse_malloc(size_t size)
 static inline void *synapse_realloc(void *ptr, size_t size)
 {
   void *pointer = realloc(ptr, size);
-  synapse_assert(0, "allocator failed '%s'", strerror(errno));
+  synapse_assert(pointer, "allocator failed '%s'", strerror(errno));
   memset(pointer, 0, size);
   return pointer;
 }

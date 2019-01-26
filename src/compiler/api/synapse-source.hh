@@ -14,53 +14,50 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_VISITOR_HH_
-# define _AST_SYNAPSE_VISITOR_HH_
+#ifndef _API_SYNAPSE_SOURCE_HH_
+# define _API_SYNAPSE_SOURCE_HH_
 
 # include <string>
-# include "synapse-stream.hh"
-# include "ast/synapse-enumeration.hh"
-# include "ast/synapse-error.hh"
-# include "ast/synapse-include.hh"
-# include "ast/synapse-structure.hh"
+# include "file/synapse-source.hh"
 
 namespace synapse {
 namespace compiler {
-namespace ast {
+namespace api {
 
-class visitor {
+class source : public file::source {
 public:
+  /**
+   * @brief Constructor
+   * @param [in] params: parameter list
+   */
+  explicit source(params& params)
+    : file::source(params) {
+  }
+
+  /**
+   * @brief Destructor
+   */
+  virtual ~source() {}
+
   /**
    * @brief Visite an enumeration node
    * @param [in] stream: file stream
-   * @param [in] node: node to visite
+   * @param [in] node: node node to visite
    */
-  virtual void visite(stream& stream, const enumeration *node) = 0;
-
-  /**
-   * @brief Visite an error node
-   * @param [in] stream: file stream
-   * @param [in] node: node to visite
-   */
-  virtual void visite(stream& stream, const error *node) = 0;
-
-  /**
-   * @brief Visite an include node
-   * @param [in] stream: file stream
-   * @param [in] node: node to visite
-   */
-  virtual void visite(stream& stream, const include *node) = 0;
+  virtual void visite(stream&, const ast::enumeration *) {
+    /* nothing to do here */
+  }
 
   /**
    * @brief Visite an structure node
    * @param [in] stream: file stream
    * @param [in] node: node to visite
    */
-  virtual void visite(stream& stream, const structure *node) = 0;
+  virtual void visite(stream& stream, const ast::structure *node);
 };
 
-};  // namespace ast
+};  // namespace api
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_VISITOR_HH_ */
+#endif /* !_API_SYNAPSE_SOURCE_HH_ */

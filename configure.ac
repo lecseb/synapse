@@ -70,7 +70,6 @@ AM_CONDITIONAL([synapse_SILENT], [test "$AM_DEFAULT_VERBOSITY"="0"])
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
-	src/compiler/ast/Makefile
 	src/compiler/Makefile
 	src/library/libsynapse.pc
 	src/library/Makefile

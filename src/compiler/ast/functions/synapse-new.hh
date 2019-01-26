@@ -14,33 +14,40 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ast/synapse-enumeration.hh"
-#include "ast/synapse-visitor.hh"
+#ifndef _AST_FUNCTIONS_SYNAPSE_NEW_HH_
+# define _AST_FUNCTIONS_SYNAPSE_NEW_HH_
+
+# include <string>
+# include "ast/synapse-function.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
-enumeration::enumeration(const std::string& name, const enumerators& enums)
-  : _name(name) {
-  enumerators::const_iterator it = enums.begin();
-  for (; it != enums.end(); it++) {
-    const types::enumerator *enumerator = it->second;
-    (*this)[it->first] = new types::enumerator(enumerator->get_name(),
-      enumerator->get_default_value());
-  }
-}
+class visitor;
 
-enumeration::~enumeration() {
-  enumerators::iterator it = begin();
-  for (; it != end(); it++)
-    delete it->second;
-}
+/**
+ * @brief function description
+ */
+class function_new : public ast::function {
+public:
+  /**
+   * @brief Constructor
+   * @param [in] name: name of the structure
+   * @param [in] args: argument of the function
+   * @param [in] out: return of the function
+   */
+  function_new(const std::string& name, const arguments& args, type *out)
+    : ast::function(name, args, out) {}
 
-void enumeration::accept(stream& stream, visitor *visitor) const {
-  visitor->visite(stream, this);
-}
+  /**
+   * @brief destructor
+   */
+  virtual ~function_new() {}
+};
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
+
+#endif /* _AST_FUNCTIONS_SYNAPSE_NEW_HH_ */

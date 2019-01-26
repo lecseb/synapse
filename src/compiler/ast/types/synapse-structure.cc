@@ -14,33 +14,27 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ast/synapse-enumeration.hh"
-#include "ast/synapse-visitor.hh"
+# include "ast/types/synapse-structure.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace types {
 
-enumeration::enumeration(const std::string& name, const enumerators& enums)
-  : _name(name) {
-  enumerators::const_iterator it = enums.begin();
-  for (; it != enums.end(); it++) {
-    const types::enumerator *enumerator = it->second;
-    (*this)[it->first] = new types::enumerator(enumerator->get_name(),
-      enumerator->get_default_value());
-  }
+structure::structure(const std::string& name, const ast::structure *str)
+  : type(name, "NULL", true),
+    _structure(str) {
 }
 
-enumeration::~enumeration() {
-  enumerators::iterator it = begin();
-  for (; it != end(); it++)
-    delete it->second;
+const ast::structure *structure::get_structure() const {
+  return _structure;
 }
 
-void enumeration::accept(stream& stream, visitor *visitor) const {
-  visitor->visite(stream, this);
+std::string structure::get_type_form() const {
+  return std::string("struct ") + _structure->get_name();
 }
 
+};  // namespace types
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

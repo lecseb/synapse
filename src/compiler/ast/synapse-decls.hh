@@ -17,18 +17,22 @@
 #ifndef _AST_SYNAPSE_DECLS_HH_
 # define _AST_SYNAPSE_DECLS_HH_
 
-# include <list>
+# include <map>
 # include <string>
-# include "synapse-decl.hh"
+# include <vector>
+# include "ast/synapse-decl.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
 
+class enumeration;
+class structure;
+
 /**
- * @brief Root element of the AST
+ * @brief declaration container definition
  */
-class decls : public std::list<decl *> {
+class decls : public std::map<std::string, decl *> {
 public:
   /**
    * @brief Constructor
@@ -37,9 +41,47 @@ public:
   explicit decls(const google::protobuf::FileDescriptor *desc);
 
   /**
-   * @brief destructor
+   * @brief Destructor
    */
   virtual ~decls();
+
+  /**
+   * @brief Find and return the declaration of an enumeration by
+   * its name
+   * @param [in] name: name of the structure to find
+   * @return a valid pointer on success, NULL on error
+   */
+  virtual const ast::enumeration *get_enumeration(
+    const std::string& name) const;
+
+  /**
+   * @brief Find and return the declaration of a structure by
+   * its name
+   * @param [in] name: name of the structure to find
+   * @return a valid pointer on success, NULL on error
+   */
+  virtual const ast::structure *get_structure(const std::string& name) const;
+
+private:
+  /**
+   * @brief Create a structure
+   * @param [in] desc: structure descriptor
+   */
+  void parse(const google::protobuf::Descriptor *desc);
+
+  /**
+   * @brief Create an enumeration
+   * @param [in] desc: enumeration descriptor
+   */
+  void parse(const google::protobuf::EnumDescriptor *desc);
+
+  /**
+   * @brief Create an include
+   * @param [in] desc: file descriptor
+   */
+  void parse(const google::protobuf::FileDescriptor *desc);
+
+  std::vector<ast::structure *> _deps;
 };
 
 };  // namespace ast

@@ -14,33 +14,31 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ast/synapse-enumeration.hh"
-#include "ast/synapse-visitor.hh"
+#include "ast/types/synapse-function.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
+namespace types {
 
-enumeration::enumeration(const std::string& name, const enumerators& enums)
-  : _name(name) {
-  enumerators::const_iterator it = enums.begin();
-  for (; it != enums.end(); it++) {
-    const types::enumerator *enumerator = it->second;
-    (*this)[it->first] = new types::enumerator(enumerator->get_name(),
-      enumerator->get_default_value());
-  }
+function::function(const std::string& name, const ast::function *func)
+  : type(name, "NULL", false),
+    _function(func) {
 }
 
-enumeration::~enumeration() {
-  enumerators::iterator it = begin();
-  for (; it != end(); it++)
-    delete it->second;
+const ast::function *function::get_function() const {
+  return _function;
 }
 
-void enumeration::accept(stream& stream, visitor *visitor) const {
-  visitor->visite(stream, this);
+std::string function::get_type_form() const {
+  return _function->get_name();
 }
 
+type *function::duplicate() const {
+  return new function(_name, _function);
+}
+
+};  // namespace types
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

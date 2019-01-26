@@ -14,13 +14,13 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_ENUMERATION_HH_
-# define _AST_SYNAPSE_ENUMERATION_HH_
+#ifndef _AST_SYNAPSE_FUNCTION_HH_
+# define _AST_SYNAPSE_FUNCTION_HH_
 
 # include <map>
 # include <string>
 # include "ast/synapse-decl.hh"
-# include "ast/types/synapse-enumerator.hh"
+# include "ast/synapse-type.hh"
 
 namespace synapse {
 namespace compiler {
@@ -29,35 +29,35 @@ namespace ast {
 class visitor;
 
 /**
- * @brief enumeration description
+ * @brief function description
  */
-class enumeration :
-  public std::map<uint32_t, types::enumerator *>,
-  public ast::decl {
+class function {
 public:
   /**
    * @brief typedef to simplify the naming
    */
-  typedef std::map<uint32_t, types::enumerator *> enumerators;
+  typedef std::map<uint32_t, type *> arguments;
 
   /**
    * @brief Constructor
-   * @param [in] name: name of the enumeration
-   * @param [in] enumerators: list of enumerators
+   * @param [in] name: name of the structure
+   * @param [in] args: argument of the function
+   * @param [in] out: return of the function
    */
-  enumeration(const std::string& name, const enumerators& enums);
+  function(const std::string& name, const arguments& args, type *out);
 
   /**
    * @brief destructor
    */
-  virtual ~enumeration();
+  virtual ~function();
 
   /**
-   * @brief Accept function of the visitor design* pattern
-   * @param [in] stream: file stream
-   * @param [in] visitor: visitor to browse
+   * @brief Get the argument list
+   * @return the argument list
    */
-  virtual void accept(stream& stream, visitor *visitor) const;
+  const arguments& get_arguments() const {
+    return _args;
+  }
 
   /**
    * @brief Get the name of the enumeration
@@ -67,12 +67,28 @@ public:
     return _name;
   }
 
-private:
+  /**
+   * @brief Create the prototype of the function
+   * @return a string
+   */
+  std::string get_prototype(bool const_return, bool const_param) const;
+
+  /**
+   * @brief Get the output
+   * @return the output (may be null)
+   */
+  const type *get_output() const {
+    return _out;
+  }
+
+protected:
+  arguments _args;
   std::string _name;
+  type *_out;
 };
 
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_ENUMERATION_HH_ */
+#endif /* _AST_SYNAPSE_FUNCTION_HH_ */

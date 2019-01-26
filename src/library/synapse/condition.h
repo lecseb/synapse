@@ -20,7 +20,7 @@
 # include <assert.h>
 # include <errno.h>
 # include <string.h>
-# include <synapse/log.h>
+//# include <synapse/log.h>
 
 /**
  * @brief Function argument checker. Check the condition 'cond' and return the
@@ -32,7 +32,6 @@
 # define synapse_return_val_if_fail(cond, value) { \
   do { \
     if (!(cond)) { \
-      synapse_error("condition failed '%s'", #cond); \
       return value; \
     } \
   } while (0); \
@@ -44,7 +43,13 @@
  * @param [in] cond: condition to check
  */
 /* codecheck_ignore[SPACING] */
-# define synapse_return_if_fail(cond) synapse_return_val_if_fail(cond, )
+# define synapse_return_if_fail(cond) { \
+  do { \
+    if (!(cond)) { \
+      return; \
+    } \
+  } while (0); \
+}
 
 /**
  * @brief Extend the standard assert by adding a string to underline the reason
@@ -53,7 +58,6 @@
 # define synapse_assert(cond, str, ...) { \
   do { \
     if (!(cond)) { \
-      synapse_critical(str, ## __VA_ARGS__); \
       assert(0); \
     } \
   } while (0); \

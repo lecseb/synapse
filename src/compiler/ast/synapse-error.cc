@@ -21,18 +21,20 @@ namespace synapse {
 namespace compiler {
 namespace ast {
 
-error::error(const google::protobuf::Descriptor *, const std::string&) {
+error::error(const google::protobuf::Descriptor *d, const std::string& s)
+  : _error(std::string(d->DebugString() + ">>>> " + s + "\n")) {
 }
 
-error::error(const google::protobuf::EnumDescriptor *, const std::string&) {
+error::error(const google::protobuf::EnumDescriptor *d, const std::string& s)
+  : _error(std::string(d->DebugString() + ">>>> " + s + "\n")) {
 }
 
-error::error(const google::protobuf::ServiceDescriptor *,
-  const std::string&) {
+error::error(const google::protobuf::ServiceDescriptor *d, const std::string& s)
+  : _error(std::string(d->DebugString() + ">>>> " + s + "\n")) {
 }
 
-bool error::accept(visitor *visitor) const {
-  return visitor->visite(this);
+void error::accept(stream& stream, visitor *visitor) const {
+  visitor->visite(stream, this);
 }
 
 };  // namespace ast

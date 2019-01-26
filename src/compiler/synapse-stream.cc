@@ -14,33 +14,29 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ast/synapse-enumeration.hh"
-#include "ast/synapse-visitor.hh"
+#include "synapse-stream.hh"
 
 namespace synapse {
 namespace compiler {
-namespace ast {
 
-enumeration::enumeration(const std::string& name, const enumerators& enums)
-  : _name(name) {
-  enumerators::const_iterator it = enums.begin();
-  for (; it != enums.end(); it++) {
-    const types::enumerator *enumerator = it->second;
-    (*this)[it->first] = new types::enumerator(enumerator->get_name(),
-      enumerator->get_default_value());
-  }
+const std::string stream::endl = "\n";
+
+stream::stream(const std::string& name,
+  google::protobuf::compiler::OutputDirectory *out)
+  : _stream(out->Open(name)),
+    _printer(new google::protobuf::io::Printer(_stream, '$')),
+    _name(name) {
 }
 
-enumeration::~enumeration() {
-  enumerators::iterator it = begin();
-  for (; it != end(); it++)
-    delete it->second;
+stream::~stream() {
+  delete _printer;
+  delete _stream;
 }
 
-void enumeration::accept(stream& stream, visitor *visitor) const {
-  visitor->visite(stream, this);
+stream& stream::operator<<(const std::string& data) {
+  _printer->Print(data.c_str());
+  return *this;
 }
 
-};  // namespace ast
 };  // namespace compiler
 };  // namespace synapse

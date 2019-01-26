@@ -14,40 +14,55 @@
  * along with synapse.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _AST_SYNAPSE_DECL_HH_
-# define _AST_SYNAPSE_DECL_HH_
+#ifndef _AST_TYPES_SYNAPSE_STRUCTURE_HH_
+# define _AST_TYPES_SYNAPSE_STRUCTURE_HH_
 
+# include <map>
 # include <string>
-# include <google/protobuf/descriptor.h>
-# include "synapse-stream.hh"
+# include "ast/synapse-structure.hh"
+# include "ast/synapse-type.hh"
 
 namespace synapse {
 namespace compiler {
 namespace ast {
-
-class visitor;
+namespace types {
 
 /**
- * @brief declaration
+ * @brief structure description
  */
-class decl {
+class structure : public ast::type {
 public:
+  /**
+   * @brief Constructor
+   * @param [in] name: name of the type
+   * @param [in] structure: structure linked to the type
+   */
+  structure(const std::string& name, const ast::structure *str);
+
   /**
    * @brief destructor
    */
-  virtual ~decl() {}
+  virtual ~structure() {}
 
   /**
-   * @brief Accept function of the visitor design pattern
-   * @param [in] stream: file stream
-   * @param [in] visitor: visitor to browse
-   * @return true or false depending on the visite algorithm
+   * @brief Get the structure contained into the type
+   * @retun a valid pointer
    */
-  virtual void accept(stream& stream, visitor *visitor) const = 0;
+  virtual const ast::structure *get_structure() const;
+
+  /**
+   * @brief Get the return form of the descriptor
+   * @retun a string
+   */
+  virtual std::string get_type_form() const;
+
+protected:
+  const ast::structure *_structure;
 };
 
+};  // namespace types
 };  // namespace ast
 };  // namespace compiler
 };  // namespace synapse
 
-#endif /* _AST_SYNAPSE_DECL_HH_ */
+#endif /* _AST_TYPES_SYNAPSE_STRUCTURE_HH_ */
